@@ -23,7 +23,9 @@
 }
 
 .contact-head {
-  margin-bottom: 64px;
+  margin-bottom: 72px;
+  /* Necessário para clipReveal no título funcionar */
+  overflow: hidden;
 }
 
 .section-eyebrow {
@@ -34,15 +36,21 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .contact-title {
+  display: inline-block;
   text-align: center;
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 600;
+  width: 100%;
+  font-size: clamp(36px, 6vw, 60px);
+  font-weight: 700;
   color: #f2f5f2;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  background: linear-gradient(90deg, #f2f5f2 0%, #46d373 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .contact-content {

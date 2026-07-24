@@ -1,6 +1,12 @@
 import './Services.css';
+import { Suspense, lazy } from 'react';
 import { useReveal } from '../../hooks/useReveal';
 import { useTilt } from '../../hooks/useTilt';
+
+// Lazy load da cena 3D (three.js é pesado, só carrega quando Services aparece)
+const Scene3D = lazy(() =>
+  import('../Scene3D/Scene3D').then((m) => ({ default: m.Scene3D }))
+);
 
 const SERVICES = [
   { icon: '⌨', title: 'Sistemas', desc: 'Desenvolvimento de sistemas web sob medida — front, back e integrações.' },
@@ -10,17 +16,24 @@ const SERVICES = [
 ];
 
 export const Services = () => {
-  const sectionRef = useReveal<HTMLDivElement>({ animation: 'fadeUp' });
-  const gridRef = useReveal<HTMLDivElement>({ stagger: 0.12, delay: 0.1 });
+  const titleRef = useReveal<HTMLDivElement>({ animation: 'slideUpBig' });
+  const gridRef = useReveal<HTMLDivElement>({ stagger: 0.18, animation: 'fadeUp' });
 
   return (
     <section id="servicos" className="services">
-      <div className="services-container" ref={sectionRef}>
-        <span className="section-eyebrow">O que fazemos</span>
-        <h2 className="services-title">Serviços</h2>
+      {/* Cena 3D REAL no fundo da seção */}
+      <Suspense fallback={null}>
+        <Scene3D opacity={0.85} />
+      </Suspense>
+
+      <div className="services-container services-front">
+        <div ref={titleRef}>
+          <span className="section-eyebrow">O que fazemos</span>
+          <h2 className="services-title">Serviços</h2>
+        </div>
         <div className="services-grid" ref={gridRef}>
-          {SERVICES.map((s) => (
-            <ServiceCard key={s.title} {...s} />
+          {SERVICES.map((s, i) => (
+            <ServiceCard key={s.title} index={i} {...s} />
           ))}
         </div>
       </div>
@@ -28,13 +41,19 @@ export const Services = () => {
   );
 };
 
-function ServiceCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
-  const tiltRef = useTilt<HTMLDivElement>({ max: 10 });
+function ServiceCard({ icon, title, desc, index }: { icon: string; title: string; desc: string; index: number }) {
+  const tiltRef = useTilt<HTMLDivElement>({ max: 16, perspective: 900, scale: 1.04 });
   return (
-    <div className="service-card" ref={tiltRef} data-reveal-child>
+    <div
+      className="service-card"
+      ref={tiltRef}
+      data-reveal-child
+      style={{ animationDelay: `${index * 0.05}s` }}
+    >
       <div className="service-icon" aria-hidden="true">{icon}</div>
       <h3 className="service-name">{title}</h3>
       <p className="service-desc">{desc}</p>
+      <span className="service-card-glow" aria-hidden="true" />
     </div>
   );
 }

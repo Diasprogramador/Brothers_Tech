@@ -4,40 +4,47 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export type RevealAnimation = 'fadeUp' | 'fadeIn' | 'scale' | 'fadeLeft' | 'fadeRight';
+export type RevealAnimation =
+  | 'fadeUp'
+  | 'fadeIn'
+  | 'scale'
+  | 'fadeLeft'
+  | 'fadeRight'
+  | 'slideUpBig'
+  | 'rotateIn'
+  | 'clipReveal';
 
 interface UseRevealOptions {
   animation?: RevealAnimation;
   delay?: number;
   duration?: number;
-  /** Stagger children with [data-reveal-child] instead of animating the element itself */
+  /** Stagger de filhos marcados com [data-reveal-child] */
   stagger?: number;
-  /** Element visibility triggerStart. Defaults to "top 85%" */
+  /** Distance/offset amplitude. Default depende da animação. */
+  amount?: number;
+  /** "top 85%" por padrão */
   start?: string;
+  /** Reproduz a animação ao reverter (scrub-like). Default: once only. */
+  scrub?: boolean;
 }
 
+// Estados iniciais DRAMATICOS (intencionalmente grandes p/ serem óbvios)
 const fromStates: Record<RevealAnimation, gsap.TweenVars> = {
-  fadeUp: { y: 40, opacity: 0 },
+  fadeUp: { y: 60, opacity: 0 },
   fadeIn: { opacity: 0 },
-  scale: { scale: 0.94, opacity: 0 },
-  fadeLeft: { x: -50, opacity: 0 },
-  fadeRight: { x: 50, opacity: 0 },
+  scale: { scale: 0.85, opacity: 0 },
+  fadeLeft: { x: -90, opacity: 0 },
+  fadeRight: { x: 90, opacity: 0 },
+  // Animações novas — bem mais dramáticas
+  slideUpBig: { y: 180, opacity: 0, scale: 0.95 },
+  rotateIn: { y: 80, rotation: 8, opacity: 0, transformOrigin: 'left bottom' },
+  clipReveal: { clipPath: 'inset(0 100% 0 0)', opacity: 0.6 },
 };
 
 /**
- * Hook reutilizável para scroll reveal com GSAP ScrollTrigger.
- * Respeita prefers-reduced-motion (não anima nesse caso).
- *
- * Uso:
- *   const ref = useReveal({ animation: 'fadeUp', delay: 0.1 });
- *   <section ref={ref}>...</section>
- *
- * Ou para stagger de filhos:
- *   const ref = useReveal({ stagger: 0.15 });
- *   <section ref={ref}>
- *     <div data-reveal-child>card 1</div>
- *     <div data-reveal-child>card 2</div>
- *   </section>
+ * Scroll reveal com GSAP ScrollTrigger — ação ÓBVIA (não sutil).
+ * Modos extras: slideUpBig, rotateIn, clipReveal. Scrub opcional.
+ * Respeita prefers-reduced-motion.
  */
 export function useReveal<T extends HTMLElement = HTMLDivElement>(
   options: UseRevealOptions = {}
@@ -51,13 +58,19 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
-    const { animation = 'fadeUp', delay = 0, duration = 0.8, stagger = 0, start = 'top 85%' } = options;
+    const {
+      animation = 'fadeUp',
+      delay = 0,
+      duration = 1.1,
+      stagger = 0,
+      start = 'top 82%',
+      scrub = false,
+    } = options;
     const from = fromStates[animation];
 
     const targets: Element[] = stagger
       ? Array.from(el.querySelectorAll('[data-reveal-child]'))
       : [el];
-
     if (targets.length === 0) return;
 
     const ctx = gsap.context(() => {
@@ -69,21 +82,24 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
           y: 0,
           scale: 1,
           opacity: 1,
+          rotation: 0,
+          clipPath: 'inset(0 0% 0 0)',
           duration,
           delay,
-          ease: 'power3.out',
+          ease: 'power4.out',
           stagger: stagger || undefined,
           scrollTrigger: {
             trigger: el,
             start,
-            once: true,
+            toggleActions: 'play none none reverse',
+            ...(scrub ? { scrub: 0.6 } : { once: true }),
           },
         }
       );
     }, el);
 
     return () => ctx.revert();
-  }, [options.animation, options.delay, options.duration, options.stagger, options.start]);
+  }, [options.animation, options.delay, options.duration, options.stagger, options.start, options.scrub]);
 
   return ref;
 }

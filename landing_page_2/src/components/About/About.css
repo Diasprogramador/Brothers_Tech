@@ -63,10 +63,16 @@
   -webkit-user-drag: none;
   transform: translateZ(40px);
   transition: transform 0.4s ease;
+  will-change: transform;
 }
 
 .about-card:hover .about-avatar {
-  transform: translateZ(60px);
+  transform: translateZ(70px);
+}
+
+/* Avatar da direita fica um pouco mais atrás no início (chão) */
+.about-avatar--right {
+  transform: translateZ(20px) translateY(8px);
 }
 
 /* Plataforma/sombra sob os personagens — aterra a composição */

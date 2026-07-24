@@ -6,6 +6,7 @@ import { Projects } from './components/Projects/Projects';
 import { About } from './components/About/About';
 import { Contact } from './components/Contact/Contact';
 import { Footer } from './components/Footer/Footer';
+import { SmoothScroll } from './providers/SmoothScroll';
 
 function App() {
   const { isPreloading, onComplete } = usePreloader();
@@ -19,12 +20,14 @@ function App() {
           transition: 'opacity 0.5s ease',
         }}
       >
-        <Hero />
-        <Services />
-        <Projects />
-        <About />
-        <Contact />
-        <Footer />
+        <SmoothScroll>
+          <Hero />
+          <Services />
+          <Projects />
+          <About />
+          <Contact />
+          <Footer />
+        </SmoothScroll>
       </div>
     </>
   );

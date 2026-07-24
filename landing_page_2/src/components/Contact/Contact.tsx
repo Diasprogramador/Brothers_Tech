@@ -3,9 +3,9 @@ import { useReveal } from '../../hooks/useReveal';
 import { useTilt } from '../../hooks/useTilt';
 
 export const Contact = () => {
-  const titleRef = useReveal<HTMLDivElement>({ animation: 'fadeUp' });
-  const formRef = useReveal<HTMLDivElement>({ animation: 'fadeRight', delay: 0.1 });
-  const sideRef = useReveal<HTMLDivElement>({ animation: 'fadeLeft', delay: 0.2 });
+  const titleRef = useReveal<HTMLDivElement>({ animation: 'clipReveal', duration: 1.4 });
+  const formRef = useReveal<HTMLDivElement>({ animation: 'fadeRight', delay: 0.15, duration: 1.3, amount: 120 });
+  const sideRef = useReveal<HTMLDivElement>({ animation: 'fadeLeft', delay: 0.3, duration: 1.3, amount: 120 });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
