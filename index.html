@@ -87,7 +87,7 @@
 
   /* ---------- hero ---------- */
   .hero{
-    min-height:100vh; display:flex; align-items:center;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
     padding-top:80px; padding-bottom:60px;
     position:relative; overflow:hidden;
     background:#E8E8E8;
@@ -106,10 +106,10 @@
     pointer-events:none;
   }
   .hero .wrap{
-    display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;
-    position:relative; z-index:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; z-index:1; text-align:center;
   }
-  .hero-content{ position:relative; }
+  .hero-content{ position:relative; margin-bottom:40px; }
   .eyebrow{
     font-family:'IBM Plex Mono', monospace; font-size:12px; color:#1A1A1A;
     display:inline-flex; align-items:center; gap:8px; margin-bottom:20px;
@@ -124,8 +124,9 @@
   .hero h1 .accent{ color:var(--green); }
   .hero-sub{
     margin-top:28px; max-width:440px; color:var(--text-muted); font-size:16px; line-height:1.7;
+    margin-left:auto; margin-right:auto;
   }
-  .hero-actions{ display:flex; gap:14px; margin-top:36px; flex-wrap:wrap; }
+  .hero-actions{ display:flex; gap:14px; margin-top:36px; flex-wrap:wrap; justify-content:center; }
   .btn-primary, .btn-ghost{
     font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:500;
     padding:14px 28px; border-radius:100px; display:inline-flex; align-items:center; gap:10px;
@@ -135,15 +136,40 @@
   .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.2); background:#333333; }
   .btn-ghost{ border:1px solid #BDBDBD; color:#1A1A1A; background:transparent; }
   .btn-ghost:hover{ border-color:#1A1A1A; color:#1A1A1A; }
-  .hero-avatar{
-    position:relative; display:flex; justify-content:center; align-items:center;
+
+  /* Avatars container */
+  .hero-avatars{
+    display:flex; gap:40px; align-items:flex-end; justify-content:center;
+    position:relative;
   }
-  .hero-avatar img{
-    width:100%; max-width:420px; height:auto;
-    filter:drop-shadow(0 20px 40px rgba(0,0,0,.15));
+  .avatar-item{
+    position:relative; display:flex; flex-direction:column; align-items:center;
   }
+  .avatar-item img{
+    height:320px; width:auto;
+    filter:drop-shadow(0 20px 40px rgba(0,0,0,.2));
+    transition:transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .avatar-item:hover img{
+    transform:translateY(-10px) scale(1.02);
+  }
+  .avatar-item:first-child{
+    transform:translateY(20px);
+  }
+  .avatar-item:first-child:hover img{
+    transform:translateY(10px) scale(1.02);
+  }
+  .avatar-name{
+    margin-top:16px; font-family:'Space Grotesk', sans-serif; font-weight:600;
+    font-size:14px; color:#1A1A1A; letter-spacing:0.02em;
+  }
+  .avatar-role{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:#757575;
+    margin-top:4px;
+  }
+
   .hero-tags{
-    margin-top:48px; display:flex; gap:10px; flex-wrap:wrap;
+    margin-top:48px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
   }
   .tag{
     font-family:'IBM Plex Mono', monospace; font-size:11px; color:#1A1A1A;
@@ -319,9 +345,10 @@
   }
 
   @media (max-width: 860px){
-    .hero .wrap{ grid-template-columns:1fr; text-align:center; }
-    .hero-avatar{ order:-1; margin-bottom:20px; }
-    .hero-avatar img{ max-width:280px; margin:0 auto; }
+    .hero .wrap{ text-align:center; }
+    .hero-avatars{ flex-direction:column; align-items:center; gap:20px; }
+    .avatar-item:first-child{ transform:none; }
+    .avatar-item img{ height:240px; }
     .hero-tags{ justify-content:center; }
     .hero-actions{ justify-content:center; }
     .hero-sub{ margin-left:auto; margin-right:auto; }
@@ -390,15 +417,26 @@
           <a href="#contato" class="btn-primary">Iniciar projeto →</a>
           <a href="#servicos" class="btn-ghost">Serviços</a>
         </div>
-        <div class="hero-tags">
-          <span class="tag"><span class="dot green"></span>Sistemas</span>
-          <span class="tag"><span class="dot orange"></span>Apps</span>
-          <span class="tag"><span class="dot blue"></span>Sites</span>
-          <span class="tag"><span class="dot green"></span>Softwares</span>
+      </div>
+
+      <div class="hero-avatars">
+        <div class="avatar-item">
+          <img src="assets/avatar-sanderson.svg" alt="Sanderson">
+          <div class="avatar-name">Sanderson</div>
+          <div class="avatar-role">co-fundador</div>
+        </div>
+        <div class="avatar-item">
+          <img src="assets/avatar-caio.svg" alt="Caio">
+          <div class="avatar-name">Caio</div>
+          <div class="avatar-role">co-fundador</div>
         </div>
       </div>
-      <div class="hero-avatar">
-        <img src="assets/avatars.png" alt="Brothers Tech - Sanderson e Caio">
+
+      <div class="hero-tags">
+        <span class="tag"><span class="dot green"></span>Sistemas</span>
+        <span class="tag"><span class="dot orange"></span>Apps</span>
+        <span class="tag"><span class="dot blue"></span>Sites</span>
+        <span class="tag"><span class="dot green"></span>Softwares</span>
       </div>
     </div>
   </section>

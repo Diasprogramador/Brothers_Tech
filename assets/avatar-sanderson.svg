@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400" fill="none">
+  <!-- Sanderson Avatar -->
+  <defs>
+    <linearGradient id="skin1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A574"/>
+      <stop offset="100%" style="stop-color:#C4956A"/>
+    </linearGradient>
+    <linearGradient id="hair1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A1A1A"/>
+      <stop offset="100%" style="stop-color:#2D2D2D"/>
+    </linearGradient>
+    <linearGradient id="shirt1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#F0F0F0"/>
+    </linearGradient>
+    <linearGradient id="pants1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2D2D2D"/>
+      <stop offset="100%" style="stop-color:#1A1A1A"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Body -->
+  <ellipse cx="100" cy="380" rx="35" ry="12" fill="#1A1A1A"/>
+  
+  <!-- Legs -->
+  <rect x="70" y="280" width="22" height="100" rx="8" fill="url(#pants1)"/>
+  <rect x="108" y="280" width="22" height="100" rx="8" fill="url(#pants1)"/>
+  
+  <!-- Shoes -->
+  <ellipse cx="81" cy="378" rx="18" ry="10" fill="#1A1A1A"/>
+  <ellipse cx="119" cy="378" rx="18" ry="10" fill="#1A1A1A"/>
+  
+  <!-- Torso -->
+  <rect x="60" y="180" width="80" height="110" rx="15" fill="url(#shirt1)"/>
+  
+  <!-- Arms -->
+  <rect x="40" y="190" width="25" height="80" rx="10" fill="url(#shirt1)"/>
+  <rect x="135" y="190" width="25" height="80" rx="10" fill="url(#shirt1)"/>
+  
+  <!-- Hands in pockets -->
+  <ellipse cx="52" cy="270" rx="10" ry="8" fill="url(#skin1)"/>
+  <ellipse cx="148" cy="270" rx="10" ry="8" fill="url(#skin1)"/>
+  
+  <!-- Neck -->
+  <rect x="88" y="155" width="24" height="30" rx="8" fill="url(#skin1)"/>
+  
+  <!-- Head -->
+  <ellipse cx="100" cy="120" rx="50" ry="55" fill="url(#skin1)"/>
+  
+  <!-- Hair -->
+  <path d="M50 100 Q50 60 100 55 Q150 60 150 100 Q150 80 130 75 Q110 70 90 75 Q70 80 50 100" fill="url(#hair1)"/>
+  <ellipse cx="100" cy="70" rx="45" ry="25" fill="url(#hair1)"/>
+  
+  <!-- Ears -->
+  <ellipse cx="50" cy="120" rx="8" ry="12" fill="url(#skin1)"/>
+  <ellipse cx="150" cy="120" rx="8" ry="12" fill="url(#skin1)"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="80" cy="115" rx="8" ry="6" fill="#FFFFFF"/>
+  <ellipse cx="120" cy="115" rx="8" ry="6" fill="#FFFFFF"/>
+  <circle cx="82" cy="115" r="4" fill="#1A1A1A"/>
+  <circle cx="122" cy="115" r="4" fill="#1A1A1A"/>
+  <circle cx="83" cy="114" r="1.5" fill="#FFFFFF"/>
+  <circle cx="123" cy="114" r="1.5" fill="#FFFFFF"/>
+  
+  <!-- Eyebrows -->
+  <path d="M70 105 Q80 100 90 105" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M110 105 Q120 100 130 105" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="125" rx="5" ry="4" fill="#C4956A"/>
+  
+  <!-- Mouth -->
+  <path d="M88 140 Q100 148 112 140" stroke="#8B5A3D" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Earring -->
+  <circle cx="48" cy="125" r="3" fill="#FFD700"/>
+</svg>
