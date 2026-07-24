@@ -1,38 +1,47 @@
 import './About.css';
+import { useReveal } from '../../hooks/useReveal';
+import { useTilt } from '../../hooks/useTilt';
+import avatarCaio from '../../assets/founders/avatar-caio.png';
+import avatarSanderson from '../../assets/founders/avatar-sanderson.png';
 
 export const About = () => {
+  const sectionRef = useReveal<HTMLDivElement>({ animation: 'fadeUp' });
+  const cardTiltRef = useTilt<HTMLDivElement>({ max: 6, perspective: 1400 });
+
   return (
     <section id="sobre" className="about">
-      <div className="about-container">
-        <h2 className="about-title">Sobre Nós</h2>
-        <div className="about-content">
-          <div className="about-frame">
-            <svg viewBox="0 0 800 400" className="about-svg">
-              {/* Moldura SVG semelhante à Hero */}
-              <rect
-                x="0"
-                y="0"
-                width="800"
-                height="400"
-                rx="40"
-                ry="40"
-                fill="#161b18"
-              />
-            </svg>
-            <div className="about-inner">
-              {/* Personagens ao centro */}
-              <div className="about-characters">
-                <div className="character">S</div>
-                <div className="character">C</div>
-              </div>
-            </div>
+      <div className="about-container" ref={sectionRef}>
+        <span className="about-label">Sobre Nós</span>
+
+        <div className="about-card" ref={cardTiltRef}>
+          <div className="about-avatars" data-reveal-child>
+            <img
+              src={avatarCaio}
+              alt="Caio — cofundador da Brothers Tech"
+              className="about-avatar"
+              loading="lazy"
+            />
+            <img
+              src={avatarSanderson}
+              alt="Sanderson — cofundador da Brothers Tech"
+              className="about-avatar"
+              loading="lazy"
+            />
           </div>
-          <div className="about-info">
-            {/* Informações laterais */}
-            <p>Seção em revisão</p>
+          <span className="about-platform" aria-hidden="true" />
+          <div className="about-names" data-reveal-child>
+            <span>Caio</span>
+            <span>Sanderson</span>
           </div>
         </div>
+
+        <p className="about-text">
+          Somos a <strong>Brothers Tech</strong> — dois irmãos unidos pela paixão
+          de transformar ideias em produtos digitais. Da concepção ao deploy,
+          cuidamos de cada detalhe para entregar sistemas, apps e sites que
+          performam e encantam.
+        </p>
       </div>
     </section>
   );
-}
+};
