@@ -664,9 +664,10 @@
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        // Only remove pure black background (very strict threshold)
-        if(r < 15 && g < 15 && b < 15) {
-          data[i + 3] = 0; // Set alpha to 0 (transparent)
+        const avg = (r + g + b) / 3;
+        // Remove dark pixels - more aggressive on pure black, preserve colored darks
+        if(avg < 25 && Math.abs(r - g) < 10 && Math.abs(g - b) < 10) {
+          data[i + 3] = 0;
         }
       }
       ctx.putImageData(imageData, 0, 0);
