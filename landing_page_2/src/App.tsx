@@ -1,5 +1,11 @@
 import { usePreloader } from './hooks/usePreloader';
-import Preloader from './components/Preloader/Preloader';
+import { Preloader } from './components/Preloader/Preloader';
+import { Hero } from './components/Hero/Hero';
+import { Services } from './components/Services/Services';
+import { Projects } from './components/Projects/Projects';
+import { About } from './components/About/About';
+import { Contact } from './components/Contact/Contact';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
   const { isPreloading, onComplete } = usePreloader();
@@ -7,29 +13,19 @@ function App() {
   return (
     <>
       {isPreloading && <Preloader onComplete={onComplete} />}
-      <main
+      <div
         style={{
           opacity: isPreloading ? 0 : 1,
           transition: 'opacity 0.5s ease',
-          width: '100%',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#0c0f0d',
-          color: '#f2f5f2',
-          fontFamily: "'Inter', system-ui, sans-serif",
         }}
       >
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontSize: 48, fontWeight: 600, letterSpacing: '-0.02em' }}>
-            Brothers Tech
-          </h1>
-          <p style={{ marginTop: 12, color: '#94a39a', fontSize: 18 }}>
-            Landing page em construção
-          </p>
-        </div>
-      </main>
+        <Hero />
+        <Services />
+        <Projects />
+        <About />
+        <Contact />
+        <Footer />
+      </div>
     </>
   );
 }

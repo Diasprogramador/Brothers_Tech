@@ -118,7 +118,7 @@ interface LogoSvgProps {
   svgRef: React.Ref<SVGSVGElement>;
 }
 
-export default function LogoSvg({ svgRef }: LogoSvgProps) {
+export const LogoSvg = ({ svgRef }: LogoSvgProps) => {
   const strokeLayerRef = useRef<SVGGElement>(null);
   const fillLayerRef = useRef<SVGGElement>(null);
 

@@ -1,0 +1,33 @@
+.services {
+  padding: 120px 32px;
+  background: #121613;
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services-title {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 600;
+  color: #f2f5f2;
+  margin-bottom: 64px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.service-card {
+  padding: 40px;
+  background: #161b18;
+  border: 1px solid #26302b;
+  border-radius: 18px;
+  color: #f2f5f2;
+  font-size: 20px;
+  font-weight: 500;
+}

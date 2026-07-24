@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import LogoSvg from './LogoSvg';
+import { LogoSvg } from './LogoSvg';
 import { createPreloaderAnimation } from './preloaderAnimation';
 import './Preloader.css';
 
@@ -7,7 +7,7 @@ interface PreloaderProps {
   onComplete: () => void;
 }
 
-export default function Preloader({ onComplete }: PreloaderProps) {
+export const Preloader = ({ onComplete }: PreloaderProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
