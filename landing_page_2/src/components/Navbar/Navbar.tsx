@@ -26,7 +26,6 @@ export const Navbar = () => {
         <a href="#home" className="navbar-logo">
           <img src="/assets/logo/Logo.svg" alt="Brothers Tech" />
         </a>
-
         <ul className={`navbar-links ${menuOpen ? "is-open" : ""}`}>
           <li>
             <a href="#servicos" onClick={() => setMenuOpen(false)}>
@@ -50,7 +49,9 @@ export const Navbar = () => {
           </li>
         </ul>
 
-        <div className="navbar-placeholder" />
+        <div className="navbar-placeholder">
+          <h2>Fale Conosco</h2>
+        </div>
 
         <button
           className={`navbar-toggle ${menuOpen ? "is-open" : ""}`}
