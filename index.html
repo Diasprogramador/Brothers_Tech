@@ -145,8 +145,11 @@
   .avatar-item{
     position:relative; display:flex; flex-direction:column; align-items:center;
   }
-  .avatar-item img{
-    height:320px; width:auto;
+  .avatar-img{
+    width:250px; height:320px;
+    background-size:cover; background-position:center top;
+    background-color:#E8E8E8;
+    background-blend-mode:lighten;
     transition:transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   .avatar-item:hover img{
@@ -420,12 +423,12 @@
 
       <div class="hero-avatars">
         <div class="avatar-item">
-          <img src="assets/avatar-sanderson.png" alt="Sanderson">
+          <div class="avatar-img" style="background-image:url('assets/avatar-sanderson.png')"></div>
           <div class="avatar-name">Sanderson</div>
           <div class="avatar-role">co-fundador</div>
         </div>
         <div class="avatar-item">
-          <img src="assets/avatar-caio.png" alt="Caio">
+          <div class="avatar-img" style="background-image:url('assets/avatar-caio.png')"></div>
           <div class="avatar-name">Caio</div>
           <div class="avatar-role">co-fundador</div>
         </div>
