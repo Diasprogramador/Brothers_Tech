@@ -78,10 +78,10 @@
   nav ul a:hover::after{ width:100%; }
   .nav-cta{
     font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:500;
-    color:#fff; background:var(--accent); padding:10px 20px; border-radius:100px;
+    color:#FFFFFF; background:#1A1A1A; padding:10px 20px; border-radius:100px;
     white-space:nowrap; transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
   }
-  .nav-cta:hover{ transform:translateY(-1px); box-shadow:0 4px 12px rgba(74,111,165,.25); background:var(--accent-hover); }
+  .nav-cta:hover{ transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.2); background:#333333; }
   .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:60; }
   .burger span{ width:22px; height:2px; background:var(--text); transition:.3s; }
 
@@ -97,15 +97,15 @@
     pointer-events:none;
   }
   .eyebrow{
-    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--accent);
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:#1A1A1A;
     display:flex; align-items:center; gap:10px; margin-bottom:24px;
     letter-spacing:.02em;
   }
-  .eyebrow::before{ content:''; width:24px; height:1px; background:var(--accent); }
+  .eyebrow::before{ content:''; width:24px; height:1px; background:#1A1A1A; }
   .hero h1{
     font-size:clamp(36px, 5.5vw, 72px); line-height:1.05; max-width:800px; letter-spacing:-0.03em;
   }
-  .hero h1 .accent{ color:var(--accent); }
+  .hero h1 .accent{ color:#1A1A1A; }
   .hero-sub{
     margin-top:24px; max-width:520px; color:var(--text-muted); font-size:17px; line-height:1.7;
   }
@@ -139,7 +139,7 @@
     font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--text-dim);
     display:flex; align-items:center; gap:10px; margin-bottom:16px;
   }
-  .section-eyebrow .n{ color:var(--accent); font-weight:600; }
+  .section-eyebrow .n{ color:#1A1A1A; font-weight:600; }
   .section-head h2{ font-size:clamp(28px, 3.5vw, 42px); letter-spacing:-0.02em; max-width:600px; }
   .section-head p{ color:var(--text-muted); max-width:520px; margin-top:14px; font-size:16px; }
 
@@ -235,6 +235,12 @@
     display:flex; align-items:center; gap:8px; background:#555555;
   }
   .channel:hover{ color:#FFFFFF; border-color:#FFFFFF; }
+
+  /* contact buttons - light on dark */
+  #contato .btn-primary{ background:#FFFFFF; color:#333333; }
+  #contato .btn-primary:hover{ background:#F0F0F0; box-shadow:0 8px 24px rgba(0,0,0,.15); }
+  #contato .btn-ghost{ border-color:#FFFFFF; color:#FFFFFF; background:transparent; }
+  #contato .btn-ghost:hover{ background:rgba(255,255,255,.1); }
 
   footer{
     border-top:1px solid #BDBDBD; padding:32px 0; background:#E5E5E5;
