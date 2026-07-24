@@ -154,14 +154,6 @@
   .dot.green{ background:var(--green); }
   .dot.orange{ background:var(--orange); }
   .dot.blue{ background:var(--blue); }
-
-  .hero-tags{
-    margin-top:56px; display:flex; gap:10px; flex-wrap:wrap;
-  }
-  .tag{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-muted);
-    border:1px solid var(--line); padding:8px 14px; border-radius:100px;
-    display:flex; align-items:center; gap:8px; background:var(--surface);
   }
   .tag .dot{ width:6px; height:6px; border-radius:50%; }
   .dot.green{ background:var(--green); }
@@ -283,9 +275,48 @@
   .footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
   .footer-row p{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:#666666; }
 
-  /* reveal animation */
-  .reveal{ opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+  /* reveal animations - smooth fluid motion */
+  .reveal{
+    opacity:0; transform:translateY(40px);
+    transition:opacity .8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+               transform .8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
   .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-left{
+    opacity:0; transform:translateX(-60px);
+    transition:opacity .9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+               transform .9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal-left.in{ opacity:1; transform:translateX(0); }
+  .reveal-right{
+    opacity:0; transform:translateX(60px);
+    transition:opacity .9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+               transform .9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal-right.in{ opacity:1; transform:translateX(0); }
+  .reveal-scale{
+    opacity:0; transform:scale(0.9);
+    transition:opacity .8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+               transform .8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal-scale.in{ opacity:1; transform:scale(1); }
+
+  /* hero entrance animations */
+  .hero-content .eyebrow{ animation:fadeInUp .8s ease forwards; animation-delay:.2s; opacity:0; }
+  .hero-content h1{ animation:fadeInUp .8s ease forwards; animation-delay:.4s; opacity:0; }
+  .hero-content .hero-sub{ animation:fadeInUp .8s ease forwards; animation-delay:.6s; opacity:0; }
+  .hero-content .hero-actions{ animation:fadeInUp .8s ease forwards; animation-delay:.8s; opacity:0; }
+  .hero-content .hero-tags{ animation:fadeInUp .8s ease forwards; animation-delay:1s; opacity:0; }
+  .hero-avatar{ animation:fadeInRight 1s ease forwards; animation-delay:.5s; opacity:0; }
+
+  @keyframes fadeInUp{
+    from{ opacity:0; transform:translateY(30px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeInRight{
+    from{ opacity:0; transform:translateX(40px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
 
   @media (max-width: 860px){
     .hero .wrap{ grid-template-columns:1fr; text-align:center; }
@@ -375,13 +406,13 @@
   <!-- SERVICOS -->
   <section id="servicos">
     <div class="wrap">
-      <div class="section-head reveal">
+      <div class="section-head reveal-left">
         <div class="section-eyebrow"><span class="n">01</span> — o que fazemos</div>
         <h2>Quatro frentes, um mesmo padrão de qualidade.</h2>
         <p>Cada projeto passa pela mesma régua: escopo claro, prazos combinados e entrega que funciona de verdade.</p>
       </div>
 
-      <div class="services-grid reveal">
+      <div class="services-grid reveal-scale">
         <div class="service-card">
           <div class="num mono">01</div>
           <h3>Sistemas</h3>
@@ -413,7 +444,7 @@
   <!-- PROJETOS -->
   <section id="projetos">
     <div class="wrap">
-      <div class="section-head reveal">
+      <div class="section-head reveal-right">
         <div class="section-eyebrow"><span class="n">02</span> — trabalhos</div>
         <h2>Projetos recentes</h2>
         <p>A Brothers Tech acabou de nascer — esses são os espaços reservados para os primeiros projetos que vamos entregar.</p>
@@ -453,13 +484,13 @@
   <!-- SOBRE -->
   <section id="sobre">
     <div class="wrap">
-      <div class="section-head reveal">
+      <div class="section-head reveal-left">
         <div class="section-eyebrow"><span class="n">03</span> — quem faz</div>
         <h2>Sobre nós</h2>
         <p>A Brothers Tech nasceu de uma parceria simples: dois irmãos que gostam de resolver problemas com código.</p>
       </div>
 
-      <div class="about-grid reveal">
+      <div class="about-grid reveal-scale">
         <div class="founder">
           <div class="founder-avatar">S</div>
           <div class="role mono">co-fundador</div>
@@ -486,7 +517,7 @@
   <!-- CONTATO -->
   <section id="contato">
     <div class="wrap">
-      <div class="contact-box reveal">
+      <div class="contact-box reveal-scale">
         <h2>Bora tirar seu projeto do papel?</h2>
         <p>Conta pra gente o que você precisa — sistema, app, site ou software — e a gente volta com um plano.</p>
         <div class="contact-actions">
@@ -512,11 +543,13 @@
 </footer>
 
 <script>
+  // Header scroll state
   const header = document.getElementById('site-header');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 10);
   });
 
+  // Mobile menu
   const burger = document.getElementById('burger');
   const mobileMenu = document.getElementById('mobileMenu');
   burger.addEventListener('click', () => {
@@ -524,16 +557,58 @@
   });
   mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+  // Smooth scroll reveal animations with stagger
+  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
       if(entry.isIntersecting){
-        entry.target.classList.add('in');
-        io.unobserve(entry.target);
+        // Add stagger delay based on element position
+        const delay = entry.target.dataset.delay || 0;
+        setTimeout(() => {
+          entry.target.classList.add('in');
+        }, delay);
+        revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => io.observe(el));
+  }, observerOptions);
+
+  revealElements.forEach((el, index) => {
+    // Add stagger delay for elements in the same section
+    if(!el.dataset.delay) {
+      el.dataset.delay = (index % 4) * 100;
+    }
+    revealObserver.observe(el);
+  });
+
+  // Parallax effect for hero avatar
+  const heroAvatar = document.querySelector('.hero-avatar');
+  if(heroAvatar) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      if(scrolled < window.innerHeight) {
+        heroAvatar.style.transform = `translateY(${scrolled * 0.15}px)`;
+      }
+    });
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if(target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
 </script>
 
 </body>
