@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brother_Tech — Sistemas, Apps, Sites e Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0f0d;
+    --bg-soft:#121613;
+    --surface:#161b18;
+    --surface-2:#1d2320;
+    --line:#26302b;
+    --text:#f2f5f2;
+    --text-muted:#94a39a;
+    --text-dim:#5d6b63;
+    --green:#46d373;
+    --green-dim:#2c8f4d;
+    --orange:#ff7a3d;
+    --blue:#5b9dff;
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--green); color:#08110b; }
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.02em; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  section{ position:relative; }
+
+  /* ---------- background texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(12,15,13,.72); backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  header.scrolled{ border-bottom-color:var(--line); }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:19px;
+    display:flex; align-items:center; gap:2px;
+  }
+  .logo .b1{ color:var(--text); }
+  .logo .b2{ color:var(--green); }
+  .logo .mark{
+    width:9px; height:9px; border-radius:50%; background:var(--green);
+    display:inline-block; margin:0 8px; box-shadow:0 0 12px var(--green);
+  }
+  nav ul{ list-style:none; display:flex; gap:36px; }
+  nav ul a{
+    font-size:14px; color:var(--text-muted); font-weight:500;
+    position:relative; padding:4px 0; transition:color .2s ease;
+  }
+  nav ul a:hover{ color:var(--text); }
+  nav ul a::after{
+    content:''; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--green);
+    transition:width .25s ease;
+  }
+  nav ul a:hover::after{ width:100%; }
+  .nav-cta{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:500;
+    color:var(--bg); background:var(--green); padding:10px 20px; border-radius:100px;
+    white-space:nowrap; transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .nav-cta:hover{ transform:translateY(-1px); box-shadow:0 6px 20px rgba(70,211,115,.35); }
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:60; }
+  .burger span{ width:22px; height:2px; background:var(--text); transition:.3s; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding-top:120px; padding-bottom:80px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before{
+    content:''; position:absolute; top:-20%; left:50%; width:900px; height:900px;
+    background:radial-gradient(circle, rgba(70,211,115,.10) 0%, rgba(70,211,115,0) 60%);
+    transform:translateX(-50%); pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--green);
+    display:flex; align-items:center; gap:10px; margin-bottom:28px;
+    letter-spacing:.02em;
+  }
+  .eyebrow::before{ content:''; width:24px; height:1px; background:var(--green); }
+  .hero h1{
+    font-size:clamp(40px, 6.4vw, 84px); line-height:1.03; max-width:920px; letter-spacing:-0.03em;
+  }
+  .hero h1 .accent{ color:var(--green); }
+  .hero-sub{
+    margin-top:28px; max-width:520px; color:var(--text-muted); font-size:17px; line-height:1.65;
+  }
+  .hero-actions{ display:flex; gap:16px; margin-top:44px; flex-wrap:wrap; }
+  .btn-primary, .btn-ghost{
+    font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:500;
+    padding:15px 28px; border-radius:100px; display:inline-flex; align-items:center; gap:10px;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn-primary{ background:var(--green); color:#08110b; }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(70,211,115,.3); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--text-muted); background:var(--surface); }
+
+  /* twin mark graphic */
+  .twin-mark{
+    position:absolute; right:32px; top:130px; width:340px; opacity:.9;
+  }
+  .twin-mark svg{ width:100%; height:auto; }
+
+  .hero-tags{
+    margin-top:64px; display:flex; gap:12px; flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-muted);
+    border:1px solid var(--line); padding:8px 14px; border-radius:100px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tag .dot{ width:6px; height:6px; border-radius:50%; }
+  .dot.green{ background:var(--green); }
+  .dot.orange{ background:var(--orange); }
+  .dot.blue{ background:var(--blue); }
+
+  /* ---------- section headers ---------- */
+  .section-head{ margin-bottom:56px; }
+  .section-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--text-dim);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .section-eyebrow .n{ color:var(--green); }
+  .section-head h2{ font-size:clamp(30px, 4vw, 46px); letter-spacing:-0.02em; max-width:640px; }
+  .section-head p{ color:var(--text-muted); max-width:520px; margin-top:16px; font-size:16px; }
+
+  /* ---------- services ---------- */
+  #servicos{ background:var(--bg-soft); padding:140px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .services-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .service-card{
+    background:var(--bg-soft); padding:44px 40px; transition:background .25s ease;
+    position:relative;
+  }
+  .service-card:hover{ background:var(--surface); }
+  .service-card .num{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--green); }
+  .service-card h3{ font-size:26px; margin-top:20px; margin-bottom:14px; }
+  .service-card p{ color:var(--text-muted); font-size:15px; line-height:1.6; }
+  .service-card .for{
+    margin-top:22px; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-dim);
+  }
+
+  /* ---------- projects ---------- */
+  #projetos{ padding:140px 0; }
+  .projects-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+  .project-card{
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--surface);
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .project-card:hover{ transform:translateY(-4px); border-color:var(--green-dim); }
+  .project-thumb{
+    aspect-ratio:4/3; background:
+      repeating-linear-gradient(135deg, var(--surface-2), var(--surface-2) 10px, var(--surface) 10px, var(--surface) 20px);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .project-thumb span{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-dim);
+    border:1px dashed var(--line); padding:8px 14px; border-radius:100px;
+  }
+  .project-body{ padding:24px; }
+  .project-body h4{ font-size:17px; font-weight:600; font-family:'Space Grotesk',sans-serif; }
+  .project-body p{ color:var(--text-dim); font-size:13.5px; margin-top:8px; font-family:'IBM Plex Mono', monospace; }
+  .projects-note{
+    margin-top:40px; display:flex; align-items:center; gap:12px; color:var(--text-muted); font-size:14px;
+  }
+  .projects-note .dot{ width:8px; height:8px; border-radius:50%; background:var(--orange); flex:none; }
+
+  /* ---------- about ---------- */
+  #sobre{ background:var(--bg-soft); padding:140px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .founder{ padding:48px 40px; position:relative; }
+  .founder:first-child{ border-right:1px solid var(--line); }
+  .founder .role{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--green); }
+  .founder h3{ font-size:30px; margin-top:16px; }
+  .founder p{ color:var(--text-muted); margin-top:14px; font-size:15px; line-height:1.65; }
+  .founder-avatar{
+    width:56px; height:56px; border-radius:50%; margin-bottom:22px;
+    background:linear-gradient(135deg, var(--green), var(--blue));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:20px; color:#08110b;
+  }
+  .about-story{ max-width:640px; margin-top:56px; color:var(--text-muted); font-size:16px; line-height:1.75; }
+  .about-story strong{ color:var(--text); font-weight:600; }
+  .founded-tag{
+    margin-top:32px; display:inline-flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--text-dim);
+    border:1px solid var(--line); padding:10px 18px; border-radius:100px;
+  }
+
+  /* ---------- contact ---------- */
+  #contato{ padding:150px 0 120px; }
+  .contact-box{
+    background:linear-gradient(180deg, var(--surface), var(--bg-soft));
+    border:1px solid var(--line); border-radius:28px; padding:80px 56px; text-align:center; position:relative; overflow:hidden;
+  }
+  .contact-box::before{
+    content:''; position:absolute; bottom:-40%; left:50%; width:700px; height:700px;
+    background:radial-gradient(circle, rgba(70,211,115,.12) 0%, rgba(70,211,115,0) 65%);
+    transform:translateX(-50%); pointer-events:none;
+  }
+  .contact-box h2{ font-size:clamp(32px, 5vw, 56px); max-width:680px; margin:0 auto; position:relative; z-index:1; }
+  .contact-box p{ color:var(--text-muted); margin-top:20px; max-width:460px; margin-left:auto; margin-right:auto; position:relative; z-index:1; }
+  .contact-actions{ display:flex; gap:16px; justify-content:center; margin-top:44px; flex-wrap:wrap; position:relative; z-index:1; }
+  .contact-channels{
+    margin-top:64px; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; position:relative; z-index:1;
+  }
+  .channel{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--text-muted);
+    border:1px solid var(--line); padding:12px 20px; border-radius:100px; transition:.2s;
+    display:flex; align-items:center; gap:8px;
+  }
+  .channel:hover{ color:var(--text); border-color:var(--text-muted); }
+
+  footer{
+    border-top:1px solid var(--line); padding:36px 0; 
+  }
+  .footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .footer-row p{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-dim); }
+
+  /* reveal animation */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 860px){
+    .services-grid{ grid-template-columns:1fr; }
+    .projects-grid{ grid-template-columns:1fr; }
+    .about-grid{ grid-template-columns:1fr; }
+    .founder:first-child{ border-right:none; border-bottom:1px solid var(--line); }
+    .twin-mark{ display:none; }
+    nav ul{ display:none; }
+    .burger{ display:flex; }
+    .nav-cta{ display:none; }
+    .contact-box{ padding:56px 28px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ transition:none; opacity:1; transform:none; }
+  }
+
+  /* mobile menu */
+  .mobile-menu{
+    position:fixed; inset:0; background:var(--bg); z-index:55;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px;
+    transform:translateY(-100%); transition:transform .35s ease;
+  }
+  .mobile-menu.open{ transform:translateY(0); }
+  .mobile-menu a{ font-family:'Space Grotesk', sans-serif; font-size:28px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header id="site-header">
+  <div class="nav">
+    <a href="#home" class="logo"><span class="b1">brother</span><span class="mark"></span><span class="b2">tech</span></a>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#sobre">Sobre nós</a></li>
+      </ul>
+    </nav>
+    <a href="#contato" class="nav-cta">Fale com a gente</a>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#servicos">Serviços</a>
+  <a href="#projetos">Projetos</a>
+  <a href="#sobre">Sobre nós</a>
+  <a href="#contato" style="color:var(--green)">Contato</a>
+</div>
+
+<main>
+
+  <!-- HOME -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="eyebrow mono">brother_tech · estúdio de desenvolvimento</div>
+      <h1>Dois irmãos.<br>Um só <span class="accent">código</span>.</h1>
+      <p class="hero-sub">Construímos sistemas, apps, sites e softwares sob medida — do primeiro rascunho ao produto no ar. Uma dupla, um fluxo de trabalho, sem ruído no meio do caminho.</p>
+      <div class="hero-actions">
+        <a href="#contato" class="btn-primary">Iniciar um projeto →</a>
+        <a href="#servicos" class="btn-ghost">Ver serviços</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag"><span class="dot green"></span>Sistemas</span>
+        <span class="tag"><span class="dot orange"></span>Apps</span>
+        <span class="tag"><span class="dot blue"></span>Sites</span>
+        <span class="tag"><span class="dot green"></span>Softwares</span>
+      </div>
+    </div>
+
+    <div class="twin-mark">
+      <svg viewBox="0 0 300 300" fill="none">
+        <circle cx="105" cy="150" r="80" stroke="#46d373" stroke-width="1.4" opacity="0.55"/>
+        <circle cx="195" cy="150" r="80" stroke="#5b9dff" stroke-width="1.4" opacity="0.55"/>
+        <path d="M150 78 A80 80 0 0 1 150 222 A80 80 0 0 1 150 78 Z" fill="#46d373" opacity="0.14"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SERVICOS -->
+  <section id="servicos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="section-eyebrow"><span class="n">01</span> — o que fazemos</div>
+        <h2>Quatro frentes, um mesmo padrão de qualidade.</h2>
+        <p>Cada projeto passa pela mesma régua: escopo claro, prazos combinados e entrega que funciona de verdade.</p>
+      </div>
+
+      <div class="services-grid reveal">
+        <div class="service-card">
+          <div class="num mono">01</div>
+          <h3>Sistemas</h3>
+          <p>Plataformas sob medida para organizar processos internos, integrar áreas e tirar planilhas soltas da equação.</p>
+          <div class="for mono">→ gestão, automação, integração</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">02</div>
+          <h3>Apps</h3>
+          <p>Aplicativos mobile pensados do fluxo do usuário para trás — nada de tela bonita que ninguém sabe usar.</p>
+          <div class="for mono">→ iOS, Android, multiplataforma</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">03</div>
+          <h3>Sites</h3>
+          <p>Presença digital rápida, responsiva e fácil de manter — do institucional simples ao e-commerce completo.</p>
+          <div class="for mono">→ institucional, landing page, loja</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">04</div>
+          <h3>Softwares</h3>
+          <p>Ferramentas específicas para um problema específico do seu negócio, feitas sob encomenda.</p>
+          <div class="for mono">→ automação, ferramentas internas, APIs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETOS -->
+  <section id="projetos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="section-eyebrow"><span class="n">02</span> — trabalhos</div>
+        <h2>Projetos recentes</h2>
+        <p>A Brother_Tech acabou de nascer — esses são os espaços reservados para os primeiros projetos que vamos entregar.</p>
+      </div>
+
+      <div class="projects-grid reveal">
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 01</h4>
+            <p>sistema · em produção</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 02</h4>
+            <p>app · em produção</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 03</h4>
+            <p>site · em produção</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="projects-note reveal">
+        <span class="dot"></span>
+        <span class="mono" style="font-size:13.5px">Quer ser o primeiro case da Brother_Tech? Fale com a gente na seção de contato.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="section-eyebrow"><span class="n">03</span> — quem faz</div>
+        <h2>Sobre nós</h2>
+        <p>A Brother_Tech nasceu de uma parceria simples: dois irmãos que gostam de resolver problemas com código.</p>
+      </div>
+
+      <div class="about-grid reveal">
+        <div class="founder">
+          <div class="founder-avatar">S</div>
+          <div class="role mono">co-fundador</div>
+          <h3>Sanderson</h3>
+          <p>Cuida da ponte entre o que o cliente precisa e o que a gente constrói — do primeiro papo até a entrega final.</p>
+        </div>
+        <div class="founder">
+          <div class="founder-avatar" style="background:linear-gradient(135deg, var(--blue), var(--orange))">C</div>
+          <div class="role mono">co-fundador</div>
+          <h3>Caio</h3>
+          <p>Põe a mão no código: arquitetura, integrações e a parte técnica que faz tudo funcionar nos bastidores.</p>
+        </div>
+      </div>
+
+      <p class="about-story reveal">Somos uma dupla pequena de propósito — <strong>sem camadas, sem intermediários</strong>. Cada projeto passa pelas mãos dos dois fundadores, do escopo ao deploy. É esse o nosso jeito de garantir padrão e cuidado em cada entrega.</p>
+
+      <div class="founded-tag reveal">
+        <span class="dot green" style="width:6px;height:6px;border-radius:50%;background:var(--green)"></span>
+        fundada em 23.07.2026
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="wrap">
+      <div class="contact-box reveal">
+        <h2>Bora tirar seu projeto do papel?</h2>
+        <p>Conta pra gente o que você precisa — sistema, app, site ou software — e a gente volta com um plano.</p>
+        <div class="contact-actions">
+          <a href="mailto:contato@brothertech.dev" class="btn-primary">Enviar e-mail →</a>
+          <a href="https://wa.me/55SEUNUMERO" class="btn-ghost">Chamar no WhatsApp</a>
+        </div>
+        <div class="contact-channels">
+          <a href="mailto:contato@brothertech.dev" class="channel"><span class="dot green" style="width:6px;height:6px;border-radius:50%;background:var(--green)"></span>contato@brothertech.dev</a>
+          <a href="#" class="channel"><span class="dot orange" style="width:6px;height:6px;border-radius:50%;background:var(--orange)"></span>@brother_tech</a>
+          <a href="#" class="channel"><span class="dot blue" style="width:6px;height:6px;border-radius:50%;background:var(--blue)"></span>github.com/brother-tech</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <p>© 2026 Brother_Tech — todos os direitos reservados</p>
+    <p>feito por dois irmãos, um código de cada vez</p>
+  </div>
+</footer>
+
+<script>
+  // header scroll state
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // mobile menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    burger.classList.toggle('active');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
