@@ -1,277 +1,182 @@
-/* ===== Seção About — arena dos personagens ===== */
+/* =========================================================
+   Seção About — palco 3D dos personagens (mobile-first)
+   Camadas (z-index):
+     1  gradiente de fundo (.about-bg)
+     2  Canvas 3D            (.about-stage-layer)
+     3  conteúdo semântico  (.about-container) — balões, nomes, texto
+   ========================================================= */
 
 .about {
   position: relative;
-  padding: 140px 32px;
-  /* Fundo trocado do #0c0f0d fosco para um gradiente profundo tipo "arena" */
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(70, 211, 115, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 20% 100%, rgba(255, 176, 64, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(86, 140, 245, 0.08) 0%, transparent 60%),
-    linear-gradient(180deg, #0a0d10 0%, #0e1218 50%, #0a0d10 100%);
+  padding: 96px 16px 64px;
+  background: #06080a;
   overflow: hidden;
+  isolation: isolate;
 }
 
-/* Grade sutil de fundo — profundidade/isométrica */
-.about-grid-bg {
+/* ---------- Fundo gradiente profundo + holofotes da arena ---------- */
+.about-bg {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 80%);
+  z-index: 1;
   pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(70, 211, 115, 0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 12% 110%, rgba(255, 176, 64, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 88% 110%, rgba(86, 140, 245, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, #06080a 0%, #0a0e12 50%, #06080a 100%);
 }
 
+/* ---------- Camada do Canvas 3D ---------- */
+.about-stage-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto; /* Canvas precisa capturar pointer p/ interagir */
+}
+
+.avatar-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Placeholder enquanto o chunk 3D lazy carrega */
+.about-stage-loading {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Container semântico (texto/balões/nomes) ---------- */
 .about-container {
   position: relative;
-  max-width: 1200px;
+  z-index: 3;
+  max-width: 920px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: none; /* deixa o canvas receber pointer; balões reativam abaixo */
 }
 
 /* Pill flutuante "Sobre Nós" */
 .about-label {
   display: inline-block;
-  padding: 8px 20px;
+  align-self: center;
+  pointer-events: auto;
+  padding: 8px 18px;
   background: rgba(70, 211, 115, 0.08);
   border: 1px solid rgba(70, 211, 115, 0.35);
   border-radius: 999px;
   color: #7ef0a8;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   backdrop-filter: blur(8px);
-  box-shadow: 0 0 30px -8px rgba(70, 211, 115, 0.3);
+  box-shadow: 0 0 30px -8px rgba(70, 211, 115, 0.35);
 }
 
-/* ===== Arena (palco onde os personagens vivem) ===== */
-.about-arena {
+/* ---------- Moldura que alinha os balões sobre os avatares 3D ---------- */
+.about-stage-frame {
   position: relative;
   width: 100%;
-  max-width: 960px;
-  padding: 24px;
-  border-radius: 24px;
-}
-
-/* Spotlight segue o mouse — ilumina a arena */
-.about-spotlight {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  opacity: 0;
+  height: clamp(360px, 62vh, 560px);
   pointer-events: none;
-  background: radial-gradient(
-    circle 280px at var(--spot-x, 50%) var(--spot-y, 50%),
-    rgba(255, 176, 64, 0.14) 0%,
-    rgba(255, 176, 64, 0.04) 35%,
-    transparent 70%
-  );
-  transition: opacity 0.3s ease;
 }
 
-/* Partículas âmbar flutuantes */
-.about-particle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffb040 0%, rgba(255, 176, 64, 0) 70%);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-/* ===== Card grande com avatares ===== */
-.about-card {
-  position: relative;
-  width: 100%;
-  max-width: 880px;
-  margin: 0 auto;
-  background: linear-gradient(180deg, rgba(22, 27, 24, 0.6) 0%, rgba(12, 15, 13, 0.4) 100%);
-  border: 1px solid rgba(70, 211, 115, 0.12);
-  border-radius: 20px;
-  padding: 64px 32px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: visible;
-  transform-style: preserve-3d;
-  backdrop-filter: blur(12px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 30px 80px -40px rgba(0, 0, 0, 0.8);
-}
-
-.about-avatars {
-  display: flex;
-  gap: clamp(20px, 5vw, 64px);
-  align-items: flex-end;
-  justify-content: center;
-  width: 100%;
-  transform-style: preserve-3d;
-}
-
-/* ===== Personagem (avatar + balão) ===== */
-.about-character {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform-style: preserve-3d;
-}
-
-.about-char-wrapper {
-  position: relative;
-  transform-style: preserve-3d;
-}
-
-.about-avatar {
-  width: clamp(180px, 30vw, 290px);
-  height: auto;
-  object-fit: contain;
-  user-select: none;
-  -webkit-user-drag: none;
-  transform: translateZ(40px);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  will-change: transform;
-  filter: drop-shadow(0 24px 24px rgba(0, 0, 0, 0.5));
-  cursor: pointer;
-}
-
-/* Ring de luz que acende no hover — "personagem acordou" */
-.about-ring {
-  position: absolute;
-  inset: -8%;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 176, 64, 0);
-  opacity: 0;
-  transform: translateZ(30px) scale(0.85);
-  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
-  pointer-events: none;
-  box-shadow: 0 0 40px -8px rgba(255, 176, 64, 0.4);
-}
-
-/* Estado "acordado" ao hover do personagem */
-.about-character:hover .about-avatar {
-  transform: translateZ(90px) scale(1.04);
-  filter: drop-shadow(0 36px 28px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 24px rgba(255, 176, 64, 0.25));
-}
-
-.about-character:hover .about-ring {
-  opacity: 1;
-  transform: translateZ(30px) scale(1);
-  border-color: rgba(255, 176, 64, 0.5);
-}
-
-/* Balão de fala com especialidade do fundador */
+/* ---------- Balões de especialidade (overlay) ---------- */
 .about-bubble {
   position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%) translateZ(80px);
-  min-width: 200px;
-  padding: 14px 18px;
-  background: rgba(18, 22, 20, 0.92);
+  top: 8%;
+  width: 168px;
+  padding: 12px 14px;
+  background: rgba(10, 14, 12, 0.82);
   border: 1px solid rgba(255, 176, 64, 0.4);
   border-radius: 14px;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.8), 0 0 30px -10px rgba(255, 176, 64, 0.25);
-  white-space: nowrap;
   text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 16px 40px -16px rgba(0, 0, 0, 0.85),
+    0 0 32px -12px rgba(255, 176, 64, 0.3);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .about-bubble::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  border: 8px solid transparent;
+  border: 10px solid transparent;
   border-top-color: rgba(255, 176, 64, 0.4);
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.6));
+}
+
+/* Por padrão eles ficam invisíveis — mostram no hover da moldura */
+.about-stage-frame:hover .about-bubble,
+.about-container:focus-within .about-bubble {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-bubble--left {
+  left: 2%;
+}
+
+.about-bubble--right {
+  right: 2%;
 }
 
 .about-bubble strong {
   color: #ffb040;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
   letter-spacing: 0.02em;
 }
 
 .about-bubble-role {
   color: #f2f5f2;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .about-bubble-tag {
   color: #7ef0a8;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
-.about-character:hover .about-bubble {
-  opacity: 1;
-  transform: translateX(-50%) translateZ(80px) translateY(-12px);
-}
-
-/* Avatar da direita some um pouco mais atrás no início */
-.about-character--right .about-avatar {
-  transform: translateZ(20px) translateY(10px);
-}
-
-.about-character--right:hover .about-avatar {
-  transform: translateZ(70px) scale(1.03);
-}
-
-/* Plataforma/sombra sob os personagens */
-.about-platform {
-  display: block;
-  width: 70%;
-  max-width: 560px;
-  height: 16px;
-  margin-top: -4px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 176, 64, 0.18) 0%,
-    rgba(0, 0, 0, 0.55) 35%,
-    rgba(0, 0, 0, 0) 70%
-  );
-  transform: translateZ(10px);
-}
-
-/* ===== Nomes com split reveal ===== */
+/* ---------- Nomes (split reveal, abaixo do palco) ---------- */
 .about-names {
+  pointer-events: auto;
   display: flex;
   width: 100%;
   max-width: 600px;
   justify-content: space-between;
-  padding: 0 12%;
-  margin-top: 12px;
-  transform: translateZ(30px);
+  padding: 0 16%;
+  margin-top: 8px;
 }
 
 .about-name {
   overflow: hidden;
   color: #f2f5f2;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   display: inline-block;
+  text-shadow: 0 2px 14px rgba(70, 211, 115, 0.25);
 }
 
 .about-name span {
@@ -279,67 +184,116 @@
   will-change: transform, opacity;
 }
 
-/* Texto descritivo abaixo do card */
+/* ---------- Texto descritivo ---------- */
 .about-text {
-  margin: 56px 0 0;
-  max-width: 660px;
+  pointer-events: auto;
+  margin: 40px 0 0;
+  max-width: 620px;
   text-align: center;
   color: #b8c4be;
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.75;
 }
 
 .about-text strong {
   color: #7ef0a8;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-/* ===== Mobile ===== */
-@media (max-width: 640px) {
+/* =========================================
+   BREAKPOINTS — mobile-first, sobe a escala
+   ========================================= */
+
+/* >= 480px */
+@media (min-width: 480px) {
   .about {
-    padding: 90px 16px;
-  }
-  .about-arena {
-    padding: 12px;
-  }
-  .about-card {
-    padding: 44px 12px 20px;
-    overflow: hidden;
-  }
-  .about-avatars {
-    gap: 8px;
-  }
-  .about-avatar {
-    width: 42vw;
+    padding: 112px 24px 80px;
   }
   .about-bubble {
-    min-width: 150px;
-    padding: 10px 12px;
+    width: 188px;
+    padding: 14px 16px;
   }
   .about-bubble strong {
-    font-size: 14px;
+    font-size: 19px;
   }
   .about-bubble-role {
-    font-size: 11px;
+    font-size: 13px;
   }
   .about-bubble-tag {
-    font-size: 10px;
+    font-size: 11px;
   }
   .about-name {
-    font-size: 18px;
+    font-size: 22px;
   }
-  .about-text {
-    font-size: 16px;
-    margin-top: 40px;
+  .about-label {
+    font-size: 13px;
+    padding: 8px 20px;
   }
 }
 
-/* ===== Acessibilidade: respeita prefers-reduced-motion ===== */
-@media (prefers-reduced-motion: reduce) {
-  .about-character:hover .about-avatar {
-    transform: translateZ(40px);
+/* >= 768px — tablet/desktop */
+@media (min-width: 768px) {
+  .about {
+    padding: 140px 32px 96px;
   }
-  .about-character--right:hover .about-avatar {
-    transform: translateZ(20px);
+  .about-stage-frame {
+    height: clamp(420px, 70vh, 620px);
+  }
+  .about-bubble {
+    width: 220px;
+    padding: 16px 18px;
+  }
+  .about-bubble strong {
+    font-size: 22px;
+  }
+  .about-bubble-role {
+    font-size: 14px;
+  }
+  .about-bubble-tag {
+    font-size: 12px;
+  }
+  .about-bubble--left {
+    left: 6%;
+  }
+  .about-bubble--right {
+    right: 6%;
+  }
+  .about-name {
+    font-size: 26px;
+  }
+  .about-label {
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  .about-text {
+    font-size: 19px;
+    margin-top: 56px;
+  }
+}
+
+/* >= 1100px — wide */
+@media (min-width: 1100px) {
+  .about-stage-frame {
+    height: clamp(480px, 76vh, 680px);
+  }
+  .about-bubble--left {
+    left: 10%;
+  }
+  .about-bubble--right {
+    right: 10%;
+  }
+  .about-name {
+    font-size: 30px;
+  }
+}
+
+/* =========================================
+   Acessibilidade: reduced-motion
+   ========================================= */
+@media (prefers-reduced-motion: reduce) {
+  .about-stage-frame:hover .about-bubble,
+  .about-container:focus-within .about-bubble {
+    opacity: 1;
+    transform: none;
   }
 }
