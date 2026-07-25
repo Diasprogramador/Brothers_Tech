@@ -32,6 +32,16 @@ const FOUNDERS: Founder[] = [
   },
 ];
 
+// Skills compartilhadas (representa a parceria — a base do "Handshake Orb")
+const SHARED_SKILLS = [
+  'React',
+  'TypeScript',
+  'Three.js',
+  'Node.js',
+  'GSAP',
+  'Figma',
+];
+
 export const About = () => {
   const sectionRef = useReveal<HTMLDivElement>({ animation: 'slideUpBig' });
   const namesWrap = useRef<HTMLDivElement>(null);
@@ -116,6 +126,13 @@ export const About = () => {
           cuidamos de cada detalhe para entregar sistemas, apps e sites que
           performam e encantam.
         </p>
+
+        {/* Skills compartilhadas — representa a base da parceria */}
+        <ul className="about-skills" aria-label="Tecnologias que dominamos">
+          {SHARED_SKILLS.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
 
         {/* Hidden — avatares mantêm sourcing Vite p/ preload/hash consistente */}
         <link rel="preload" as="image" href={avatarCaio} />

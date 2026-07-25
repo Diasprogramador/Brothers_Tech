@@ -5,74 +5,30 @@ import avatarCaio from '../../assets/founders/avatar-caio.png';
 import avatarSanderson from '../../assets/founders/avatar-sanderson.png';
 
 /**
- * AvatarStage — palco 3D real (React Three Fiber) para a seção About.
+ * AvatarStage — palco 3D (React Three Fiber) para a seção About.
  *
- * Conceito "showcase de personagens":
- *  - Dois avatar-billboards (textura PNG com alpha) sobre uma plataforma 3D
- *  - Iluminação cinematográfica (ambient + 2 spots coloridos que orbitam)
- *  - Partículas volumétricas em espiral em torno dos personagens
- *  - Leve "respiração" idle + inclinação suave que segue o mouse (lerp)
- *  - Grade holográfica sob a plataforma para aterrar a composição
+ * Conceito "Handshake Orb":
+ *  - Dois avatar-billboards (PNG com alpha nativo) sobre uma plataforma 3D,
+ *    levemente inclinados (±15°) "olhando" um pro outro.
+ *  - Esfera translúcida central ("orb") representa a parceria entre os irmãos.
+ *  - Iluminação cinematográfica: ambient + spots coloridos que orbitam.
+ *  - Partículas volumétricas em espiral em torno dos personagens.
+ *  - Grade holográfica sob a plataforma.
+ *  - Leve "respiração" idle alternada (um inhala, o outro exhala).
+ *  - Inclinação suave que segue o cursor (lerp, não snap).
  *
- * Totalmente responsivo: camera/FOV/posições ajustam por viewport via useThree size.
- * Respeita prefers-reduced-motion (desliga idle + partículas).
- * Sem dependências extras — só @react-three/fiber + three (já no projeto).
+ * Totalmente responsivo (mobile-first via useThree size).
+ * Respeita prefers-reduced-motion (desliga idle/partículas/spotlight).
+ * Sem deps extras — só @react-three/fiber + three (já no projeto).
  */
 
 type Follow = React.MutableRefObject<{ x: number; y: number }>;
 
-/* ---------- ShaderMaterial: chroma-key remove fundo preto do PNG ---------- */
-// Os PNGs originais não têm canal alpha (Format24bppRgb), então usamos um
-// shader que descarta pixels cuja luminância está abaixo de um threshold.
-// Feather suave nas bordas evita "dent" duro ao redor da silhueta.
-const chromaKeyVertex = /* glsl */ `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-const chromaKeyFragment = /* glsl */ `
-  uniform sampler2D uMap;
-  uniform float uThreshold;   // pixels com luminância abaixo disso viram transparentes
-  uniform float uFeather;     // suavidade da borda do chroma-key (0..1)
-  uniform vec3 uTint;         // coloração leve para integrar com o palco
-  uniform float uTintAmount;
-  varying vec2 vUv;
-  void main() {
-    vec4 tex = texture2D(uMap, vUv);
-    float lum = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
-    // Smoothstep do threshold ao threshold+feather: 0 abaixo, 1 acima.
-    float alpha = smoothstep(uThreshold, uThreshold + uFeather, lum);
-    if (alpha <= 0.001) discard;
-    vec3 color = mix(tex.rgb, tex.rgb * uTint, uTintAmount);
-    gl_FragColor = vec4(color, alpha);
-  }
-`;
-function makeChromaKeyMaterial(
-  map: THREE.Texture,
-  opts: { threshold?: number; feather?: number; tint?: THREE.ColorRepresentation; tintAmount?: number } = {}
-) {
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      uMap: { value: map },
-      uThreshold: { value: opts.threshold ?? 0.06 },
-      uFeather: { value: opts.feather ?? 0.12 },
-      uTint: { value: new THREE.Color(opts.tint ?? '#7ef0a8') },
-      uTintAmount: { value: opts.tintAmount ?? 0.12 },
-    },
-    vertexShader: chromaKeyVertex,
-    fragmentShader: chromaKeyFragment,
-    transparent: true,
-    side: THREE.DoubleSide,
-    depthWrite: false,
-  });
-}
-
-/* ---------- Avatar como billboard 3D (com chroma-key) ---------- */
+/* ---------- Avatar como billboard 3D (PNG com alpha nativo) ---------- */
 function AvatarBillboard({
   texture,
   position,
+  baseYaw,
   scale = 1,
   idlePhase = 0,
   followRef,
@@ -80,6 +36,8 @@ function AvatarBillboard({
 }: {
   texture: THREE.Texture;
   position: [number, number, number];
+  /** Rotação Y base — os avatares se olham. Negativo = olha pra direita. */
+  baseYaw: number;
   scale?: number;
   idlePhase?: number;
   followRef: Follow;
@@ -93,33 +51,79 @@ function AvatarBillboard({
 
     if (!reduced) {
       const t = state.clock.elapsedTime + idlePhase;
-      // Respiração idle (sobe/desce + leve rotação Z)
+      // Respiração idle alternada — um inhala quando o outro exhala.
       grp.position.y = position[1] + Math.sin(t * 1.1) * 0.04;
       grp.rotation.z = Math.sin(t * 0.7) * 0.04;
     }
 
-    // Inclinação suave que segue o mouse (lerp p/ suavizar)
+    // Inclinação que segue o cursor (soma sobre o baseYaw p/ se olharem).
     const target = followRef.current;
-    const targetYaw = target.x * 0.28;
-    const targetPitch = -target.y * 0.18;
+    const targetYaw = baseYaw + target.x * 0.18;
+    const targetPitch = -target.y * 0.12;
     grp.rotation.y = THREE.MathUtils.lerp(grp.rotation.y, targetYaw, 1 - Math.exp(-delta * 4));
     grp.rotation.x = THREE.MathUtils.lerp(grp.rotation.x, targetPitch, 1 - Math.exp(-delta * 4));
   });
 
   return (
-    <group ref={groupRef} position={position}>
+    <group ref={groupRef} position={position} rotation={[0, baseYaw, 0]}>
       <mesh scale={[scale, scale, scale]}>
-        {/* Avatar real tem aspect 341x1024 (~0.333:1), portrait estreito. */}
-        <planeGeometry args={[0.6, 1.8, 1]} />
-        <primitive
-          object={makeChromaKeyMaterial(texture, {
-            threshold: 0.06,
-            feather: 0.12,
-            tint: '#7ef0a8',
-            tintAmount: 0.12,
-          })}
-          attach="material"
+        {/* PNG aspect ~527:1581 (≈1:3) — plano estreito e alto. */}
+        <planeGeometry args={[0.5, 1.5, 1]} />
+        <meshStandardMaterial
+          map={texture}
+          transparent
+          roughness={0.7}
+          metalness={0.0}
+          side={THREE.DoubleSide}
+          emissive="#7ef0a8"
+          emissiveIntensity={0.04}
+          emissiveMap={texture}
         />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------- Handshake Orb: esfera translúcida central (signature element) ---------- */
+function HandshakeOrb({ reduced }: { reduced: boolean }) {
+  const core = useRef<THREE.Mesh>(null);
+  const halo = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (reduced) return;
+    const t = state.clock.elapsedTime;
+    const pulse = 1 + Math.sin(t * 1.4) * 0.06;
+    if (core.current) core.current.scale.setScalar(pulse);
+    if (halo.current) {
+      halo.current.scale.setScalar(1 + Math.sin(t * 1.4 + Math.PI / 2) * 0.1);
+      halo.current.rotation.z = t * 0.3;
+    }
+  });
+
+  return (
+    <group position={[0, 0.55, 0]}>
+      {/* Núcleo */}
+      <mesh ref={core}>
+        <icosahedronGeometry args={[0.22, 2]} />
+        <meshStandardMaterial
+          color="#7ef0a8"
+          emissive="#46d373"
+          emissiveIntensity={0.6}
+          transparent
+          opacity={0.55}
+          roughness={0.15}
+          metalness={0.6}
+        />
+      </mesh>
+      {/* Halo (anel orbitante) */}
+      <mesh ref={halo} rotation={[Math.PI / 2.4, 0, 0]}>
+        <torusGeometry args={[0.36, 0.012, 16, 64]} />
+        <meshBasicMaterial color="#ffb040" transparent opacity={0.45} />
+      </mesh>
+      {/* Glow radial na base */}
+      <mesh position={[0, -0.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.05, 0.4, 32]} />
+        <meshBasicMaterial color="#46d373" transparent opacity={0.18} side={THREE.DoubleSide} />
       </mesh>
     </group>
   );
@@ -259,10 +263,12 @@ function Stage({
 }) {
   const { size, camera } = useThree();
   const isNarrow = size.width < 640;
-  // Avatares são 3:1 portrait (plano 0.6x1.8). Base encosta na plataforma (-0.7).
-  const spread = isNarrow ? 0.45 : 0.85;       // distância horizontal do centro
-  const avatarScale = isNarrow ? 0.8 : 1.05;    // avatar desktop ~2.0 alto, mobile ~1.45
-  const avatarY = 0.28;                          // base ≈ plataforma
+  // Avatares PNG ~1:3 portrait (plano 0.5x1.5). Base encosta na plataforma (-0.7).
+  const spread = isNarrow ? 0.55 : 0.95;       // distância horizontal do centro
+  const avatarScale = isNarrow ? 0.85 : 1.1;    // avatar desktop ~1.65 alto, mobile ~1.3
+  const avatarY = 0.1;                           // base ≈ plataforma (1.5*scale/2 → ~0.83, ajustado)
+  // Avatares se olham: yaw negativo (esquerda olha pra direita) e positivo (vice-versa)
+  const yaw = isNarrow ? 0.18 : 0.26;
   const caioPos: [number, number, number] = [-spread, avatarY, 0.2];
   const sandPos: [number, number, number] = [spread, avatarY, 0.4];
 
@@ -273,13 +279,15 @@ function Stage({
 
   return (
     <>
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.6} />
       <MovingLights reduced={reduced} />
-      <Platform radius={isNarrow ? 1.6 : 2.2} reduced={reduced} />
+      <Platform radius={isNarrow ? 1.7 : 2.3} reduced={reduced} />
       <HoloGrid />
+      <HandshakeOrb reduced={reduced} />
       <AvatarBillboard
         texture={caioTex}
         position={caioPos}
+        baseYaw={yaw}
         scale={avatarScale}
         idlePhase={0}
         followRef={followRef}
@@ -288,8 +296,9 @@ function Stage({
       <AvatarBillboard
         texture={sandersonTex}
         position={sandPos}
+        baseYaw={-yaw}
         scale={avatarScale}
-        idlePhase={1.3}
+        idlePhase={Math.PI}
         followRef={followRef}
         reduced={reduced}
       />
