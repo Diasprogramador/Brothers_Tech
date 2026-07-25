@@ -1,6 +1,6 @@
-import { useMemo, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { useMemo, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 /**
  * Cena 3D real (React Three Fiber / Three.js).
@@ -90,12 +90,12 @@ export function Scene3D({ opacity = 1 }: Scene3DProps) {
   return (
     <div
       className="scene3d"
-      style={{ opacity, pointerEvents: 'none' }}
+      style={{ opacity, pointerEvents: "none" }}
       aria-hidden="true"
     >
       <Canvas
         camera={{ position: [0, 0, 5], fov: 50 }}
-        style={{ background: 'transparent' }}
+        style={{ background: "transparent" }}
         dpr={[1, 2]}
       >
         <ambientLight intensity={0.4} />

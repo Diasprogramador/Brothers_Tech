@@ -1,5 +1,5 @@
-import { ReactNode, useEffect } from 'react';
-import Lenis from 'lenis';
+import { ReactNode, useEffect } from "react";
+import Lenis from "lenis";
 
 /**
  * Smooth scroll provider — envolve toda a aplicação e dá a sensação
@@ -9,7 +9,9 @@ import Lenis from 'lenis';
  */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (prefersReduced) return;
 
     const lenis = new Lenis({
