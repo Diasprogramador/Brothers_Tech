@@ -107,7 +107,7 @@ function equalize(allSegs: CubicSegment[][]): CubicSegment[][] {
 
 // ── Rotacionar segments para começarem no ponto de referência ─
 function rotateToReference(
-  start: Point,
+  _start: Point,
   segments: CubicSegment[],
   refPoint: Point,
 ): { start: Point; segments: CubicSegment[] } {
