@@ -1,16 +1,17 @@
+import { useRef } from "react";
 import { Svg } from "./svg/Svg";
 import { Navbar } from "../Navbar/Navbar";
 import "./Hero.css";
 
 export const Hero = () => {
+  const pathRef = useRef<SVGPathElement>(null);
+
   return (
     <>
-      {/* Formato Svg: */}
-      <Svg />
+      <Svg pathRef={pathRef} />
 
       <section id="home" className="hero">
-        {/* Navbar da página */}
-        <Navbar />
+        <Navbar pathRef={pathRef} />
 
         <div className="hero-container" />
       </section>

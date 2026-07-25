@@ -1,85 +1,120 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { buildClipPath, easeInOut } from "../Hero/svg/notchPath";
 import "./Navbar.css";
 
-export const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+interface NavbarProps {
+  pathRef?: React.RefObject<SVGPathElement | null>;
+}
+
+const SCROLL_RANGE_RATIO = 0.15;
+
+export const Navbar = ({ pathRef }: NavbarProps) => {
+  const [progress, setProgress] = useState(0);
+  const scrollRange = useRef(120);
+  const prefersReduced = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    []
+  );
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const updateRange = () => {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      scrollRange.current = isMobile
+        ? window.innerHeight * (SCROLL_RANGE_RATIO * 1.5)
+        : window.innerHeight * SCROLL_RANGE_RATIO;
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    updateRange();
+
+    const update = () => {
+      const raw = Math.min(window.scrollY / scrollRange.current, 1);
+      const p = prefersReduced ? (raw > 0 ? 1 : 0) : easeInOut(raw);
+      setProgress(p);
+
+      if (pathRef && "current" in pathRef && pathRef.current && !prefersReduced) {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        pathRef.current.setAttribute("d", buildClipPath(p, isMobile));
+      }
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    const onResize = () => {
+      updateRange();
+      update();
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    update();
+
     return () => {
-      document.body.style.overflow = "";
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
     };
-  }, [menuOpen]);
+  }, [prefersReduced, pathRef]);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const id = href.replace("#", "");
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleContactClick = () => {
     document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false);
-  };
-
-  const handleLinkClick = (href: string) => {
-    const element = document.getElementById(href.replace("#", ""));
-    element?.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false);
   };
 
   return (
-    <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
-      <div className="nav-logo-icon">
-        <a href="#home">
-          <img src="/assets/logo/Logo_icon.svg" alt="Brothers Tech" />
-        </a>
-      </div>
+    <nav
+      className="navbar"
+      style={{ "--nav-progress": progress } as React.CSSProperties}
+    >
+      <div className="nav-inner">
+        <div className="nav-logo-icon">
+          <a href="#home" onClick={(e) => handleNavClick(e, "#home")}>
+            <img src="/assets/logo/Logo_icon.svg" alt="Brothers Tech" />
+          </a>
+        </div>
 
-      <ul className={`nav-links ${menuOpen ? "is-open" : ""}`}>
-        <li>
-          <a href="#servicos" onClick={(e) => { e.preventDefault(); handleLinkClick("servicos"); }}>
-            Serviços
-          </a>
-        </li>
-        <li>
-          <a href="#projetos" onClick={(e) => { e.preventDefault(); handleLinkClick("projetos"); }}>
-            Projetos
-          </a>
-        </li>
-        <li>
-          <a href="#sobre-nos" onClick={(e) => { e.preventDefault(); handleLinkClick("sobre-nos"); }}>
-            Sobre Nós
-          </a>
-        </li>
-        <li>
-          <a href="#contato" onClick={(e) => { e.preventDefault(); handleLinkClick("contato"); }}>
-            Contato
-          </a>
-        </li>
-      </ul>
+        <ul>
+          <li>
+            <a href="#servicos" onClick={(e) => handleNavClick(e, "#servicos")}>
+              Serviços
+            </a>
+          </li>
+          <li>
+            <a href="#projetos" onClick={(e) => handleNavClick(e, "#projetos")}>
+              Projetos
+            </a>
+          </li>
+          <li>
+            <a href="#sobre" onClick={(e) => handleNavClick(e, "#sobre")}>
+              Sobre Nós
+            </a>
+          </li>
+          <li>
+            <a href="#contato" onClick={(e) => handleNavClick(e, "#contato")}>
+              Contato
+            </a>
+          </li>
+        </ul>
 
-      <div className="nav-button">
         <button onClick={handleContactClick}>Fale Conosco</button>
       </div>
-
-      <button
-        className={`nav-toggle ${menuOpen ? "is-open" : ""}`}
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Abrir menu"
-        aria-expanded={menuOpen}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      {menuOpen && (
-        <div className="nav-overlay" onClick={() => setMenuOpen(false)} />
-      )}
     </nav>
   );
 };
