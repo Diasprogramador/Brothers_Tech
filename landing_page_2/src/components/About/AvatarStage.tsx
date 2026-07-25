@@ -21,7 +21,55 @@ import avatarSanderson from '../../assets/founders/avatar-sanderson.png';
 
 type Follow = React.MutableRefObject<{ x: number; y: number }>;
 
-/* ---------- Avatar como billboard 3D ---------- */
+/* ---------- ShaderMaterial: chroma-key remove fundo preto do PNG ---------- */
+// Os PNGs originais não têm canal alpha (Format24bppRgb), então usamos um
+// shader que descarta pixels cuja luminância está abaixo de um threshold.
+// Feather suave nas bordas evita "dent" duro ao redor da silhueta.
+const chromaKeyVertex = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+const chromaKeyFragment = /* glsl */ `
+  uniform sampler2D uMap;
+  uniform float uThreshold;   // pixels com luminância abaixo disso viram transparentes
+  uniform float uFeather;     // suavidade da borda do chroma-key (0..1)
+  uniform vec3 uTint;         // coloração leve para integrar com o palco
+  uniform float uTintAmount;
+  varying vec2 vUv;
+  void main() {
+    vec4 tex = texture2D(uMap, vUv);
+    float lum = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
+    // Smoothstep do threshold ao threshold+feather: 0 abaixo, 1 acima.
+    float alpha = smoothstep(uThreshold, uThreshold + uFeather, lum);
+    if (alpha <= 0.001) discard;
+    vec3 color = mix(tex.rgb, tex.rgb * uTint, uTintAmount);
+    gl_FragColor = vec4(color, alpha);
+  }
+`;
+function makeChromaKeyMaterial(
+  map: THREE.Texture,
+  opts: { threshold?: number; feather?: number; tint?: THREE.ColorRepresentation; tintAmount?: number } = {}
+) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uMap: { value: map },
+      uThreshold: { value: opts.threshold ?? 0.06 },
+      uFeather: { value: opts.feather ?? 0.12 },
+      uTint: { value: new THREE.Color(opts.tint ?? '#7ef0a8') },
+      uTintAmount: { value: opts.tintAmount ?? 0.12 },
+    },
+    vertexShader: chromaKeyVertex,
+    fragmentShader: chromaKeyFragment,
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+}
+
+/* ---------- Avatar como billboard 3D (com chroma-key) ---------- */
 function AvatarBillboard({
   texture,
   position,
@@ -61,17 +109,16 @@ function AvatarBillboard({
   return (
     <group ref={groupRef} position={position}>
       <mesh scale={[scale, scale, scale]}>
-        <planeGeometry args={[1, 1.25, 1]} />
-        <meshStandardMaterial
-          map={texture}
-          transparent
-          alphaTest={0.32}
-          roughness={0.55}
-          metalness={0.05}
-          emissive="#ffffff"
-          emissiveMap={texture}
-          emissiveIntensity={0.08}
-          side={THREE.DoubleSide}
+        {/* Avatar real tem aspect 341x1024 (~0.333:1), portrait estreito. */}
+        <planeGeometry args={[0.6, 1.8, 1]} />
+        <primitive
+          object={makeChromaKeyMaterial(texture, {
+            threshold: 0.06,
+            feather: 0.12,
+            tint: '#7ef0a8',
+            tintAmount: 0.12,
+          })}
+          attach="material"
         />
       </mesh>
     </group>
@@ -210,13 +257,19 @@ function Stage({
   sandersonTex: THREE.Texture;
   reduced: boolean;
 }) {
-  const { size } = useThree();
+  const { size, camera } = useThree();
   const isNarrow = size.width < 640;
-  // Mobile: empilha os avatares próximos + levemente deslocados em profundidade
-  const spread = isNarrow ? 0.55 : 1.05;
-  const avatarScale = isNarrow ? 1.35 : 1.7;
-  const caioPos: [number, number, number] = [-spread, -0.1, 0.2];
-  const sandPos: [number, number, number] = [spread, -0.1, 0.4];
+  // Avatares são 3:1 portrait (plano 0.6x1.8). Base encosta na plataforma (-0.7).
+  const spread = isNarrow ? 0.45 : 0.85;       // distância horizontal do centro
+  const avatarScale = isNarrow ? 0.8 : 1.05;    // avatar desktop ~2.0 alto, mobile ~1.45
+  const avatarY = 0.28;                          // base ≈ plataforma
+  const caioPos: [number, number, number] = [-spread, avatarY, 0.2];
+  const sandPos: [number, number, number] = [spread, avatarY, 0.4];
+
+  // Aponta a câmera para o centro do palco (uma vez por mount/resize efetivo)
+  useEffect(() => {
+    camera.lookAt(0, 0.3, 0);
+  }, [camera, size.width, size.height]);
 
   return (
     <>
@@ -302,7 +355,7 @@ export function AvatarStage() {
     <div className="avatar-stage" ref={wrapRef}>
       <Suspense fallback={null}>
         <Canvas
-          camera={{ position: [0, 0.4, 4.2], fov: 42 }}
+          camera={{ position: [0, 1.1, 5.6], fov: 38 }}
           dpr={[1, 2]}
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
           style={{ background: 'transparent' }}
