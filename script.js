@@ -20,9 +20,8 @@ const observerOptions = {
 };
 
 const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, index) => {
+  entries.forEach((entry) => {
     if(entry.isIntersecting){
-      // Add stagger delay based on element position
       const delay = entry.target.dataset.delay || 0;
       setTimeout(() => {
         entry.target.classList.add('in');
@@ -33,23 +32,11 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 revealElements.forEach((el, index) => {
-  // Add stagger delay for elements in the same section
   if(!el.dataset.delay) {
     el.dataset.delay = (index % 4) * 100;
   }
   revealObserver.observe(el);
 });
-
-// Parallax effect for hero avatar
-const heroAvatar = document.querySelector('.hero-avatar');
-if(heroAvatar) {
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    if(scrolled < window.innerHeight) {
-      heroAvatar.style.transform = `translateY(${scrolled * 0.15}px)`;
-    }
-  });
-}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -65,37 +52,3 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Remove black background from avatar images (sticker effect)
-function removeBlackBg(imgElement, src) {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    for(let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const avg = (r + g + b) / 3;
-      // Remove dark pixels - more aggressive on pure black, preserve colored darks
-      if(avg < 25 && Math.abs(r - g) < 10 && Math.abs(g - b) < 10) {
-        data[i + 3] = 0;
-      }
-    }
-    ctx.putImageData(imageData, 0, 0);
-    imgElement.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
-  };
-  img.src = src;
-}
-
-// Apply to avatar images
-document.querySelectorAll('.avatar-img').forEach(el => {
-  const bgImage = el.style.backgroundImage;
-  const src = bgImage.match(/url\(['"]?(.+?)['"]?\)/)?.[1];
-  if(src) removeBlackBg(el, src);
-});
