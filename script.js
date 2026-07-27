@@ -4,6 +4,48 @@
    ===================================================================== */
 'use strict';
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Preloader (3s com stagger de letras) ---------- */
+const preloader = document.getElementById('preloader');
+if (preloader) {
+  const TOTAL_MS = 3000;          // duração total
+  const LAST_LETTER_DELAY = 120 + 11 * 180 + 520; // ~2.6s — última letra termina
+
+  // marca o documento pra fallback no-js
+  document.documentElement.classList.add('js');
+
+  let completed = false;
+
+  function done() {
+    if (completed) return;
+    completed = true;
+    preloader.classList.add('is-complete');
+    // esconde após o fade do preloader
+    setTimeout(() => {
+      preloader.classList.add('is-done');
+    }, 350);
+    // remove do DOM depois pra não atrapalhar a11y nem tab
+    setTimeout(() => {
+      preloader.remove();
+    }, 900);
+  }
+
+  // dispara "complete" depois que a última letra assentar
+  setTimeout(() => {
+    // se a página já carregou, mantém 3s totais; senão espera
+    if (document.readyState === 'complete' || prefersReducedMotion) {
+      done();
+    }
+  }, LAST_LETTER_DELAY);
+
+  // garante 3s mínimos mesmo se tudo carregar muito rápido
+  setTimeout(done, TOTAL_MS);
+
+  // se demorar muito (mais de 5s por algum asset), libera mesmo assim
+  setTimeout(() => { if (!completed) done(); }, 5000);
+}
+
 /* ---------- Header scroll state ---------- */
 const header = document.getElementById('site-header');
 let ticking = false;
@@ -67,7 +109,6 @@ const revealObserver = new IntersectionObserver((entries) => {
 revealEls.forEach(el => revealObserver.observe(el));
 
 /* ---------- Smooth scroll (vanilla, respeita prefers-reduced-motion) ---------- */
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     const id = this.getAttribute('href');
