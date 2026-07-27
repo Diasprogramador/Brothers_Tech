@@ -1,101 +1,136 @@
-// Header scroll state
-const header = document.getElementById('site-header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 10);
-});
+/* =====================================================================
+   BROTHERS TECH — script.js
+   Vanilla JS, sem libs. Acessível e performático.
+   ===================================================================== */
+'use strict';
 
-// Mobile menu
+/* ---------- Header scroll state ---------- */
+const header = document.getElementById('site-header');
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    header.classList.toggle('scrolled', window.scrollY > 8);
+    ticking = false;
+  });
+}, { passive: true });
+
+/* ---------- Mobile menu acessível ---------- */
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
-burger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
+const menuLinks = mobileMenu.querySelectorAll('a');
+
+function openMenu(){
+  mobileMenu.classList.add('open');
+  burger.setAttribute('aria-expanded', 'true');
+  burger.setAttribute('aria-label', 'Fechar menu');
+  document.body.style.overflow = 'hidden';
+  // foco no primeiro link
+  menuLinks[0]?.focus();
+}
+function closeMenu(){
+  mobileMenu.classList.remove('open');
+  burger.setAttribute('aria-expanded', 'false');
+  burger.setAttribute('aria-label', 'Abrir menu');
+  document.body.style.overflow = '';
+  burger.focus();
+}
+function toggleMenu(){
+  const isOpen = mobileMenu.classList.contains('open');
+  if (isOpen) closeMenu(); else openMenu();
+}
+burger.addEventListener('click', toggleMenu);
+menuLinks.forEach(a => a.addEventListener('click', closeMenu));
+// ESC fecha
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+    closeMenu();
+  }
 });
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+// Fecha se redimensionar pra desktop
+const mql = window.matchMedia('(min-width: 860px)');
+mql.addEventListener('change', (e) => { if (e.matches) closeMenu(); });
 
-// Smooth scroll reveal animations with stagger
-const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
+/* ---------- Reveal animations (IntersectionObserver) ---------- */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
 const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, index) => {
-    if(entry.isIntersecting){
-      // Add stagger delay based on element position
-      const delay = entry.target.dataset.delay || 0;
-      setTimeout(() => {
-        entry.target.classList.add('in');
-      }, delay);
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      // respeita delays explícitos do dataset, sem sobrescrever
+      const delay = Number(entry.target.dataset.delay) || 0;
+      setTimeout(() => entry.target.classList.add('in'), delay);
       revealObserver.unobserve(entry.target);
     }
   });
-}, observerOptions);
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+revealEls.forEach(el => revealObserver.observe(el));
 
-revealElements.forEach((el, index) => {
-  // Add stagger delay for elements in the same section
-  if(!el.dataset.delay) {
-    el.dataset.delay = (index % 4) * 100;
-  }
-  revealObserver.observe(el);
-});
-
-// Parallax effect for hero avatar
-const heroAvatar = document.querySelector('.hero-avatar');
-if(heroAvatar) {
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    if(scrolled < window.innerHeight) {
-      heroAvatar.style.transform = `translateY(${scrolled * 0.15}px)`;
-    }
-  });
-}
-
-// Smooth scroll for anchor links
+/* ---------- Smooth scroll (vanilla, respeita prefers-reduced-motion) ---------- */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
+  anchor.addEventListener('click', function (e) {
+    const id = this.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if(target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    closeMenu();
+    target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+    history.pushState(null, '', id);
   });
 });
 
-// Remove black background from avatar images (sticker effect)
-function removeBlackBg(imgElement, src) {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    for(let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const avg = (r + g + b) / 3;
-      // Remove dark pixels - more aggressive on pure black, preserve colored darks
-      if(avg < 25 && Math.abs(r - g) < 10 && Math.abs(g - b) < 10) {
-        data[i + 3] = 0;
-      }
-    }
-    ctx.putImageData(imageData, 0, 0);
-    imgElement.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
-  };
-  img.src = src;
+/* ---------- Custom cursor (desktop com mouse fino) ---------- */
+const finePointer = window.matchMedia('(pointer: fine)').matches && window.innerWidth >= 860;
+if (finePointer && !prefersReducedMotion) {
+  const dot = document.createElement('div');
+  const ring = document.createElement('div');
+  dot.className = 'cursor-dot';
+  ring.className = 'cursor-ring';
+  dot.setAttribute('aria-hidden', 'true');
+  ring.setAttribute('aria-hidden', 'true');
+  document.body.append(dot, ring);
+
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx - 3}px, ${my - 3}px)`;
+  });
+  // ring segue com lerp pra dar "elasticidade"
+  (function follow(){
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(follow);
+  })();
+  // cresce em cima de elementos interativos
+  document.querySelectorAll('a, button, .tag, .channel').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('grow'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('grow'));
+  });
+  // some ao sair da janela
+  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
 }
 
-// Apply to avatar images
-document.querySelectorAll('.avatar-img').forEach(el => {
-  const bgImage = el.style.backgroundImage;
-  const src = bgImage.match(/url\(['"]?(.+?)['"]?\)/)?.[1];
-  if(src) removeBlackBg(el, src);
-});
+/* ---------- Parallax sutil nos avatares do hero (joystick no mouse) ---------- */
+if (finePointer && !prefersReducedMotion) {
+  const hero = document.querySelector('.hero');
+  const avatars = document.querySelectorAll('.hero-avatars .avatar-img');
+  hero?.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5..0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    avatars.forEach((img, i) => {
+      const depth = (i + 1) * 6; // avatar 2 reage mais
+      img.style.setProperty('--px', `${x * depth}px`);
+      img.style.setProperty('--py', `${y * depth}px`);
+    });
+  });
+}
+// CSS já anima com .avatar-img float; aplicamos translate adicional via layer extra
+// (mantido simples — animação original do CSS roda junto)
+
+/* ---------- Log de carregamento pra debug ---------- */
+console.log('Brothers Tech · pronto');
