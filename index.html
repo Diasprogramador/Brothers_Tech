@@ -1,1374 +1,219 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Brothers Tech — Sistemas, Apps, Sites e Software</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #e5e5e5;
-        --bg-soft: #d0d0d0;
-        --surface: #f5f5f5;
-        --surface-2: #e0e0e0;
-        --line: #bdbdbd;
-        --text: #1a1a1a;
-        --text-muted: #4a4a4a;
-        --text-dim: #757575;
-        --accent: #ffffff;
-        --accent-soft: #e0e0e0;
-        --accent-hover: #f0f0f0;
-        --green: #5b8c6a;
-        --orange: #c47a4a;
-        --blue: #4a6fa5;
-        --radius: 16px;
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brothers Tech — Sistemas, Apps, Sites e Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: "Inter", sans-serif;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        overflow-x: hidden;
-      }
-      ::selection {
-        background: var(--accent);
-        color: #fff;
-      }
+<header id="site-header">
+  <div class="nav">
+    <a href="#home" class="logo">
+      <img src="assets/logo.svg" alt="Brothers Tech">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#sobre">Sobre nós</a></li>
+      </ul>
+    </nav>
+    <a href="#contato" class="nav-cta">Fale com a gente</a>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </div>
+</header>
 
-      h1,
-      h2,
-      h3 {
-        font-family: "Space Grotesk", sans-serif;
-        font-weight: 600;
-        letter-spacing: -0.02em;
-      }
-      .mono {
-        font-family: "IBM Plex Mono", monospace;
-      }
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#servicos">Serviços</a>
+  <a href="#projetos">Projetos</a>
+  <a href="#sobre">Sobre nós</a>
+  <a href="#contato" style="color:var(--accent)">Contato</a>
+</div>
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      img {
-        max-width: 100%;
-        display: block;
-      }
+<main>
 
-      .wrap {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 0 24px;
-      }
-      section {
-        position: relative;
-      }
-
-      /* ---------- header ---------- */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        background: rgba(229, 229, 229, 0.85);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid transparent;
-        transition:
-          border-color 0.3s ease,
-          background 0.3s ease;
-      }
-      header.scrolled {
-        border-bottom-color: var(--line);
-        background: rgba(229, 229, 229, 0.95);
-      }
-      .nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 24px;
-        max-width: 1120px;
-        margin: 0 auto;
-      }
-      .logo {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .logo img {
-        height: 32px;
-        width: auto;
-      }
-      nav ul {
-        list-style: none;
-        display: flex;
-        gap: 32px;
-      }
-      nav ul a {
-        font-size: 14px;
-        color: var(--text-muted);
-        font-weight: 500;
-        position: relative;
-        padding: 4px 0;
-        transition: color 0.2s ease;
-      }
-      nav ul a:hover {
-        color: var(--text);
-      }
-      nav ul a::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 0;
-        height: 2px;
-        background: var(--accent);
-        transition: width 0.25s ease;
-      }
-      nav ul a:hover::after {
-        width: 100%;
-      }
-      .nav-cta {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        font-weight: 500;
-        color: #ffffff;
-        background: #1a1a1a;
-        padding: 10px 20px;
-        border-radius: 100px;
-        white-space: nowrap;
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease,
-          background 0.2s ease;
-      }
-      .nav-cta:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        background: #333333;
-      }
-      .burger {
-        display: none;
-        flex-direction: column;
-        gap: 5px;
-        cursor: pointer;
-        z-index: 60;
-      }
-      .burger span {
-        width: 22px;
-        height: 2px;
-        background: var(--text);
-        transition: 0.3s;
-      }
-
-      /* ---------- hero ---------- */
-      .hero {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-top: 80px;
-        padding-bottom: 60px;
-        position: relative;
-        overflow: hidden;
-        background: #e8e8e8;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image:
-          linear-gradient(rgba(180, 180, 180, 0.3) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(180, 180, 180, 0.3) 1px, transparent 1px);
-        background-size: 60px 60px;
-        pointer-events: none;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        top: 10%;
-        left: 30%;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(
-          circle,
-          rgba(91, 140, 106, 0.08) 0%,
-          transparent 60%
-        );
-        pointer-events: none;
-      }
-      .hero .wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 1;
-        text-align: center;
-      }
-      .hero-content {
-        position: relative;
-        margin-bottom: 40px;
-      }
-      .eyebrow {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
-        color: #1a1a1a;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 20px;
-        letter-spacing: 0.02em;
-        background: #d0d0d0;
-        padding: 8px 16px;
-        border-radius: 100px;
-      }
-      .eyebrow::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--green);
-      }
-      .hero h1 {
-        font-size: clamp(48px, 7vw, 96px);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
-        font-weight: 700;
-        text-transform: uppercase;
-      }
-      .hero h1 .line2 {
-        display: block;
-      }
-      .hero h1 .accent {
-        color: var(--green);
-      }
-      .hero-sub {
-        margin-top: 28px;
-        max-width: 440px;
-        color: var(--text-muted);
-        font-size: 16px;
-        line-height: 1.7;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .hero-actions {
-        display: flex;
-        gap: 14px;
-        margin-top: 36px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .btn-primary,
-      .btn-ghost {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        font-weight: 500;
-        padding: 14px 28px;
-        border-radius: 100px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease,
-          background 0.2s ease,
-          border-color 0.2s ease;
-      }
-      .btn-primary {
-        background: #1a1a1a;
-        color: #ffffff;
-      }
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        background: #333333;
-      }
-      .btn-ghost {
-        border: 1px solid #bdbdbd;
-        color: #1a1a1a;
-        background: transparent;
-      }
-      .btn-ghost:hover {
-        border-color: #1a1a1a;
-        color: #1a1a1a;
-      }
-
-      /* Avatars container */
-      .hero-avatars {
-        display: flex;
-        gap: 40px;
-        align-items: flex-end;
-        justify-content: center;
-        position: relative;
-      }
-      .avatar-item {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .avatar-img {
-        width: 250px;
-        height: 320px;
-        background-size: cover;
-        background-position: center top;
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      .avatar-item:hover img {
-        transform: translateY(-10px) scale(1.02);
-      }
-      .avatar-item:first-child {
-        transform: translateY(20px);
-      }
-      .avatar-item:first-child:hover img {
-        transform: translateY(10px) scale(1.02);
-      }
-      .avatar-name {
-        margin-top: 16px;
-        font-family: "Space Grotesk", sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        color: #1a1a1a;
-        letter-spacing: 0.02em;
-      }
-      .avatar-role {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 11px;
-        color: #757575;
-        margin-top: 4px;
-      }
-
-      .hero-tags {
-        margin-top: 48px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .tag {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 11px;
-        color: #1a1a1a;
-        border: 1px solid #bdbdbd;
-        padding: 8px 14px;
-        border-radius: 100px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: transparent;
-      }
-      .tag .dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-      }
-      .dot.green {
-        background: var(--green);
-      }
-      .dot.orange {
-        background: var(--orange);
-      }
-      .dot.blue {
-        background: var(--blue);
-      }
-
-      .tag .dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-      }
-      .dot.green {
-        background: var(--green);
-      }
-      .dot.orange {
-        background: var(--orange);
-      }
-      .dot.blue {
-        background: var(--blue);
-      }
-
-      /* ---------- section headers ---------- */
-      .section-head {
-        margin-bottom: 48px;
-      }
-      .section-eyebrow {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        color: var(--text-dim);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 16px;
-      }
-      .section-eyebrow .n {
-        color: #1a1a1a;
-        font-weight: 600;
-      }
-      .section-head h2 {
-        font-size: clamp(28px, 3.5vw, 42px);
-        letter-spacing: -0.02em;
-        max-width: 600px;
-      }
-      .section-head p {
-        color: var(--text-muted);
-        max-width: 520px;
-        margin-top: 14px;
-        font-size: 16px;
-      }
-
-      /* ---------- services ---------- */
-      #servicos {
-        background: #333333;
-        padding: 120px 0;
-      }
-      #servicos .section-head h2 {
-        color: #ffffff;
-      }
-      #servicos .section-head p {
-        color: #bdbdbd;
-      }
-      #servicos .section-eyebrow {
-        color: #9e9e9e;
-      }
-      #servicos .section-eyebrow .n {
-        color: #ffffff;
-      }
-      .services-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1px;
-        background: #4a4a4a;
-        border-radius: var(--radius);
-        overflow: hidden;
-      }
-      .service-card {
-        background: #333333;
-        padding: 40px 36px;
-        transition: background 0.25s ease;
-        position: relative;
-      }
-      .service-card:hover {
-        background: #3a3a3a;
-      }
-      .service-card .num {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        color: #ffffff;
-        font-weight: 600;
-      }
-      .service-card h3 {
-        font-size: 22px;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        color: #ffffff;
-      }
-      .service-card p {
-        color: #bdbdbd;
-        font-size: 15px;
-        line-height: 1.65;
-      }
-      .service-card .for {
-        margin-top: 20px;
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
-        color: #9e9e9e;
-      }
-
-      /* ---------- projects ---------- */
-      #projetos {
-        padding: 120px 0;
-      }
-      .projects-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-      .project-card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        overflow: hidden;
-        background: var(--surface);
-        transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease;
-      }
-      .project-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-      }
-      .project-thumb {
-        aspect-ratio: 4/3;
-        background: var(--bg-soft);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-      }
-      .project-thumb span {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
-        color: var(--text-dim);
-        border: 1px dashed var(--line);
-        padding: 8px 14px;
-        border-radius: 100px;
-      }
-      .project-body {
-        padding: 20px;
-      }
-      .project-body h4 {
-        font-size: 16px;
-        font-weight: 600;
-        font-family: "Space Grotesk", sans-serif;
-      }
-      .project-body p {
-        color: var(--text-dim);
-        font-size: 13px;
-        margin-top: 6px;
-        font-family: "IBM Plex Mono", monospace;
-      }
-      .projects-note {
-        margin-top: 36px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--text-muted);
-        font-size: 14px;
-      }
-      .projects-note .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--orange);
-        flex: none;
-      }
-
-      /* ---------- about ---------- */
-      #sobre {
-        background: #757575;
-        padding: 120px 0;
-      }
-      #sobre .section-head h2 {
-        color: #ffffff;
-      }
-      #sobre .section-head p {
-        color: #e0e0e0;
-      }
-      #sobre .section-eyebrow {
-        color: #bdbdbd;
-      }
-      #sobre .section-eyebrow .n {
-        color: #ffffff;
-      }
-      .about-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-        border: 1px solid #888888;
-        border-radius: var(--radius);
-        overflow: hidden;
-        background: #666666;
-      }
-      .founder {
-        padding: 40px 36px;
-        position: relative;
-      }
-      .founder:first-child {
-        border-right: 1px solid #888888;
-      }
-      .founder .role {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
-        color: #ffffff;
-        font-weight: 500;
-      }
-      .founder h3 {
-        font-size: 26px;
-        margin-top: 12px;
-        color: #ffffff;
-      }
-      .founder p {
-        color: #d0d0d0;
-        margin-top: 12px;
-        font-size: 15px;
-        line-height: 1.65;
-      }
-      .founder-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        background: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Space Grotesk", sans-serif;
-        font-weight: 700;
-        font-size: 18px;
-        color: #333333;
-      }
-      .about-story {
-        max-width: 640px;
-        margin-top: 48px;
-        color: #e0e0e0;
-        font-size: 16px;
-        line-height: 1.75;
-      }
-      .about-story strong {
-        color: #ffffff;
-        font-weight: 600;
-      }
-      .founded-tag {
-        margin-top: 28px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        color: #d0d0d0;
-        border: 1px solid #888888;
-        padding: 10px 18px;
-        border-radius: 100px;
-        background: #666666;
-      }
-
-      /* ---------- contact ---------- */
-      #contato {
-        padding: 120px 0 100px;
-        background: #666666;
-      }
-      .contact-box {
-        background: #555555;
-        border: 1px solid #777777;
-        border-radius: 24px;
-        padding: 72px 48px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-      .contact-box::before {
-        content: "";
-        position: absolute;
-        bottom: -30%;
-        left: 50%;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.06) 0%,
-          rgba(255, 255, 255, 0) 60%
-        );
-        transform: translateX(-50%);
-        pointer-events: none;
-      }
-      .contact-box h2 {
-        font-size: clamp(28px, 4.5vw, 48px);
-        max-width: 600px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-        color: #ffffff;
-      }
-      .contact-box p {
-        color: #bdbdbd;
-        margin-top: 16px;
-        max-width: 440px;
-        margin-left: auto;
-        margin-right: auto;
-        position: relative;
-        z-index: 1;
-        font-size: 16px;
-      }
-      .contact-actions {
-        display: flex;
-        gap: 14px;
-        justify-content: center;
-        margin-top: 40px;
-        flex-wrap: wrap;
-        position: relative;
-        z-index: 1;
-      }
-      .contact-channels {
-        margin-top: 56px;
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        position: relative;
-        z-index: 1;
-      }
-      .channel {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 13px;
-        color: #bdbdbd;
-        border: 1px solid #888888;
-        padding: 10px 18px;
-        border-radius: 100px;
-        transition: 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: #555555;
-      }
-      .channel:hover {
-        color: #ffffff;
-        border-color: #ffffff;
-      }
-
-      /* contact buttons - light on dark */
-      #contato .btn-primary {
-        background: #ffffff;
-        color: #333333;
-      }
-      #contato .btn-primary:hover {
-        background: #f0f0f0;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      }
-      #contato .btn-ghost {
-        border-color: #ffffff;
-        color: #ffffff;
-        background: transparent;
-      }
-      #contato .btn-ghost:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      footer {
-        border-top: 1px solid #bdbdbd;
-        padding: 32px 0;
-        background: #e5e5e5;
-      }
-      .footer-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
-      .footer-row p {
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 12px;
-        color: #666666;
-      }
-
-      /* reveal animations - smooth fluid motion */
-      .reveal {
-        opacity: 0;
-        transform: translateY(40px);
-        transition:
-          opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      .reveal.in {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .reveal-left {
-        opacity: 0;
-        transform: translateX(-60px);
-        transition:
-          opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      .reveal-left.in {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      .reveal-right {
-        opacity: 0;
-        transform: translateX(60px);
-        transition:
-          opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      .reveal-right.in {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      .reveal-scale {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      }
-      .reveal-scale.in {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      /* hero entrance animations */
-      .hero-content .eyebrow {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 0.2s;
-        opacity: 0;
-      }
-      .hero-content h1 {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 0.4s;
-        opacity: 0;
-      }
-      .hero-content .hero-sub {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 0.6s;
-        opacity: 0;
-      }
-      .hero-content .hero-actions {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 0.8s;
-        opacity: 0;
-      }
-      .hero-content .hero-tags {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 1s;
-        opacity: 0;
-      }
-      .hero-avatar {
-        animation: fadeInRight 1s ease forwards;
-        animation-delay: 0.5s;
-        opacity: 0;
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes fadeInRight {
-        from {
-          opacity: 0;
-          transform: translateX(40px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-
-      @media (max-width: 860px) {
-        .hero .wrap {
-          text-align: center;
-        }
-        .hero-avatars {
-          flex-direction: column;
-          align-items: center;
-          gap: 20px;
-        }
-        .avatar-item:first-child {
-          transform: none;
-        }
-        .avatar-item img {
-          height: 240px;
-        }
-        .hero-tags {
-          justify-content: center;
-        }
-        .hero-actions {
-          justify-content: center;
-        }
-        .hero-sub {
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .services-grid {
-          grid-template-columns: 1fr;
-        }
-        .projects-grid {
-          grid-template-columns: 1fr;
-        }
-        .about-grid {
-          grid-template-columns: 1fr;
-        }
-        .founder:first-child {
-          border-right: none;
-          border-bottom: 1px solid #888888;
-        }
-        nav ul {
-          display: none;
-        }
-        .burger {
-          display: flex;
-        }
-        .nav-cta {
-          display: none;
-        }
-        .contact-box {
-          padding: 48px 24px;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-        .reveal {
-          transition: none;
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* mobile menu */
-      .mobile-menu {
-        position: fixed;
-        inset: 0;
-        background: var(--bg);
-        z-index: 55;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 32px;
-        transform: translateY(-100%);
-        transition: transform 0.35s ease;
-      }
-      .mobile-menu.open {
-        transform: translateY(0);
-      }
-      .mobile-menu a {
-        font-family: "Space Grotesk", sans-serif;
-        font-size: 28px;
-      }
-    </style>
-  </head>
-  <body>
-    <header id="site-header">
-      <div class="nav">
-        <a href="#home" class="logo">
-          <img src="assets/logo.svg" alt="Brothers Tech" />
-        </a>
-        <nav>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#servicos">Serviços</a></li>
-            <li><a href="#projetos">Projetos</a></li>
-            <li><a href="#sobre">Sobre nós</a></li>
-          </ul>
-        </nav>
-        <a href="#contato" class="nav-cta">Fale com a gente</a>
-        <div class="burger" id="burger">
-          <span></span><span></span><span></span>
+  <!-- HOME -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow mono">estúdio de desenvolvimento</div>
+        <h1>BROTHERS<br><span class="accent">TECH</span></h1>
+        <p class="hero-sub">Construímos sistemas, apps, sites e softwares sob medida — do primeiro rascunho ao produto no ar.</p>
+        <div class="hero-actions">
+          <a href="#contato" class="btn-primary">Iniciar projeto →</a>
+          <a href="#servicos" class="btn-ghost">Serviços</a>
         </div>
       </div>
-    </header>
 
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#home">Home</a>
-      <a href="#servicos">Serviços</a>
-      <a href="#projetos">Projetos</a>
-      <a href="#sobre">Sobre nós</a>
-      <a href="#contato" style="color: var(--accent)">Contato</a>
+      <div class="hero-avatars">
+        <div class="avatar-item">
+          <div class="avatar-img" style="background-image:url('assets/avatar-sanderson.png')"></div>
+          <div class="avatar-name">Sanderson</div>
+          <div class="avatar-role">co-fundador</div>
+        </div>
+        <div class="avatar-item">
+          <div class="avatar-img" style="background-image:url('assets/avatar-caio.png')"></div>
+          <div class="avatar-name">Caio</div>
+          <div class="avatar-role">co-fundador</div>
+        </div>
+      </div>
+
+      <div class="hero-tags">
+        <span class="tag"><span class="dot green"></span>Sistemas</span>
+        <span class="tag"><span class="dot orange"></span>Apps</span>
+        <span class="tag"><span class="dot blue"></span>Sites</span>
+        <span class="tag"><span class="dot green"></span>Softwares</span>
+      </div>
     </div>
+  </section>
 
-    <main>
-      <!-- HOME -->
-      <section class="hero" id="home">
-        <div class="wrap">
-          <div class="hero-content">
-            <div class="eyebrow mono">estúdio de desenvolvimento</div>
-            <h1>BROTHERS<br /><span class="accent">TECH</span></h1>
-            <p class="hero-sub">
-              Construímos sistemas, apps, sites e softwares sob medida — do
-              primeiro rascunho ao produto no ar.
-            </p>
-            <div class="hero-actions">
-              <a href="#contato" class="btn-primary">Iniciar projeto →</a>
-              <a href="#servicos" class="btn-ghost">Serviços</a>
-            </div>
-          </div>
-
-          <div class="hero-avatars">
-            <div class="avatar-item">
-              <div
-                class="avatar-img"
-                style="
-                  background-image: url(&quot;assets/avatar-sanderson.png&quot;);
-                "
-              ></div>
-              <div class="avatar-name">Sanderson</div>
-              <div class="avatar-role">co-fundador</div>
-            </div>
-            <div class="avatar-item">
-              <div
-                class="avatar-img"
-                style="
-                  background-image: url(&quot;assets/avatar-caio.png&quot;);
-                "
-              ></div>
-              <div class="avatar-name">Caio</div>
-              <div class="avatar-role">co-fundador</div>
-            </div>
-          </div>
-
-          <div class="hero-tags">
-            <span class="tag"><span class="dot green"></span>Sistemas</span>
-            <span class="tag"><span class="dot orange"></span>Apps</span>
-            <span class="tag"><span class="dot blue"></span>Sites</span>
-            <span class="tag"><span class="dot green"></span>Softwares</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- SERVICOS -->
-      <section id="servicos">
-        <div class="wrap">
-          <div class="section-head reveal-left">
-            <div class="section-eyebrow">
-              <span class="n">01</span> — o que fazemos
-            </div>
-            <h2>Quatro frentes, um mesmo padrão de qualidade.</h2>
-            <p>
-              Cada projeto passa pela mesma régua: escopo claro, prazos
-              combinados e entrega que funciona de verdade.
-            </p>
-          </div>
-
-          <div class="services-grid reveal-scale">
-            <div class="service-card">
-              <div class="num mono">01</div>
-              <h3>Sistemas</h3>
-              <p>
-                Plataformas sob medida para organizar processos internos,
-                integrar áreas e tirar planilhas soltas da equação.
-              </p>
-              <div class="for mono">→ gestão, automação, integração</div>
-            </div>
-            <div class="service-card">
-              <div class="num mono">02</div>
-              <h3>Apps</h3>
-              <p>
-                Aplicativos mobile pensados do fluxo do usuário para trás — nada
-                de tela bonita que ninguém sabe usar.
-              </p>
-              <div class="for mono">→ iOS, Android, multiplataforma</div>
-            </div>
-            <div class="service-card">
-              <div class="num mono">03</div>
-              <h3>Sites</h3>
-              <p>
-                Presença digital rápida, responsiva e fácil de manter — do
-                institucional simples ao e-commerce completo.
-              </p>
-              <div class="for mono">→ institucional, landing page, loja</div>
-            </div>
-            <div class="service-card">
-              <div class="num mono">04</div>
-              <h3>Softwares</h3>
-              <p>
-                Ferramentas específicas para um problema específico do seu
-                negócio, feitas sob encomenda.
-              </p>
-              <div class="for mono">
-                → automação, ferramentas internas, APIs
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROJETOS -->
-      <section id="projetos">
-        <div class="wrap">
-          <div class="section-head reveal-right">
-            <div class="section-eyebrow">
-              <span class="n">02</span> — trabalhos
-            </div>
-            <h2>Projetos recentes</h2>
-            <p>
-              A Brothers Tech acabou de nascer — esses são os espaços reservados
-              para os primeiros projetos que vamos entregar.
-            </p>
-          </div>
-
-          <div class="projects-grid reveal">
-            <div class="project-card">
-              <div class="project-thumb"><span>em breve</span></div>
-              <div class="project-body">
-                <h4>Projeto 01</h4>
-                <p>sistema · em produção</p>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb"><span>em breve</span></div>
-              <div class="project-body">
-                <h4>Projeto 02</h4>
-                <p>app · em produção</p>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb"><span>em breve</span></div>
-              <div class="project-body">
-                <h4>Projeto 03</h4>
-                <p>site · em produção</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="projects-note reveal">
-            <span class="dot"></span>
-            <span class="mono" style="font-size: 13px"
-              >Quer ser o primeiro case da Brothers Tech? Fale com a gente na
-              seção de contato.</span
-            >
-          </div>
-        </div>
-      </section>
-
-      <!-- SOBRE -->
-      <section id="sobre">
-        <div class="wrap">
-          <div class="section-head reveal-left">
-            <div class="section-eyebrow">
-              <span class="n">03</span> — quem faz
-            </div>
-            <h2>Sobre nós</h2>
-            <p>
-              A Brothers Tech nasceu de uma parceria simples: dois irmãos que
-              gostam de resolver problemas com código.
-            </p>
-          </div>
-
-          <div class="about-grid reveal-scale">
-            <div class="founder">
-              <div class="founder-avatar">S</div>
-              <div class="role mono">co-fundador</div>
-              <h3>Sanderson</h3>
-              <p>
-                Cuida da ponte entre o que o cliente precisa e o que a gente
-                constrói — do primeiro papo até a entrega final.
-              </p>
-            </div>
-            <div class="founder">
-              <div class="founder-avatar" style="background: var(--green)">
-                C
-              </div>
-              <div class="role mono">co-fundador</div>
-              <h3>Caio</h3>
-              <p>
-                Põe a mão no código: arquitetura, integrações e a parte técnica
-                que faz tudo funcionar nos bastidores.
-              </p>
-            </div>
-          </div>
-
-          <p class="about-story reveal">
-            Somos uma dupla pequena de propósito —
-            <strong>sem camadas, sem intermediários</strong>. Cada projeto passa
-            pelas mãos dos dois fundadores, do escopo ao deploy. É esse o nosso
-            jeito de garantir padrão e cuidado em cada entrega.
-          </p>
-
-          <div class="founded-tag reveal">
-            <span
-              class="dot green"
-              style="
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: var(--green);
-              "
-            ></span>
-            fundada em 23.07.2026
-          </div>
-        </div>
-      </section>
-
-      <!-- CONTATO -->
-      <section id="contato">
-        <div class="wrap">
-          <div class="contact-box reveal-scale">
-            <h2>Bora tirar seu projeto do papel?</h2>
-            <p>
-              Conta pra gente o que você precisa — sistema, app, site ou
-              software — e a gente volta com um plano.
-            </p>
-            <div class="contact-actions">
-              <a href="mailto:contato@brothertech.dev" class="btn-primary"
-                >Enviar e-mail →</a
-              >
-              <a href="https://wa.me/55SEUNUMERO" class="btn-ghost"
-                >Chamar no WhatsApp</a
-              >
-            </div>
-            <div class="contact-channels">
-              <a href="mailto:contato@brothertech.dev" class="channel"
-                ><span
-                  class="dot green"
-                  style="
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: var(--green);
-                  "
-                ></span
-                >contato@brothertech.dev</a
-              >
-              <a href="#" class="channel"
-                ><span
-                  class="dot orange"
-                  style="
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: var(--orange);
-                  "
-                ></span
-                >@brothers_tech</a
-              >
-              <a href="#" class="channel"
-                ><span
-                  class="dot blue"
-                  style="
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: var(--blue);
-                  "
-                ></span
-                >github.com/brothers-tech</a
-              >
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="wrap footer-row">
-        <p>© 2026 Brothers Tech — todos os direitos reservados</p>
-        <p>feito por dois irmãos, um código de cada vez</p>
+  <!-- SERVICOS -->
+  <section id="servicos">
+    <div class="wrap">
+      <div class="section-head reveal-left">
+        <div class="section-eyebrow"><span class="n">01</span> — o que fazemos</div>
+        <h2>Quatro frentes, um mesmo padrão de qualidade.</h2>
+        <p>Cada projeto passa pela mesma régua: escopo claro, prazos combinados e entrega que funciona de verdade.</p>
       </div>
-    </footer>
 
-    <script>
-      // Header scroll state
-      const header = document.getElementById("site-header");
-      window.addEventListener("scroll", () => {
-        header.classList.toggle("scrolled", window.scrollY > 10);
-      });
+      <div class="services-grid reveal-scale">
+        <div class="service-card">
+          <div class="num mono">01</div>
+          <h3>Sistemas</h3>
+          <p>Plataformas sob medida para organizar processos internos, integrar áreas e tirar planilhas soltas da equação.</p>
+          <div class="for mono">→ gestão, automação, integração</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">02</div>
+          <h3>Apps</h3>
+          <p>Aplicativos mobile pensados do fluxo do usuário para trás — nada de tela bonita que ninguém sabe usar.</p>
+          <div class="for mono">→ iOS, Android, multiplataforma</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">03</div>
+          <h3>Sites</h3>
+          <p>Presença digital rápida, responsiva e fácil de manter — do institucional simples ao e-commerce completo.</p>
+          <div class="for mono">→ institucional, landing page, loja</div>
+        </div>
+        <div class="service-card">
+          <div class="num mono">04</div>
+          <h3>Softwares</h3>
+          <p>Ferramentas específicas para um problema específico do seu negócio, feitas sob encomenda.</p>
+          <div class="for mono">→ automação, ferramentas internas, APIs</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      // Mobile menu
-      const burger = document.getElementById("burger");
-      const mobileMenu = document.getElementById("mobileMenu");
-      burger.addEventListener("click", () => {
-        mobileMenu.classList.toggle("open");
-      });
-      mobileMenu
-        .querySelectorAll("a")
-        .forEach((a) =>
-          a.addEventListener("click", () =>
-            mobileMenu.classList.remove("open"),
-          ),
-        );
+  <!-- PROJETOS -->
+  <section id="projetos">
+    <div class="wrap">
+      <div class="section-head reveal-right">
+        <div class="section-eyebrow"><span class="n">02</span> — trabalhos</div>
+        <h2>Projetos recentes</h2>
+        <p>A Brothers Tech acabou de nascer — esses são os espaços reservados para os primeiros projetos que vamos entregar.</p>
+      </div>
 
-      // Smooth scroll reveal animations with stagger
-      const revealElements = document.querySelectorAll(
-        ".reveal, .reveal-left, .reveal-right, .reveal-scale",
-      );
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
+      <div class="projects-grid reveal">
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 01</h4>
+            <p>sistema · em produção</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 02</h4>
+            <p>app · em produção</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb"><span>em breve</span></div>
+          <div class="project-body">
+            <h4>Projeto 03</h4>
+            <p>site · em produção</p>
+          </div>
+        </div>
+      </div>
 
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            // Add stagger delay based on element position
-            const delay = entry.target.dataset.delay || 0;
-            setTimeout(() => {
-              entry.target.classList.add("in");
-            }, delay);
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
+      <div class="projects-note reveal">
+        <span class="dot"></span>
+        <span class="mono" style="font-size:13px">Quer ser o primeiro case da Brothers Tech? Fale com a gente na seção de contato.</span>
+      </div>
+    </div>
+  </section>
 
-      revealElements.forEach((el, index) => {
-        // Add stagger delay for elements in the same section
-        if (!el.dataset.delay) {
-          el.dataset.delay = (index % 4) * 100;
-        }
-        revealObserver.observe(el);
-      });
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="wrap">
+      <div class="section-head reveal-left">
+        <div class="section-eyebrow"><span class="n">03</span> — quem faz</div>
+        <h2>Sobre nós</h2>
+        <p>A Brothers Tech nasceu de uma parceria simples: dois irmãos que gostam de resolver problemas com código.</p>
+      </div>
 
-      // Parallax effect for hero avatar
-      const heroAvatar = document.querySelector(".hero-avatar");
-      if (heroAvatar) {
-        window.addEventListener("scroll", () => {
-          const scrolled = window.scrollY;
-          if (scrolled < window.innerHeight) {
-            heroAvatar.style.transform = `translateY(${scrolled * 0.15}px)`;
-          }
-        });
-      }
+      <div class="about-grid reveal-scale">
+        <div class="founder">
+          <div class="founder-avatar">S</div>
+          <div class="role mono">co-fundador</div>
+          <h3>Sanderson</h3>
+          <p>Cuida da ponte entre o que o cliente precisa e o que a gente constrói — do primeiro papo até a entrega final.</p>
+        </div>
+        <div class="founder">
+          <div class="founder-avatar" style="background:var(--green)">C</div>
+          <div class="role mono">co-fundador</div>
+          <h3>Caio</h3>
+          <p>Põe a mão no código: arquitetura, integrações e a parte técnica que faz tudo funcionar nos bastidores.</p>
+        </div>
+      </div>
 
-      // Smooth scroll for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        });
-      });
+      <p class="about-story reveal">Somos uma dupla pequena de propósito — <strong>sem camadas, sem intermediários</strong>. Cada projeto passa pelas mãos dos dois fundadores, do escopo ao deploy. É esse o nosso jeito de garantir padrão e cuidado em cada entrega.</p>
 
-      // Remove black background from avatar images (sticker effect)
-      function removeBlackBg(imgElement, src) {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = function () {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imageData.data;
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const avg = (r + g + b) / 3;
-            // Remove dark pixels - more aggressive on pure black, preserve colored darks
-            if (avg < 25 && Math.abs(r - g) < 10 && Math.abs(g - b) < 10) {
-              data[i + 3] = 0;
-            }
-          }
-          ctx.putImageData(imageData, 0, 0);
-          imgElement.style.backgroundImage = `url(${canvas.toDataURL("image/png")})`;
-        };
-        img.src = src;
-      }
+      <div class="founded-tag reveal">
+        <span class="dot green" style="width:6px;height:6px;border-radius:50%;background:var(--green)"></span>
+        fundada em 23.07.2026
+      </div>
+    </div>
+  </section>
 
-      // Apply to avatar images
-      document.querySelectorAll(".avatar-img").forEach((el) => {
-        const bgImage = el.style.backgroundImage;
-        const src = bgImage.match(/url\(['"]?(.+?)['"]?\)/)?.[1];
-        if (src) removeBlackBg(el, src);
-      });
-    </script>
-  </body>
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="wrap">
+      <div class="contact-box reveal-scale">
+        <h2>Bora tirar seu projeto do papel?</h2>
+        <p>Conta pra gente o que você precisa — sistema, app, site ou software — e a gente volta com um plano.</p>
+        <div class="contact-actions">
+          <a href="mailto:contato@brothertech.dev" class="btn-primary">Enviar e-mail →</a>
+          <a href="https://wa.me/55SEUNUMERO" class="btn-ghost">Chamar no WhatsApp</a>
+        </div>
+        <div class="contact-channels">
+          <a href="mailto:contato@brothertech.dev" class="channel"><span class="dot green" style="width:6px;height:6px;border-radius:50%;background:var(--green)"></span>contato@brothertech.dev</a>
+          <a href="#" class="channel"><span class="dot orange" style="width:6px;height:6px;border-radius:50%;background:var(--orange)"></span>@brothers_tech</a>
+          <a href="#" class="channel"><span class="dot blue" style="width:6px;height:6px;border-radius:50%;background:var(--blue)"></span>github.com/brothers-tech</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <p>© 2026 Brothers Tech — todos os direitos reservados</p>
+    <p>feito por dois irmãos, um código de cada vez</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
 </html>
