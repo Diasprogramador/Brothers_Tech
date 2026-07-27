@@ -931,3 +931,150 @@ footer{
 }
 @keyframes scroll-progress{ to{ transform:scaleX(1); } }
 @media (prefers-reduced-motion: reduce){ .scroll-progress{ display:none; } }
+
+/* =====================================================================
+   PRELOADER — Brothers Tech
+   3s total. Letras entram em stagger (200ms cada = 2.4s),
+   barra cresce até ~95%, preloader fade-out nos últimos 400ms.
+   ===================================================================== */
+.preloader{
+  position:fixed; inset:0; z-index:1000;
+  background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(var(--s-5), 6vh, var(--s-8));
+  padding:var(--gutter);
+  transition:opacity 400ms var(--ease-out-expo),
+             visibility 0s linear 400ms;
+}
+.preloader.is-done{
+  opacity:0; visibility:hidden; pointer-events:none;
+}
+.preloader-words{
+  display:flex; flex-direction:column; align-items:center; gap:clamp(8px, 1.5vh, 16px);
+  text-align:center;
+}
+.preloader-row{
+  display:flex; align-items:flex-end; justify-content:center;
+  gap:clamp(2px, 0.8vw, 8px);
+  flex-wrap:nowrap;
+}
+/* "BROTHERS" — maior */
+.preloader-row-up{ gap:clamp(2px, 0.8vw, 8px); }
+/* "tech" — menor e em azul */
+.preloader-row-down{ gap:clamp(2px, 0.6vw, 6px); }
+.letter{
+  /* largura fixa aqui define o tamanho da letra — img respeita 100% */
+  display:inline-flex; align-items:flex-end; justify-content:center;
+  opacity:0; transform:translateY(28px) scale(0.85);
+  animation:letter-in 520ms var(--ease-out-expo) forwards;
+  animation-delay:calc(120ms + var(--i) * 180ms);
+  will-change:transform, opacity;
+  flex:0 0 auto;
+}
+.letter img{
+  display:block; user-select:none; -webkit-user-drag:none;
+  width:100%;
+  height:auto;
+  max-width:100%;
+}
+/* "BROTHERS" — 8 letras: cada .letter = 8vw no mobile pra sobrar margem */
+.preloader-row-up .letter{ width:clamp(20px, 8vw, 88px); }
+.preloader-row-down .letter{ width:clamp(16px, 5.5vw, 56px); }
+/* a row centraliza e respeita o container */
+.preloader-row-up, .preloader-row-down{
+  max-width:100%;
+  flex-wrap:nowrap;
+  justify-content:center;
+}
+.preloader-words{
+  width:100%;
+  max-width:min(560px, calc(100vw - var(--gutter) * 2));
+}
+/* o SVG já vem colorido (fill #2F2F42 e #364C84) — sem mexer */
+
+@keyframes letter-in{
+  0%{ opacity:0; transform:translateY(28px) scale(0.85); filter:blur(6px); }
+  60%{ opacity:1; filter:blur(0); }
+  100%{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+}
+/* após última letra entrar (~1.9s), faz um pequeno "assentar" */
+.preloader.is-complete .preloader-words{
+  animation:settle 350ms var(--ease-out-expo) forwards;
+  animation-delay:80ms;
+}
+@keyframes settle{
+  0%{ transform:scale(1); }
+  100%{ transform:scale(0.96); opacity:0.6; }
+}
+
+/* barra de progresso */
+.preloader-bar{
+  width:min(280px, 60vw); height:2px;
+  background:rgba(0,0,0,.08);
+  border-radius:999px; overflow:hidden;
+  position:relative;
+}
+.preloader-bar-fill{
+  display:block; position:absolute; left:0; top:0; bottom:0;
+  width:0;
+  background:linear-gradient(90deg, #2F2F42, #364C84);
+  border-radius:999px;
+  animation:bar-fill 2400ms var(--ease-out-expo) forwards;
+  animation-delay:120ms;
+}
+@keyframes bar-fill{
+  to{ width:100%; }
+}
+
+/* quebra a página pra não mostrar conteúdo durante o preloader */
+.preloader~.skip-link,
+.preloader~.scroll-progress,
+.preloader~header,
+.preloader~main,
+.preloader~footer{
+  opacity:0;
+  transition:opacity 500ms var(--ease-out-expo);
+}
+.preloader.is-done~.skip-link,
+.preloader.is-done~.scroll-progress,
+.preloader.is-done~header,
+.preloader.is-done~main,
+.preloader.is-done~footer{
+  opacity:1;
+}
+/* fallback no-js: esconde preloader e mostra tudo direto */
+.no-js .preloader{ display:none; }
+.no-js .preloader~.skip-link,
+.no-js .preloader~.scroll-progress,
+.no-js .preloader~header,
+.no-js .preloader~main,
+.no-js .preloader~footer{ opacity:1; }
+
+/* responsivo: desktop ganha mais respiro e letras maiores */
+@media (min-width:768px){
+  .preloader-words{ gap:clamp(12px, 2vh, 20px); }
+  .preloader-row-up{ gap:clamp(8px, 1.2vw, 14px); }
+  .preloader-row-down{ gap:clamp(6px, 1vw, 12px); }
+  .preloader-row-up .letter{ width:clamp(80px, 9vw, 120px); }
+  .preloader-row-down .letter{ width:clamp(50px, 5.5vw, 78px); }
+  .preloader-bar{ width:min(360px, 40vw); }
+}
+@media (min-width:1200px){
+  .preloader-row-up .letter{ width:108px; }
+  .preloader-row-down .letter{ width:72px; }
+}
+/* telas muito pequenas: apertar pra não estourar */
+@media (max-width:380px){
+  .preloader-row-up{ gap:2px; }
+  .preloader-row-down{ gap:1px; }
+  .preloader-row-up .letter{ width:32px; }
+  .preloader-row-down .letter{ width:22px; }
+}
+
+/* prefers-reduced-motion: preloader simples, fade rápido */
+@media (prefers-reduced-motion: reduce){
+  .preloader{ transition:opacity 200ms linear, visibility 0s linear 200ms; }
+  .letter{ animation:letter-in 200ms ease forwards; animation-delay:calc(var(--i) * 20ms); }
+  .preloader-bar-fill{ animation:bar-fill 600ms ease forwards; }
+  .preloader.is-complete .preloader-words{ animation:none; }
+}
