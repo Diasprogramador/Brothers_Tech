@@ -15,7 +15,7 @@
   --line-soft:#D4D4D4;
   --ink:#161616;
   --ink-muted:#3F3F3F;
-  --ink-dim:#6B6B6B;
+  --ink-dim:#5F5F5F;
   --paper:#FFFFFF;
   --paper-soft:#F8F8F8;
 
@@ -44,17 +44,26 @@
   --text-body:clamp(0.9375rem, 1.05vw, 1.0625rem);/* 15→17 */
   --text-eyebrow:clamp(0.6875rem, 0.95vw, 0.8125rem); /* 11→13 */
 
-  /* ritmo de espaçamento (escala 4px) */
-  --s-1:0.25rem; --s-2:0.5rem; --s-3:0.75rem; --s-4:1rem;
-  --s-5:1.5rem; --s-6:2rem; --s-8:3rem; --s-10:4rem; --s-12:6rem;
+  /* ritmo de espaçamento (escala 8px - Rhythm-8) */
+  --s-1: 0.5rem;   /* 8px */
+  --s-2: 1rem;     /* 16px */
+  --s-3: 1.5rem;   /* 24px */
+  --s-4: 2rem;     /* 32px */
+  --s-5: 3rem;     /* 48px */
+  --s-6: 4rem;     /* 64px */
+  --s-8: 6rem;     /* 96px */
+  --s-10: 8rem;    /* 128px */
+  --s-12: 12rem;   /* 192px */
+
+  --preloader-scale: clamp(0.7, 100vw / 400px, 1);
 
   /* raios */
   --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
 
   /* movimento */
-  --ease-out-expo:cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring:cubic-bezier(0.34, 1.56, 0.64, 1);
-  --dur-fast:180ms; --dur-normal:320ms; --dur-slow:640ms; --dur-reveal:900ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms; --dur-normal: 300ms; --dur-slow: 600ms; --dur-reveal: 1000ms;
 
   /* sombras suaves (sem preto puro) */
   --shadow-sm:0 2px 8px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.06);
@@ -135,9 +144,9 @@ section{ position:relative; }
    ===================================================================== */
 header{
   position:fixed; inset:0 0 auto 0; z-index:50;
-  background:rgba(232,232,232,.72);
-  backdrop-filter:saturate(180%) blur(14px);
-  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  background:rgba(232,232,232,0);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
   border-bottom:1px solid transparent;
   transition:
     border-color var(--dur-normal) var(--ease-out-expo),
@@ -146,7 +155,7 @@ header{
 }
 header.scrolled{
   border-bottom-color:var(--line);
-  background:rgba(232,232,232,.92);
+  background:var(--bg);
   box-shadow:var(--shadow-sm);
 }
 .nav{
@@ -480,7 +489,7 @@ nav a:hover::after, nav a:focus-visible::after{ width:100%; }
 /* =====================================================================
    SECTION HEADERS
    ===================================================================== */
-.section-head{ margin-bottom:clamp(var(--s-8), 6vh, var(--s-10)); }
+.section-head{ margin-bottom:var(--s-8); }
 .section-eyebrow{
   font-family:var(--font-mono); font-size:var(--text-eyebrow);
   color:var(--ink-dim); font-weight:500;
@@ -506,7 +515,7 @@ nav a:hover::after, nav a:focus-visible::after{ width:100%; }
    ===================================================================== */
 #servicos{
   background:#1F1F1F;
-  padding:clamp(var(--s-10), 12vh, var(--s-12)) 0;
+  padding:var(--s-12) 0;
   position:relative;
 }
 #servicos::before{
@@ -562,7 +571,7 @@ nav a:hover::after, nav a:focus-visible::after{ width:100%; }
    PROJETOS
    ===================================================================== */
 #projetos{
-  padding:clamp(var(--s-10), 12vh, var(--s-12)) 0;
+  padding:var(--s-12) 0;
 }
 .projects-grid{
   display:grid; grid-template-columns:1fr; gap:var(--s-4);
@@ -621,7 +630,7 @@ nav a:hover::after, nav a:focus-visible::after{ width:100%; }
    ===================================================================== */
 #sobre{
   background:#5C5C5C;
-  padding:clamp(var(--s-10), 12vh, var(--s-12)) 0;
+  padding:var(--s-12) 0;
   position:relative;
 }
 #sobre::before{
@@ -686,7 +695,7 @@ nav a:hover::after, nav a:focus-visible::after{ width:100%; }
    CONTATO
    ===================================================================== */
 #contato{
-  padding:clamp(var(--s-10), 12vh, var(--s-12)) 0 clamp(var(--s-8), 8vh, var(--s-10));
+  padding:var(--s-12) 0 var(--s-10);
   background:#484848;
 }
 .contact-box{
@@ -889,32 +898,31 @@ footer{
   .btn-primary,.btn-ghost{ padding:12px 20px; font-size:0.8125rem; }
 }
 
-/* =====================================================================
-   CUSTOM CURSOR — desktop com fine pointer (mouse)
-   ===================================================================== */
+/* CURSOR CUSTOMIZADO — Minimalista e sofisticado */
 @media (pointer:fine) and (min-width:860px){
-  body{ cursor:none; }
-  body *{ cursor:none; }
-  /* cursor follower via JS — habilitado em script.js */
-  .cursor-dot,.cursor-ring{
+  body, body *{ cursor:none !important; }
+  
+  .cursor-dot, .cursor-ring{
     position:fixed; top:0; left:0; pointer-events:none;
     z-index:9999; border-radius:50%;
-    mix-blend-mode:difference;
     will-change:transform;
+    transition: transform 0.1s var(--ease-out-expo);
   }
   .cursor-dot{
-    width:6px; height:6px; background:#fff;
-    transition:transform 80ms var(--ease-out-expo);
+    width:6px; height:6px; background:var(--ink);
   }
   .cursor-ring{
-    width:36px; height:36px; border:1.5px solid #fff;
-    transition:transform 180ms var(--ease-out-expo),
-               width 220ms var(--ease-spring),
-               height 220ms var(--ease-spring);
+    width:32px; height:32px; border:1px solid var(--ink);
+    transition: transform 0.2s var(--ease-out-expo), 
+                width 0.3s var(--ease-spring), 
+                height 0.3s var(--ease-spring),
+                border-color 0.3s var(--ease-out-expo);
   }
-  .cursor-ring.grow{ width:60px; height:60px; border-color:var(--green); }
-  .skip-link,.nav-cta,.btn-primary,.btn-ghost,.channel,.tag,
-  a,button{ cursor:none; }
+  .cursor-ring.grow{ 
+    width:64px; height:64px; 
+    border-color:var(--green); 
+    background:rgba(79,138,102,0.05);
+  }
 }
 
 /* =====================================================================
@@ -952,6 +960,8 @@ footer{
 .preloader-words{
   display:flex; flex-direction:column; align-items:center; gap:clamp(8px, 1.5vh, 16px);
   text-align:center;
+  transform: scale(var(--preloader-scale));
+  transform-origin: center center;
 }
 .preloader-row{
   display:flex; align-items:flex-end; justify-content:center;
