@@ -904,7 +904,7 @@ footer{
   
   .cursor-dot, .cursor-ring{
     position:fixed; top:0; left:0; pointer-events:none;
-    z-index:9999; border-radius:50%;
+    z-index:10001; border-radius:50%;
     will-change:transform;
     transition: transform 0.1s var(--ease-out-expo);
   }
