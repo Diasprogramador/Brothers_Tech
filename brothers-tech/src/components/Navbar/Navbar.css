@@ -1,3 +1,9 @@
+/* =====================================================================
+   NAVBAR — Mobile-first
+   Ordem de breakpoints: base (mobile) → tablet (560px) → desktop (860px)
+   ===================================================================== */
+
+/* ---------- Base: mobile-first (até 559px) ---------- */
 header {
   position: fixed;
   inset: 0 0 auto 0;
@@ -6,6 +12,8 @@ header {
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid transparent;
+  /* safe-area para iPhones com notch */
+  padding-top: env(safe-area-inset-top, 0);
   transition:
     border-color var(--dur-normal) var(--ease-out-expo),
     background var(--dur-normal) var(--ease-out-expo),
@@ -20,21 +28,28 @@ header.scrolled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s-4);
+  gap: var(--s-3);
   padding: var(--s-3) var(--gutter);
   max-width: var(--maxw);
   margin-inline: auto;
-  min-height: 60px;
+  min-height: 56px;
 }
 .logo {
   display: inline-flex;
   align-items: center;
   gap: var(--s-3);
   flex-shrink: 0;
+  min-width: 0;
 }
 .logo img {
-  height: 30px;
+  height: 28px;
   width: auto;
+  max-width: 100px; /* cabe em qualquer tela */
+}
+
+/* Em mobile, o nav desktop some */
+nav[aria-label="Navegação principal"] {
+  display: none;
 }
 nav[aria-label="Navegação principal"] ul {
   display: flex;
@@ -67,7 +82,9 @@ nav a:focus-visible::after {
   width: 100%;
 }
 
+/* CTA desktop também fica escondido em mobile */
 .nav-cta {
+  display: none;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -92,20 +109,21 @@ nav a:focus-visible::after {
   transform: translateY(0) scale(0.97);
 }
 
-/* Burger */
+/* Burger: visível por padrão no mobile */
 .burger {
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--r-sm);
   padding: 10px;
   position: relative;
   z-index: 60;
   transition: background var(--dur-fast) var(--ease-out-expo);
+  flex-shrink: 0;
 }
 .burger span {
   display: block;
@@ -131,7 +149,7 @@ nav a:focus-visible::after {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Mobile menu (fullscreen) */
+/* ---------- Mobile menu (fullscreen) ---------- */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -141,11 +159,16 @@ nav a:focus-visible::after {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(var(--s-6), 8vh, var(--s-12));
+  gap: clamp(var(--s-5), 6vh, var(--s-8));
   transform: translateY(-100%);
   transition: transform var(--dur-slow) var(--ease-out-expo);
   visibility: hidden;
-  padding: env(safe-area-inset-top, 0) var(--s-6) env(safe-area-inset-bottom, 0);
+  /* safe-area top/bottom */
+  padding-top: calc(env(safe-area-inset-top, 0) + var(--s-6));
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + var(--s-6));
+  padding-inline: var(--s-6);
+  /* overscroll-behavior para não puxar a página */
+  overscroll-behavior: contain;
 }
 .mobile-menu.open {
   transform: translateY(0);
@@ -161,6 +184,11 @@ nav a:focus-visible::after {
   opacity: 0;
   transform: translateY(20px);
   transition: color var(--dur-fast) var(--ease-out-expo);
+  /* tap target mínimo 44px */
+  padding: var(--s-2) var(--s-4);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 .mobile-menu.open a {
   opacity: 1;
@@ -191,7 +219,7 @@ nav a:focus-visible::after {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -6px;
+  bottom: 0;
   width: 0;
   height: 2px;
   background: var(--green);
@@ -209,7 +237,66 @@ nav a:focus-visible::after {
   padding: var(--s-3) var(--s-5);
   border-radius: var(--r-pill);
   font-weight: 500 !important;
+  margin-top: var(--s-4);
 }
 .mobile-menu-cta:hover {
   color: var(--paper) !important;
+}
+
+/* =====================================================================
+   BREAKPOINTS — subindo de mobile pra tablet e desktop
+   ===================================================================== */
+
+/* ≥ 560px — tablets pequenos: mostra CTA no header */
+@media (min-width: 560px) {
+  .nav {
+    min-height: 60px;
+    gap: var(--s-4);
+  }
+  .logo img {
+    height: 30px;
+    max-width: none;
+  }
+  .nav-cta {
+    display: inline-flex;
+  }
+}
+
+/* ≥ 860px — desktop: mostra nav inline, esconde burger */
+@media (min-width: 860px) {
+  nav[aria-label="Navegação principal"] {
+    display: block;
+  }
+  .burger {
+    display: none;
+  }
+}
+
+/* Telas muito pequenas (≤ 380px) — versão compacta */
+@media (max-width: 380px) {
+  :root {
+    --text-hero: clamp(2.25rem, 11vw, 3.5rem);
+  }
+  .nav {
+    padding: var(--s-2) var(--s-4);
+    gap: var(--s-2);
+    min-height: 52px;
+  }
+  .logo img {
+    height: 26px;
+  }
+  .burger {
+    width: 44px;
+    height: 44px;
+  }
+  .mobile-menu a {
+    font-size: clamp(1.25rem, 8vw, 1.75rem);
+  }
+}
+
+/* Suporte a browsers sem backdrop-filter */
+@supports not (backdrop-filter: blur(14px)) {
+  header {
+    background: rgba(232, 232, 232, 0.95);
+  }
 }
