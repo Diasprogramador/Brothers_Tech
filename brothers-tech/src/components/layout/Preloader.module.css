@@ -1,0 +1,188 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--s-5), 6vh, var(--s-8));
+  padding: var(--gutter);
+  transition:
+    opacity 400ms var(--ease-out-expo),
+    visibility 0s linear 400ms;
+}
+.preloader.isDone {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.5vh, 16px);
+  text-align: center;
+  width: 100%;
+  max-width: min(560px, calc(100vw - var(--gutter) * 2));
+}
+.row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(2px, 0.8vw, 8px);
+  flex-wrap: nowrap;
+  max-width: 100%;
+}
+.rowUp {
+  gap: clamp(2px, 0.8vw, 8px);
+}
+.rowDown {
+  gap: clamp(2px, 0.6vw, 6px);
+}
+.rowUp .letter {
+  width: clamp(20px, 8vw, 88px);
+}
+.rowDown .letter {
+  width: clamp(16px, 5.5vw, 56px);
+}
+
+.letter {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(28px) scale(0.85);
+  animation: letterIn 520ms var(--ease-out-expo) forwards;
+  animation-delay: calc(120ms + var(--i) * 180ms);
+  will-change: transform, opacity;
+  flex: 0 0 auto;
+}
+.letter img {
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+@keyframes letterIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.85);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.preloader.isComplete .words {
+  animation: settle 350ms var(--ease-out-expo) forwards;
+  animation-delay: 80ms;
+}
+@keyframes settle {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.96);
+    opacity: 0.6;
+  }
+}
+
+.bar {
+  width: min(280px, 60vw);
+  height: 2px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.barFill {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, #2f2f42, #364c84);
+  border-radius: 999px;
+  animation: barFill 2400ms var(--ease-out-expo) forwards;
+  animation-delay: 120ms;
+}
+@keyframes barFill {
+  to {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .words {
+    gap: clamp(12px, 2vh, 20px);
+  }
+  .rowUp {
+    gap: clamp(8px, 1.2vw, 14px);
+  }
+  .rowDown {
+    gap: clamp(6px, 1vw, 12px);
+  }
+  .rowUp .letter {
+    width: clamp(80px, 9vw, 120px);
+  }
+  .rowDown .letter {
+    width: clamp(50px, 5.5vw, 78px);
+  }
+  .bar {
+    width: min(360px, 40vw);
+  }
+}
+@media (min-width: 1200px) {
+  .rowUp .letter {
+    width: 108px;
+  }
+  .rowDown .letter {
+    width: 72px;
+  }
+}
+@media (max-width: 380px) {
+  .rowUp {
+    gap: 2px;
+  }
+  .rowDown {
+    gap: 1px;
+  }
+  .rowUp .letter {
+    width: 32px;
+  }
+  .rowDown .letter {
+    width: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader {
+    transition:
+      opacity 200ms linear,
+      visibility 0s linear 200ms;
+  }
+  .letter {
+    animation: letterIn 200ms ease forwards;
+    animation-delay: calc(var(--i) * 20ms);
+  }
+  .barFill {
+    animation: barFill 600ms ease forwards;
+  }
+  .preloader.isComplete .words {
+    animation: none;
+  }
+}
