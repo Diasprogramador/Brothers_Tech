@@ -1,0 +1,283 @@
+.hero {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--s-12) + 40px) 0 var(--s-10);
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+/* Grid sutil que reage ao scroll */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: max(48px, 7vw) max(48px, 7vw);
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    #000 30%,
+    transparent 75%
+  );
+  animation: hero-grid-drift 40s ease-in-out infinite alternate;
+}
+@keyframes hero-grid-drift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(20px, -30px) rotate(0.5deg);
+  }
+}
+/* Glow verde de atmosfera */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: min(700px, 80vw);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle,
+    rgba(79, 138, 102, 0.12) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  will-change: transform;
+  animation: hero-glow 12s ease-in-out infinite alternate;
+}
+@keyframes hero-glow {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(-50%) scale(1.15);
+    opacity: 1;
+  }
+}
+.hero .wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  gap: var(--s-8);
+}
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 680px;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  color: var(--ink);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-inset), var(--shadow-sm);
+}
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+.hero-title {
+  font-size: var(--text-hero);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.hero-title .accent {
+  color: var(--green);
+}
+.hero-sub {
+  margin-top: var(--s-5);
+  max-width: 560px;
+  color: var(--ink-muted);
+  font-size: clamp(1rem, 1.4vw, 1.1875rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.hero-actions {
+  display: flex;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--s-6);
+  width: 100%;
+}
+
+/* Botões — estilos globais (definidos em index.css) */
+
+/* ---------- Avatares ---------- */
+.hero-avatars {
+  display: flex;
+  gap: clamp(var(--s-2), 4vw, var(--s-6));
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+.avatar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.avatar-img {
+  width: auto;
+  height: clamp(220px, 38vh, 360px);
+  max-width: none;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 22px 32px rgba(0, 0, 0, 0.15));
+  transition: transform var(--dur-slow) var(--ease-out-expo);
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* parallax joystick — vars --px/--py injetadas via JS */
+  --px: 0px;
+  --py: 0px;
+}
+/* flutuação sutil contínua — keyframes incluem o parallax via vars */
+.avatar-item:nth-child(1) .avatar-img {
+  animation: float-a 6s ease-in-out infinite;
+}
+.avatar-item:nth-child(2) .avatar-img {
+  animation: float-b 7s ease-in-out infinite;
+}
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translate(var(--px, 0px), var(--py, 0px));
+  }
+  50% {
+    transform: translate(var(--px, 0px), calc(var(--py, 0px) - 10px));
+  }
+}
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translate(var(--px, 0px), var(--py, 0px));
+  }
+  50% {
+    transform: translate(var(--px, 0px), calc(var(--py, 0px) - 14px));
+  }
+}
+/* hover pausa a flutuação e faz lift (compõe com parallax) */
+.avatar-item:hover .avatar-img {
+  animation-play-state: paused;
+  transform: translate(var(--px, 0px), calc(var(--py, 0px) - 14px)) scale(1.03);
+}
+/* stagger vertical do par */
+.avatar-item:first-child {
+  margin-bottom: clamp(0px, 2vh, 24px);
+}
+
+/* Legend abaixo dos avatares */
+.hero-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-1);
+  text-align: center;
+}
+.legend-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  letter-spacing: 0.02em;
+}
+.legend-role {
+  font-size: var(--text-eyebrow);
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+
+/* Tags de frentes */
+.hero-tags {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  color: var(--ink);
+  font-weight: 500;
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    border-color var(--dur-fast) var(--ease-out-expo),
+    background var(--dur-fast) var(--ease-out-expo);
+}
+.tag:hover {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+}
+.tag .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.dot.green {
+  background: var(--green);
+}
+.dot.orange {
+  background: var(--orange);
+}
+.dot.blue {
+  background: var(--blue);
+}

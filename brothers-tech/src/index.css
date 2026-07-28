@@ -1,0 +1,335 @@
+/* =====================================================================
+   BROTHERS TECH — Design tokens & reset (global)
+   Equivalente ao :root + reset do style.css da raiz, mas isolado aqui
+   para não conflitar com as variáveis legadas do Vite template.
+   ===================================================================== */
+
+:root {
+  /* paleta intencional */
+  --bg: #e8e8e8;
+  --bg-soft: #d4d4d4;
+  --surface: #f2f2f2;
+  --surface-2: #e0e0e0;
+  --line: #c0c0c0;
+  --line-soft: #d4d4d4;
+  --ink: #161616;
+  --ink-muted: #3f3f3f;
+  --ink-dim: #6b6b6b;
+  --paper: #ffffff;
+  --paper-soft: #f8f8f8;
+
+  /* dark surfaces (seções escuras) */
+  --on-dark: #ffffff;
+  --on-dark-muted: #c8c8c8;
+  --on-dark-dim: #8a8a8a;
+
+  /* acentos — paleta limitada */
+  --green: #4f8a66;
+  --green-soft: #6fa889;
+  --orange: #c4723f;
+  --orange-soft: #e08c57;
+  --blue: #4068a1;
+  --blue-soft: #6a8cc0;
+
+  /* tipografia */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  /* escala tipográfica flúida */
+  --text-hero: clamp(2.75rem, 9vw, 6rem);
+  --text-h2: clamp(1.75rem, 4.5vw, 2.625rem);
+  --text-h3: clamp(1.25rem, 2.2vw, 1.625rem);
+  --text-body: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  --text-eyebrow: clamp(0.6875rem, 0.95vw, 0.8125rem);
+
+  /* ritmo de espaçamento (escala 4px) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-8: 3rem;
+  --s-10: 4rem;
+  --s-12: 6rem;
+
+  /* raios */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* movimento */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 180ms;
+  --dur-normal: 320ms;
+  --dur-slow: 640ms;
+  --dur-reveal: 900ms;
+
+  /* sombras suaves */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* container */
+  --maxw: 1140px;
+  --gutter: clamp(1rem, 4vw, 2rem);
+
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  overflow-x: hidden;
+  min-height: 100svh;
+  margin: 0;
+}
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+::-moz-selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.mono {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+ul,
+ol {
+  list-style: none;
+}
+
+/* Focus visível */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+  transition: outline-offset var(--dur-fast) var(--ease-out-expo);
+}
+
+/* Container utilitário */
+.wrap {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+section {
+  position: relative;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -100px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--s-3) var(--s-5);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  z-index: 200;
+  transition: top var(--dur-fast) var(--ease-out-expo);
+}
+.skip-link:focus {
+  top: var(--s-3);
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 60;
+  animation: scroll-progress auto linear;
+  animation-timeline: scroll(root);
+}
+@keyframes scroll-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* prefers-reduced-motion — desativa tudo que se mexe */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .scroll-progress {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   BOTÕES GLOBAIS (.btn-primary, .btn-ghost) — usados no Hero, Contato, etc.
+   ===================================================================== */
+.btn-primary,
+.btn-ghost {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 14px 26px;
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--dur-normal) var(--ease-spring),
+    box-shadow var(--dur-normal) var(--ease-out-expo),
+    background var(--dur-fast) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-out-expo);
+  will-change: transform;
+  min-height: 48px;
+}
+/* brilho que varre no hover */
+.btn-primary::before,
+.btn-ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform var(--dur-slow) var(--ease-out-expo);
+  pointer-events: none;
+}
+.btn-primary:hover::before,
+.btn-ghost:hover::before {
+  transform: translateX(100%);
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: #2a2a2a;
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+.btn-ghost {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+.btn-ghost:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* =====================================================================
+   REVEAL ANIMATIONS (IntersectionObserver + CSS)
+   ===================================================================== */
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 0;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    transform var(--dur-reveal) var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+.reveal {
+  transform: translateY(36px);
+}
+.reveal-left {
+  transform: translateX(-48px);
+}
+.reveal-right {
+  transform: translateX(48px);
+}
+.reveal-scale {
+  transform: scale(0.94);
+}
+.reveal.in,
+.reveal-left.in,
+.reveal-right.in,
+.reveal-scale.in {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}

@@ -1,0 +1,113 @@
+#contato {
+  padding: clamp(var(--s-10), 12vh, var(--s-12)) 0
+    clamp(var(--s-8), 8vh, var(--s-10));
+  background: #484848;
+}
+.contact-box {
+  background: #3a3a3a;
+  border: 1px solid #5a5a5a;
+  border-radius: var(--r-xl);
+  padding: clamp(var(--s-8), 10vw, var(--s-12))
+    clamp(var(--s-5), 6vw, var(--s-10));
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.contact-box::before {
+  content: "";
+  position: absolute;
+  bottom: -40%;
+  left: 50%;
+  width: 120%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+.contact-box h2 {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  max-width: 680px;
+  margin-inline: auto;
+  position: relative;
+  z-index: 1;
+  color: var(--on-dark);
+  text-wrap: balance;
+}
+.contact-box p {
+  color: var(--on-dark-muted);
+  margin-top: var(--s-4);
+  margin-inline: auto;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+  font-size: var(--text-body);
+  text-wrap: pretty;
+}
+.contact-actions {
+  display: flex;
+  gap: var(--s-3);
+  justify-content: center;
+  margin-top: var(--s-8);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.contact-channels {
+  margin-top: var(--s-8);
+  display: flex;
+  justify-content: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.channel {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--on-dark-muted);
+  border: 1px solid #6e6e6e;
+  padding: 10px 16px;
+  border-radius: var(--r-pill);
+  transition:
+    color var(--dur-fast) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-out-expo),
+    background var(--dur-fast) var(--ease-out-expo),
+    transform var(--dur-fast) var(--ease-spring);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  background: #3a3a3a;
+}
+.channel:hover {
+  color: var(--on-dark);
+  border-color: var(--on-dark);
+  transform: translateY(-1px);
+}
+.channel:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Botões na seção escura */
+#contato .btn-primary {
+  background: var(--paper);
+  color: #2a2a2a;
+}
+#contato .btn-primary:hover {
+  background: #f0f0f0;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  color: #1a1a1a;
+}
+#contato .btn-ghost {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--on-dark);
+  background: rgba(255, 255, 255, 0.05);
+}
+#contato .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--on-dark);
+}

@@ -1,0 +1,101 @@
+#projetos {
+  padding: clamp(var(--s-10), 12vh, var(--s-12)) 0;
+}
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
+}
+.project-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--surface);
+  transition:
+    transform var(--dur-normal) var(--ease-out-expo),
+    box-shadow var(--dur-normal) var(--ease-out-expo);
+  position: relative;
+}
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.project-thumb {
+  aspect-ratio: 16/10;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: radial-gradient(
+    circle at 30% 30%,
+    rgba(0, 0, 0, 0.04),
+    transparent 60%
+  );
+}
+.project-thumb span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-dim);
+  font-weight: 500;
+  border: 1px dashed var(--line);
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+}
+.project-body {
+  padding: var(--s-5);
+}
+.project-body h4 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+.project-body p {
+  color: var(--ink-dim);
+  font-size: 0.8125rem;
+  margin-top: var(--s-1);
+  font-family: var(--font-mono);
+}
+.projects-note {
+  margin-top: var(--s-8);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  padding: var(--s-3) var(--s-4);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.4);
+}
+.projects-note .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex: none;
+  box-shadow: 0 0 0 4px rgba(196, 114, 74, 0.15);
+}
+.projects-note .mono {
+  font-size: 0.8125rem !important;
+}
+
+/* =====================================================================
+   BREAKPOINTS
+   ===================================================================== */
+@media (min-width: 560px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .projects-note {
+    padding: var(--s-4) var(--s-5);
+  }
+}

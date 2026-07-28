@@ -1,0 +1,33 @@
+footer {
+  border-top: 1px solid var(--line);
+  padding: var(--s-6) 0;
+  background: var(--bg);
+}
+.footer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  text-align: center;
+}
+.footer-brand {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+.footer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-dim);
+}
+
+/* =====================================================================
+   BREAKPOINTS
+   ===================================================================== */
+@media (min-width: 560px) {
+  .footer-row {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
