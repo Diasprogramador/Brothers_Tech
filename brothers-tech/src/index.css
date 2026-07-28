@@ -176,7 +176,7 @@ section {
   position: relative;
 }
 
-/* Skip link */
+/* Skip link — escondido por padrão, aparece só no :focus */
 .skip-link {
   position: absolute;
   left: 50%;
@@ -189,10 +189,17 @@ section {
   font-family: var(--font-mono);
   font-size: 13px;
   z-index: 200;
-  transition: top var(--dur-fast) var(--ease-out-expo);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    top var(--dur-fast) var(--ease-out-expo),
+    opacity var(--dur-fast) var(--ease-out-expo);
 }
-.skip-link:focus {
+.skip-link:focus,
+.skip-link:focus-visible {
   top: var(--s-3);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Scroll progress bar */

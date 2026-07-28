@@ -22,8 +22,15 @@ export const App = () => {
   return (
     <>
       {isPreloading && <Preloader onComplete={onComplete} />}
+      <a href="#main" className="skip-link">
+        Pular para o conteúdo
+      </a>
+      {!isPreloading && (
+        <div className="scroll-progress" aria-hidden="true" />
+      )}
       <div
         ref={mainRef}
+        id="main"
         style={{
           opacity: isPreloading ? 0 : 1,
           transition: "opacity 0.5s ease",
