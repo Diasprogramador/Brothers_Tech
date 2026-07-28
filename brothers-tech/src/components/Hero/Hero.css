@@ -3,7 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: calc(var(--s-12) + 40px) 0 var(--s-10);
+  /* safe-area top para iPhone notch + espaço para navbar fixa */
+  padding-top: calc(env(safe-area-inset-top, 0) + var(--s-12) + 40px);
+  padding-bottom: var(--s-10);
+  padding-inline: 0;
   position: relative;
   overflow: hidden;
   background: var(--bg);
@@ -122,6 +125,10 @@
   font-weight: 700;
   text-transform: uppercase;
   text-wrap: balance;
+  /* evita overflow em mobile muito pequeno */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 .hero-title .accent {
   color: var(--green);
@@ -162,8 +169,8 @@
 }
 .avatar-img {
   width: auto;
-  height: clamp(220px, 38vh, 360px);
-  max-width: none;
+  height: clamp(180px, 32vh, 360px);
+  max-width: 100%;
   display: block;
   object-fit: contain;
   object-position: center bottom;
@@ -280,4 +287,75 @@
 }
 .dot.blue {
   background: var(--blue);
+}
+
+/* =====================================================================
+   BREAKPOINTS — Mobile-first
+   ===================================================================== */
+
+/* ≥ 560px — telas pequenas/tablets */
+@media (min-width: 560px) {
+  .hero {
+    padding-top: calc(env(safe-area-inset-top, 0) + var(--s-12) + 60px);
+  }
+  .avatar-img {
+    height: clamp(220px, 38vh, 360px);
+  }
+}
+
+/* ≥ 860px — desktop */
+@media (min-width: 860px) {
+  .hero {
+    min-height: 100svh;
+    padding-top: calc(env(safe-area-inset-top, 0) + var(--s-12) + 40px);
+  }
+  .avatar-img {
+    height: clamp(280px, 42vh, 420px);
+  }
+}
+
+/* ≥ 1100px — desktop amplo */
+@media (min-width: 1100px) {
+  .avatar-img {
+    height: clamp(320px, 45vh, 480px);
+  }
+}
+
+/* ≥ 1400px — telas muito largas (limita avatares) */
+@media (min-width: 1400px) {
+  .avatar-img {
+    height: 420px;
+  }
+}
+
+/* Telas muito pequenas (≤ 380px) */
+@media (max-width: 380px) {
+  .hero {
+    padding-top: calc(env(safe-area-inset-top, 0) + var(--s-10) + 20px);
+    padding-bottom: var(--s-6);
+  }
+  .hero .wrap {
+    gap: var(--s-5);
+  }
+  .hero-title {
+    font-size: clamp(2.25rem, 11vw, 3.5rem);
+    line-height: 0.95;
+  }
+  .avatar-img {
+    height: 160px;
+  }
+  .eyebrow {
+    padding: 6px 12px;
+    font-size: 0.6875rem;
+  }
+  .hero-actions {
+    margin-top: var(--s-4);
+  }
+}
+
+/* telas muito pequenas (≤360px) */
+@media (max-width: 360px) {
+  .hero-avatars {
+    gap: var(--s-1);
+  }
 }

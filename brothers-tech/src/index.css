@@ -96,9 +96,11 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 64px;
+  scroll-padding-top: 56px; /* navbar altura em mobile */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* evita zoom no iOS ao focar inputs (não usamos, mas é boa prática) */
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   background: var(--bg);
@@ -110,6 +112,8 @@ body {
   overflow-x: hidden;
   min-height: 100svh;
   margin: 0;
+  /* previne rubber-band scroll em Safari iOS */
+  overscroll-behavior-y: none;
 }
 ::selection {
   background: var(--ink);
@@ -226,6 +230,24 @@ section {
   }
   .scroll-progress {
     display: none;
+  }
+}
+
+/* =====================================================================
+   BREAKPOINTS globais (mobile-first)
+   ===================================================================== */
+
+/* ≥ 560px — tablets pequenos */
+@media (min-width: 560px) {
+  html {
+    scroll-padding-top: 60px; /* navbar altura em tablet */
+  }
+}
+
+/* ≥ 860px — desktop */
+@media (min-width: 860px) {
+  html {
+    scroll-padding-top: 64px; /* navbar altura em desktop */
   }
 }
 

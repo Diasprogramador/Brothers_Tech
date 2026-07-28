@@ -118,3 +118,19 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Telas muito pequenas (≤ 380px) */
+@media (max-width: 380px) {
+  #sobre {
+    padding: clamp(var(--s-8), 10vh, var(--s-10)) 0;
+  }
+  .founder {
+    padding: var(--s-6) var(--s-5);
+  }
+  .founder-avatar-img {
+    width: clamp(80px, 24vw, 110px);
+  }
+  .founded-tag {
+    padding: 8px 14px;
+  }
+}

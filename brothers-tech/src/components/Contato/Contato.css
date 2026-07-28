@@ -111,3 +111,22 @@
   background: rgba(255, 255, 255, 0.12);
   border-color: var(--on-dark);
 }
+
+/* Telas muito pequenas (≤ 380px) */
+@media (max-width: 380px) {
+  #contato {
+    padding: clamp(var(--s-8), 10vh, var(--s-10)) 0
+      clamp(var(--s-6), 6vh, var(--s-8));
+  }
+  .contact-box {
+    padding: var(--s-6) var(--s-4);
+    border-radius: var(--r-lg);
+  }
+  .contact-box h2 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  .contact-actions,
+  .contact-channels {
+    gap: var(--s-2);
+  }
+}

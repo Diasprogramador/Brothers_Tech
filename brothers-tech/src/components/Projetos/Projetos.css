@@ -99,3 +99,20 @@
     padding: var(--s-4) var(--s-5);
   }
 }
+
+/* Telas muito pequenas (≤ 380px) */
+@media (max-width: 380px) {
+  #projetos {
+    padding: clamp(var(--s-8), 10vh, var(--s-10)) 0;
+  }
+  .project-body {
+    padding: var(--s-4);
+  }
+  .project-body h4 {
+    font-size: 1rem;
+  }
+  .projects-note {
+    padding: var(--s-3);
+    gap: var(--s-2);
+  }
+}
