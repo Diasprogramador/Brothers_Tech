@@ -68,8 +68,28 @@ function openMenu(){
   burger.setAttribute('aria-expanded', 'true');
   burger.setAttribute('aria-label', 'Fechar menu');
   document.body.style.overflow = 'hidden';
-  // foco no primeiro link
-  menuLinks[0]?.focus();
+  
+  // Focus trap: mantém o foco dentro do menu enquanto aberto
+  const focusables = mobileMenu.querySelectorAll('a, button');
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  
+  mobileMenu.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    }
+  });
+
+  first?.focus();
 }
 function closeMenu(){
   mobileMenu.classList.remove('open');
@@ -140,9 +160,9 @@ if (finePointer && !prefersReducedMotion) {
   });
   // ring segue com lerp pra dar "elasticidade"
   (function follow(){
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
-    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 16}px, ${ry - 16}px)`;
     requestAnimationFrame(follow);
   })();
   // cresce em cima de elementos interativos

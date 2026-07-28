@@ -1,0 +1,229 @@
+/* =====================================================================
+   BROTHERS TECH — Design System (React)
+   ===================================================================== */
+
+:root {
+  /* Paleta intencional */
+  --bg: #E8E8E8;
+  --bg-soft: #D4D4D4;
+  --surface: #F2F2F2;
+  --surface-2: #E0E0E0;
+  --line: #C0C0C0;
+  --line-soft: #D4D4D4;
+  --ink: #161616;
+  --ink-muted: #3F3F3F;
+  --ink-dim: #5F5F5F;
+  --paper: #FFFFFF;
+  --paper-soft: #F8F8F8;
+
+  /* dark surfaces */
+  --on-dark: #FFFFFF;
+  --on-dark-muted: #C8C8C8;
+  --on-dark-dim: #8A8A8A;
+
+  /* acentos */
+  --green: #4F8A66;
+  --green-soft: #6FA889;
+  --orange: #C4723F;
+  --orange-soft: #E08C57;
+  --blue: #4068A1;
+  --blue-soft: #6A8CC0;
+
+  /* tipografia */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif';
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* escala tipográfica flúida */
+  --text-hero: clamp(2.75rem, 9vw, 6rem);
+  --text-h2: clamp(1.75rem, 4.5vw, 2.625rem);
+  --text-h3: clamp(1.25rem, 2.2vw, 1.625rem);
+  --text-body: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  --text-eyebrow: clamp(0.6875rem, 0.95vw, 0.8125rem);
+
+  /* ritmo de espaçamento (Rhythm-8) */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2rem;
+  --s-5: 3rem;
+  --s-6: 4rem;
+  --s-8: 6rem;
+  --s-10: 8rem;
+  --s-12: 12rem;
+
+  --preloader-scale: clamp(0.7, 100vw / 400px, 1);
+
+  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms; --dur-normal: 300ms; --dur-slow: 600ms; --dur-reveal: 1000ms;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 12px 32px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+  --shadow-lg: 0 24px 60px rgba(0,0,0,.12), 0 8px 24px rgba(0,0,0,.08);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,.6);
+
+  --maxw: 1140px;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+/* Reset & Base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100svh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.mono { font-family: var(--font-mono); }
+a { color: inherit; text-decoration: none; }
+img, svg { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+ul, ol { list-style: none; }
+
+/* Layout Containers */
+.wrap {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* =====================================================================
+   PRELOADER
+   ===================================================================== */
+.preloader {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(var(--s-5), 6vh, var(--s-8));
+  padding: var(--gutter);
+  transition: opacity 400ms var(--ease-out-expo), visibility 0s linear 400ms;
+}
+.preloader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.preloader-words {
+  display: flex; flex-direction: column; align-items: center; gap: clamp(8px, 1.5vh, 16px);
+  text-align: center;
+  transform: scale(var(--preloader-scale));
+  transform-origin: center center;
+  width: 100%;
+  max-width: min(560px, calc(100vw - var(--gutter) * 2));
+}
+.preloader-row {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: clamp(2px, 0.8vw, 8px);
+  flex-wrap: nowrap;
+}
+.letter {
+  display: inline-flex; align-items: flex-end; justify-content: center;
+  opacity: 0; transform: translateY(28px) scale(0.85);
+  animation: letter-in 520ms var(--ease-out-expo) forwards;
+  will-change: transform, opacity;
+  flex: 0 0 auto;
+}
+.letter img { width: 100%; height: auto; }
+
+.preloader-row-up .letter { width: clamp(20px, 8vw, 88px); }
+.preloader-row-down .letter { width: clamp(16px, 5.5vw, 56px); }
+
+@keyframes letter-in {
+  0% { opacity: 0; transform: translateY(28px) scale(0.85); filter: blur(6px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.preloader-bar {
+  width: min(280px, 60vw); height: 2px;
+  background: rgba(0,0,0,.08);
+  border-radius: 999px; overflow: hidden;
+  position: relative;
+}
+.preloader-bar-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, #2F2F42, #364C84);
+  transition: width 2400ms var(--ease-out-expo);
+}
+
+/* =====================================================================
+   NAVBAR
+   ===================================================================== */
+header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  background: rgba(232,232,232,0);
+  border-bottom: 1px solid transparent;
+  transition: all var(--dur-normal) var(--ease-out-expo);
+}
+header.scrolled {
+  background: var(--bg);
+  border-bottom-color: var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--s-3) var(--gutter);
+  max-width: var(--maxw); margin-inline: auto;
+  min-height: 60px;
+}
+.logo img { height: 30px; width: auto; }
+.nav-links { display: flex; gap: clamp(var(--s-4), 3vw, var(--s-8)); }
+.nav-links a {
+  font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--ink-muted); font-weight: 500;
+  position: relative; padding: var(--s-2) 0;
+  transition: color var(--dur-fast) var(--ease-out-expo);
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; bottom: 0;
+  width: 0; height: 1.5px; background: var(--ink);
+  transition: width var(--dur-normal) var(--ease-out-expo);
+}
+.nav-links a:hover::after { width: 100%; }
+
+/* =====================================================================
+   CURSOR
+   ===================================================================== */
+@media (pointer: fine) and (min-width: 860px) {
+  body, body * { cursor: none !important; }
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0; pointer-events: none;
+    z-index: 10001; border-radius: 50%;
+    will-change: transform;
+    transition: transform 0.1s var(--ease-out-expo);
+  }
+  .cursor-dot { width: 6px; height: 6px; background: var(--ink); }
+  .cursor-ring {
+    width: 32px; height: 32px; border: 1px solid var(--ink);
+    transition: transform 0.2s var(--ease-out-expo), width 0.3s var(--ease-spring), height 0.3s var(--ease-spring);
+  }
+  .cursor-ring.grow { width: 64px; height: 64px; border-color: var(--green); background: rgba(79,138,102,0.05); }
+}
+
+/* =====================================================================
+   REVEAL ANIMATIONS
+   ===================================================================== */
+.reveal {
+  opacity: 0; transform: translateY(36px);
+  transition: opacity var(--dur-reveal) var(--ease-out-expo), transform var(--dur-reveal) var(--ease-out-expo);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/*- Rest of components (Hero, Services, etc.) follow the same logic as the root CSS -*/
+/* simplified for brevity in this step, but will be fully implemented in components */
