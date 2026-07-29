@@ -133,6 +133,15 @@
 .hero-title .accent {
   color: var(--green);
 }
+.hero-title-image {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  margin-inline: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
 .hero-sub {
   margin-top: var(--s-5);
   max-width: 560px;
@@ -340,6 +349,9 @@
   .hero-title {
     font-size: clamp(2.25rem, 11vw, 3.5rem);
     line-height: 0.95;
+  }
+  .hero-title-image {
+    max-width: 100%;
   }
   .avatar-img {
     height: 160px;

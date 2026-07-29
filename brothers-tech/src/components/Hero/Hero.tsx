@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { AnimatedHeroTitle } from "../HeroTitle";
 import "./Hero.css";
 
 export const Hero = () => {
@@ -43,7 +42,13 @@ export const Hero = () => {
   return (
     <section className="hero" id="home" ref={heroRef}>
       <div className="wrap">
-        <AnimatedHeroTitle />
+        <img
+          className="hero-title-image"
+          src="assets/hero-title.png"
+          alt="Brothers Tech"
+          loading="eager"
+          decoding="async"
+        />
         <div className="hero-avatars" aria-hidden="true">
           <div className="avatar-item">
             <img
