@@ -1,5 +1,11 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  type MotionValue,
+} from "framer-motion";
 
 /* ──────────────────────────────────────────────────────────
    Cada fundador agora tem 3 versões do avatar:
@@ -74,12 +80,12 @@ const FOUNDERS: Founder[] = [
      83.3 – 100  → transição normal → pixel
 */
 
-function buildFounderAnims(
-  progress: ReturnType<typeof useSpring<number>>,
+function useBuildFounderAnims(
+  progress: MotionValue<number>,
   start: number,
   end: number,
 ): { card: FounderCardAnim; lego: AvatarStyleAnim; normal: AvatarStyleAnim; pixel: AvatarStyleAnim } {
-  const mid = (start + end) / 2;
+  // (mid removed — was unused)
 
   // Card visibility
   const avatarOpacity = useTransform(progress, [start, start + 0.02, end - 0.02, end], [0, 1, 1, 0]);
@@ -161,8 +167,8 @@ export const About = () => {
   const bgX = useTransform(smoothProgress, [0, 1], ["10%", "-10%"]);
 
   // San: 0 → 0.50   |   Caio: 0.50 → 1.00
-  const f0Anims = buildFounderAnims(smoothProgress, 0, 0.50);
-  const f1Anims = buildFounderAnims(smoothProgress, 0.50, 1.0);
+  const f0Anims = useBuildFounderAnims(smoothProgress, 0, 0.50);
+  const f1Anims = useBuildFounderAnims(smoothProgress, 0.50, 1.0);
 
   const allAnims = [f0Anims, f1Anims];
 
