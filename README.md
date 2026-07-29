@@ -9,33 +9,39 @@ Fundada em **23.07.2026** por Sanderson & Caio, co-fundadores.
 
 ## Stack
 
-- **HTML5** semântico
-- **CSS3** com design tokens (variáveis CSS) — mobile-first, responsivo até ~1140px
-- **JavaScript** vanilla (ES2020+, sem libs externas, sem build step)
+- **React 19** + **TypeScript 6** — componentes funcionais com hooks
+- **Vite 8** — build e dev server
+- **Framer Motion 12** — animações da Hero, Sobre (scroll-driven), e RevealObserver
+- **GSAP 3** + **Lenis** — smooth scroll e timeline do preloader
+- **CSS3** com design tokens (variáveis CSS) — mobile-first, breakpoints `380 / 560 / 768 / 860 / 1100 / 1400`
 - Fontes via Google Fonts (Space Grotesk / Inter / IBM Plex Mono)
-- Hospedagem recomendada: qualquer static host (GitHub Pages, Netlify, Vercel, Cloudflare Pages)
+- ESLint + TypeScript strict (`tsc --noEmit` em CI local)
 
-Sem React, sem bundler, sem dependências. O site abre direto do `index.html`.
+Single-page application com code organization em `/brothers-tech/src/components/<Section>/`.
 
 ---
 
 ## Como rodar localmente
 
-Nenhum setup necessário.
-
 ```bash
-# Opção 1 — abrir direto no navegador
-open index.html         # macOS
-xdg-open index.html     # Linux
-start index.html        # Windows
+# Entrar no diretório da SPA
+cd brothers-tech
 
-# Opção 2 — servidor estático (recomendado, evita CORS em alguns navegadores)
-python -m http.server 8080
-# ou
-npx serve .
+# Instalar dependências
+npm install
+
+# Dev server (hot reload)
+npm run dev
+# → http://localhost:5173
+
+# Build de produção
+npm run build
+
+# Lint
+npm run lint
 ```
 
-Depois: <http://localhost:8080>
+Bundle de produção: ~440 kB raw / ~146 kB gzip (single chunk).
 
 ---
 
@@ -43,28 +49,48 @@ Depois: <http://localhost:8080>
 
 ```
 .
-├── index.html               # Markup das seções (Home, Serviços, Projetos, Sobre, Contato)
-├── style.css                # Design tokens + componentes + animações
-├── script.js                # Header scroll, menu mobile, IntersectionObserver (reveal)
-├── assets/
-│   ├── logo.svg             # Logo principal
-│   ├── avatar_Sanderson.svg # Avatar SVG (sobre)
-│   ├── avatar_Caio.svg      # Avatar SVG (sobre)
-│   ├── avatar_2_*.svg       # Avatares "sticker" do hero
-│   ├── avatar-*-clean.png   # Avatares PNG com alpha (rembg)
-│   └── avatar-*.png         # Avatares PNG originais
-└── base_para_preloader/     # Referência antiga em React (marcada para remoção)
+├── index.html              # Vite entry — redireciona para /brothers-tech/
+├── style.css               # (legado) — base vanilla preservada
+├── script.js               # (legado) — JS vanilla preservado
+├── assets/                 # (legado) — assets da versão vanilla
+└── brothers-tech/          # SPA React + Vite + TS (fonte de verdade atual)
+    ├── public/
+    │   ├── assets/         # Avatares, hero-title.png, logos
+    │   ├── favicon.svg     # Logo "BTH" otimizado
+    │   ├── robots.txt      # SEO
+    │   ├── sitemap.xml     # SEO
+    │   └── site.webmanifest  # PWA metadata
+    ├── src/
+    │   ├── App.tsx         # Root: Navbar → Hero → Serviços → Projetos → Sobre → Contato → Footer
+    │   ├── main.tsx        # Vite entry
+    │   ├── index.css       # Design tokens + globals + reveal animations + about-premium
+    │   ├── components/
+    │   │   ├── Navbar/         # Header fixo com scroll state + menu mobile
+    │   │   ├── Preloader/      # GSAP timeline (BROTHERS → TECH stroke-draw → fill)
+    │   │   ├── Hero/           # Hero estática (PNG) + avatares parallax
+    │   │   ├── Servicos/       # 4-card grid com reveal on scroll
+    │   │   ├── Projetos/       # 3 cases com hover/tap expansion
+    │   │   ├── About/          # Scroll-driven sticky + framer-motion (avatar transitions)
+    │   │   ├── Contato/        # CTA box em fundo escuro
+    │   │   ├── Footer/         # Brand + nav + tag
+    │   │   └── CustomCursor/   # Cursor customizado (desktop)
+    │   ├── hooks/              # usePreloader, useReveal, useRevealObserver
+    │   └── providers/          # SmoothScroll (Lenis)
+    └── package.json
 ```
 
 ### Seções do site
 
-| Âncora       | Seção   | Conteúdo                                             |
-|--------------|---------|------------------------------------------------------|
-| `#home`      | Hero    | Headline, sub, avatares dos fundadores, tags          |
-| `#servicos`  | Serviços | 4 frentes: Sistemas, Apps, Sites, Softwares          |
-| `#projetos`  | Projetos | Grid de cases (placeholders — "em breve")            |
-| `#sobre`     | Sobre   | Cards dos fundadores + história + tag de fundação    |
-| `#contato`   | Contato | CTA, e-mail, WhatsApp, canais                         |
+| Âncora       | Componente       | Descrição                                          |
+|--------------|------------------|----------------------------------------------------|
+| —            | `Preloader`      | Animação BROTHERS → TECH em SVG stroke-draw        |
+| —            | `Navbar`         | Fixo, com menu mobile fullscreen + ARIA            |
+| `#home`      | `Hero`           | Logo PNG + avatares dos fundadores + tags          |
+| `#servicos`  | `Servicos`       | Grid de 4 frentes (Sistemas, Apps, Sites, Softwares) |
+| `#projetos`  | `Projetos`       | Grid de 3 cases com hover/tap → reveal detalhes    |
+| `#sobre`     | `About`          | Scroll-driven sticky com transição de avatares     |
+| `#contato`   | `Contato`        | CTA box em fundo escuro                            |
+| —            | `Footer`         | Copyright + nav + tagline                          |
 
 ---
 
@@ -72,30 +98,30 @@ Depois: <http://localhost:8080>
 
 ### Paleta
 
-Tokens CSS definidos em `:root` (`style.css`). As cores da marca são três acentos sobre uma base cinza-quase-branco:
+Tokens CSS definidos em `:root` (`brothers-tech/src/index.css`). As cores da marca são três acentos sobre uma base cinza-quase-branco:
 
-| Token            | Hex       | Uso                                       |
-|------------------|-----------|-------------------------------------------|
-| `--green`        | `#4F8A66` | Acento principal (hero, tag "Sistemas")   |
-| `--green-soft`   | `#6FA889` | Variação clara                            |
-| `--orange`       | `#C4723F` | Acento secundário (tag "Apps")            |
-| `--orange-soft`  | `#E08C57` | Variação clara                            |
-| `--blue`         | `#4068A1` | Acento terciário (tag "Sites")            |
-| `--blue-soft`    | `#6A8CC0` | Variação clara                            |
-| `--bg`           | `#E8E8E8` | Background geral                          |
-| `--surface`      | `#F2F2F2` | Superfícies elevadas                      |
-| `--line`         | `#C0C0C0` | Bordas sutis                              |
-| `--ink`          | `#161616` | Texto principal                           |
-| `--ink-muted`    | `#3F3F3F` | Texto secundário                          |
-| `--ink-dim`      | `#6B6B6B` | Texto terciário / labels                  |
-| `--paper`        | `#FFFFFF` | Cards de destaque                         |
-| `--on-dark`      | `#FFFFFF` | Texto sobre fundo escuro                  |
-| `--on-dark-muted`| `#C8C8C8` | Texto muted sobre fundo escuro            |
-| `--on-dark-dim`  | `#8A8A8A` | Labels sobre fundo escuro                 |
+| Token             | Hex       | Uso                                       |
+|-------------------|-----------|-------------------------------------------|
+| `--green`         | `#4F8A66` | Acento principal (Sistemas)                |
+| `--green-soft`    | `#6FA889` | Variação clara                            |
+| `--orange`        | `#C4723F` | Acento secundário (Apps)                  |
+| `--orange-soft`   | `#E08C57` | Variação clara                            |
+| `--blue`          | `#4068A1` | Acento terciário (Sites)                  |
+| `--blue-soft`     | `#6A8CC0` | Variação clara                            |
+| `--bg`            | `#E8E8E8` | Background geral                          |
+| `--surface`       | `#F2F2F2` | Superfícies elevadas                      |
+| `--line`          | `#C0C0C0` | Bordas sutis                              |
+| `--ink`           | `#161616` | Texto principal                           |
+| `--ink-muted`     | `#3F3F3F` | Texto secundário                          |
+| `--ink-dim`       | `#6B6B6B` | Texto terciário / labels                  |
+| `--paper`         | `#FFFFFF` | Cards de destaque                         |
+| `--on-dark`       | `#FFFFFF` | Texto sobre fundo escuro                  |
+| `--on-dark-muted` | `#C8C8C8` | Texto muted sobre fundo escuro            |
+| `--on-dark-dim`   | `#8A8A8A` | Labels sobre fundo escuro                 |
 
 ### Tipografia
 
-- **Display / títulos**: `Space Grotesk` — `Space Grotesk`, sans-serif
+- **Display / títulos**: `Space Grotesk` — peso 400/500/600/700
 - **Corpo**: `Inter` — peso 400/500/600
 - **Mono / labels / eyebrows**: `IBM Plex Mono` — peso 400/500/600
 
@@ -111,6 +137,17 @@ Tokens CSS definidos em `:root` (`style.css`). As cores da marca são três acen
 - Durações: `--dur-fast` 180ms · `--dur-normal` 320ms · `--dur-slow` 640ms · `--dur-reveal` 900ms
 - `prefers-reduced-motion: reduce` desativa reveals e suaviza transições
 
+### Breakpoints mobile-first
+
+```
+380px  → safety net (≤380px block em todos componentes)
+560px  → tablet pequeno
+768px  → tablet
+860px  → desktop
+1100px → desktop amplo
+1400px → telas muito largas (cap de altura em avatares, 4 col em serviços)
+```
+
 ---
 
 ## Co-fundadores
@@ -124,23 +161,28 @@ Cada projeto passa pelos dois, do escopo ao deploy. Sem camadas, sem intermediá
 
 ## Branches
 
-- `main` — produção (estável)
-- `dev-Sanderson` — branch de Sanderson (este repo)
-- `dev-Caio` — branch do Caio
+- `main` — produção (estável). Igual à `dev-Sanderson` após merge.
+- `dev-Sanderson` — branch do Sanderson (este repo).
+- `dev-Caio` — branch do Caio, sincronizada periodicamente com `dev-Sanderson`.
 
-Trabalho novo entra em `dev-*` e só vai para `main` depois de merge de ambos os lados e revisão.
+Trabalho novo entra em `dev-*` e só vai para `main` depois de revisão.
 
 ---
 
 ## Status
 
-- [x] Estrutura base (HTML + CSS + JS fragmentados)
-- [x] Hero, Serviços, Projetos, Sobre, Contato
-- [x] Header com scroll state + menu mobile acessível (ARIA, ESC, focus trap)
-- [x] IntersectionObserver para reveals
-- [x] Avatares com chroma-key / alpha nativo
-- [x] Mobile-first + acessibilidade (`prefers-reduced-motion`, ARIA)
-- [ ] **Preloader GSAP** — em produção pelo dev-Caio; será mergeado em `dev-Sanderson` em commit futuro. Implementação original (React) preservada em `base_para_preloader/`.
+- [x] Preloader com stroke-draw animation (GSAP)
+- [x] Hero estática + avatares com parallax sutil
+- [x] Navbar fixo com scroll state + menu mobile fullscreen + ARIA
+- [x] Serviços: grid 4-col responsivo com reveal on scroll
+- [x] Projetos: 3 cases com hover/tap expansion revelando tech stack
+- [x] Sobre: scroll-driven sticky + transição de avatares (lego / normal / pixel)
+- [x] Contato: CTA em fundo escuro com canais de contato
+- [x] Mobile-first responsivo (380 / 560 / 768 / 860 / 1100 / 1400)
+- [x] SEO: Open Graph + Twitter Card + canonical + robots + sitemap
+- [x] PWA: site.webmanifest + favicon.svg
+- [x] iOS hardening: safe-area-inset, overscroll-behavior, scroll-padding-top responsivo
+- [x] Acessibilidade: ARIA, focus-visible, prefers-reduced-motion, tap targets 44px+
 
 ---
 
