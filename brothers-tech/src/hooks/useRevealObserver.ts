@@ -16,12 +16,15 @@ export function useRevealObserver(): void {
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const delay = Number(entry.target.dataset.delay) || 0;
+          // Cast: querySelectorAll<HTMLElement> garante que todos os targets
+          // observados são HTMLElement (têm dataset + classList).
+          const target = entry.target as HTMLElement;
+          const delay = Number(target.dataset.delay) || 0;
           window.setTimeout(
-            () => entry.target.classList.add('in'),
+            () => target.classList.add('in'),
             delay,
           );
-          observer.unobserve(entry.target);
+          observer.unobserve(target);
         });
       },
       { threshold: 0.12, rootMargin: '0px 0px -60px 0px' },
