@@ -11,6 +11,13 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--s-4);
+  align-items: stretch;
+}
+
+/* garante que todos os cards tenham mesma altura (grid stretch) */
+.project-card {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------- Card ---------- */
@@ -38,8 +45,8 @@
 
 /* Thumb com imagem */
 .project-thumb {
-  /* altura maior para dar mais presença ao thumb */
-  height: clamp(220px, 32vw, 320px);
+  /* altura menor — as imagens já vêm com whitespace grande */
+  height: clamp(200px, 26vw, 260px);
   background: var(--bg-soft);
   display: flex;
   align-items: center;
@@ -59,7 +66,7 @@
   object-fit: contain;
   display: block;
   transition: transform var(--dur-slow) var(--ease-out-expo);
-  padding: var(--s-3);
+  padding: var(--s-4);
 }
 .project-card:hover .project-thumb img {
   transform: scale(1.04);
@@ -86,7 +93,7 @@
 
 /* ---------- Body ---------- */
 .project-body {
-  padding: var(--s-5) var(--s-5) var(--s-6);
+  padding: var(--s-4) var(--s-5) var(--s-5);
   display: flex;
   flex-direction: column;
   gap: var(--s-2);
