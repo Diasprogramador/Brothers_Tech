@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { HeroTitle } from "../HeroTitle";
+import { AnimatedHeroTitle } from "../HeroTitle";
 import "./Hero.css";
 
 export const Hero = () => {
@@ -43,7 +43,7 @@ export const Hero = () => {
   return (
     <section className="hero" id="home" ref={heroRef}>
       <div className="wrap">
-        <HeroTitle />
+        <AnimatedHeroTitle />
         <div className="hero-avatars" aria-hidden="true">
           <div className="avatar-item">
             <img

@@ -127,7 +127,7 @@ export const Navbar = () => {
             aria-label="Brothers Tech — ir para o início"
           >
             <img
-              src="assets/logo.svg"
+              src="assets/logo_icon.svg"
               alt="Brothers Tech"
               width="120"
               height="32"
