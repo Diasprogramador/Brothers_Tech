@@ -45,8 +45,8 @@
 
 /* Thumb com imagem */
 .project-thumb {
-  /* altura menor — as imagens já vêm com whitespace grande */
-  height: clamp(200px, 26vw, 260px);
+  /* altura maior — preenche melhor o card e dá presença ao projeto */
+  height: clamp(240px, 32vw, 340px);
   background: var(--bg-soft);
   display: flex;
   align-items: center;
@@ -62,11 +62,12 @@
 .project-thumb img {
   width: 100%;
   height: 100%;
-  /* contain garante que a imagem inteira aparece sem cortar */
-  object-fit: contain;
+  /* cover preenche todo o thumb cortando o whitespace lateral;
+     object-position centraliza o produto na imagem */
+  object-fit: cover;
+  object-position: center;
   display: block;
   transition: transform var(--dur-slow) var(--ease-out-expo);
-  padding: var(--s-4);
 }
 .project-card:hover .project-thumb img {
   transform: scale(1.04);
