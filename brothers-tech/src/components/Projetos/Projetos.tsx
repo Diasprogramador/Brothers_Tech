@@ -20,7 +20,7 @@ const PROJECTS: Project[] = [
     thumb: "assets/projeto_biblioteca-monsa.png",
     description:
       "Sistema de catalogação e empréstimo para biblioteca escolar — focado em simplicidade para o bibliotecário e descoberta para os alunos.",
-    stack: ["React", "Node.js", "PostgreSQL"],
+    stack: ["React", "Java Spring Boot", "PostgreSQL"],
     year: "2025",
     status: "production",
   },
@@ -31,7 +31,7 @@ const PROJECTS: Project[] = [
     thumb: "assets/projeto_cri-arte.png",
     description:
       "Plataforma para expor e vender obras de arte — galeria imersiva com curadoria e checkout integrado.",
-    stack: ["Next.js", "Stripe", "Sanity CMS"],
+    stack: ["React", "FireBase", "Sanity CMS"],
     year: "2025",
     status: "development",
   },
