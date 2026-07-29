@@ -49,10 +49,6 @@ Bundle de produção: ~440 kB raw / ~146 kB gzip (single chunk).
 
 ```
 .
-├── index.html              # Vite entry — redireciona para /brothers-tech/
-├── style.css               # (legado) — base vanilla preservada
-├── script.js               # (legado) — JS vanilla preservado
-├── assets/                 # (legado) — assets da versão vanilla
 └── brothers-tech/          # SPA React + Vite + TS (fonte de verdade atual)
     ├── public/
     │   ├── assets/         # Avatares, hero-title.png, logos
@@ -81,16 +77,16 @@ Bundle de produção: ~440 kB raw / ~146 kB gzip (single chunk).
 
 ### Seções do site
 
-| Âncora       | Componente       | Descrição                                          |
-|--------------|------------------|----------------------------------------------------|
-| —            | `Preloader`      | Animação BROTHERS → TECH em SVG stroke-draw        |
-| —            | `Navbar`         | Fixo, com menu mobile fullscreen + ARIA            |
-| `#home`      | `Hero`           | Logo PNG + avatares dos fundadores + tags          |
-| `#servicos`  | `Servicos`       | Grid de 4 frentes (Sistemas, Apps, Sites, Softwares) |
-| `#projetos`  | `Projetos`       | Grid de 3 cases com hover/tap → reveal detalhes    |
-| `#sobre`     | `About`          | Scroll-driven sticky com transição de avatares     |
-| `#contato`   | `Contato`        | CTA box em fundo escuro                            |
-| —            | `Footer`         | Copyright + nav + tagline                          |
+| Âncora      | Componente  | Descrição                                            |
+| ----------- | ----------- | ---------------------------------------------------- |
+| —           | `Preloader` | Animação BROTHERS → TECH em SVG stroke-draw          |
+| —           | `Navbar`    | Fixo, com menu mobile fullscreen + ARIA              |
+| `#home`     | `Hero`      | Logo PNG + avatares dos fundadores + tags            |
+| `#servicos` | `Servicos`  | Grid de 4 frentes (Sistemas, Apps, Sites, Softwares) |
+| `#projetos` | `Projetos`  | Grid de 3 cases com hover/tap → reveal detalhes      |
+| `#sobre`    | `About`     | Scroll-driven sticky com transição de avatares       |
+| `#contato`  | `Contato`   | CTA box em fundo escuro                              |
+| —           | `Footer`    | Copyright + nav + tagline                            |
 
 ---
 
@@ -100,24 +96,24 @@ Bundle de produção: ~440 kB raw / ~146 kB gzip (single chunk).
 
 Tokens CSS definidos em `:root` (`brothers-tech/src/index.css`). As cores da marca são três acentos sobre uma base cinza-quase-branco:
 
-| Token             | Hex       | Uso                                       |
-|-------------------|-----------|-------------------------------------------|
-| `--green`         | `#4F8A66` | Acento principal (Sistemas)                |
-| `--green-soft`    | `#6FA889` | Variação clara                            |
-| `--orange`        | `#C4723F` | Acento secundário (Apps)                  |
-| `--orange-soft`   | `#E08C57` | Variação clara                            |
-| `--blue`          | `#4068A1` | Acento terciário (Sites)                  |
-| `--blue-soft`     | `#6A8CC0` | Variação clara                            |
-| `--bg`            | `#E8E8E8` | Background geral                          |
-| `--surface`       | `#F2F2F2` | Superfícies elevadas                      |
-| `--line`          | `#C0C0C0` | Bordas sutis                              |
-| `--ink`           | `#161616` | Texto principal                           |
-| `--ink-muted`     | `#3F3F3F` | Texto secundário                          |
-| `--ink-dim`       | `#6B6B6B` | Texto terciário / labels                  |
-| `--paper`         | `#FFFFFF` | Cards de destaque                         |
-| `--on-dark`       | `#FFFFFF` | Texto sobre fundo escuro                  |
-| `--on-dark-muted` | `#C8C8C8` | Texto muted sobre fundo escuro            |
-| `--on-dark-dim`   | `#8A8A8A` | Labels sobre fundo escuro                 |
+| Token             | Hex       | Uso                            |
+| ----------------- | --------- | ------------------------------ |
+| `--green`         | `#4F8A66` | Acento principal (Sistemas)    |
+| `--green-soft`    | `#6FA889` | Variação clara                 |
+| `--orange`        | `#C4723F` | Acento secundário (Apps)       |
+| `--orange-soft`   | `#E08C57` | Variação clara                 |
+| `--blue`          | `#4068A1` | Acento terciário (Sites)       |
+| `--blue-soft`     | `#6A8CC0` | Variação clara                 |
+| `--bg`            | `#E8E8E8` | Background geral               |
+| `--surface`       | `#F2F2F2` | Superfícies elevadas           |
+| `--line`          | `#C0C0C0` | Bordas sutis                   |
+| `--ink`           | `#161616` | Texto principal                |
+| `--ink-muted`     | `#3F3F3F` | Texto secundário               |
+| `--ink-dim`       | `#6B6B6B` | Texto terciário / labels       |
+| `--paper`         | `#FFFFFF` | Cards de destaque              |
+| `--on-dark`       | `#FFFFFF` | Texto sobre fundo escuro       |
+| `--on-dark-muted` | `#C8C8C8` | Texto muted sobre fundo escuro |
+| `--on-dark-dim`   | `#8A8A8A` | Labels sobre fundo escuro      |
 
 ### Tipografia
 
