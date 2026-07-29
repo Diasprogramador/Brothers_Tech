@@ -7,7 +7,7 @@ import { Preloader } from "./components/Preloader/Preloader";
 import { Hero } from "./components/Hero/Hero";
 import { Servicos } from "./components/Servicos/Servicos";
 import { Projetos } from "./components/Projetos/Projetos";
-import { Sobre } from "./components/Sobre/Sobre";
+import { About } from "./components/About/About";
 import { Contato } from "./components/Contato/Contato";
 import { Footer } from "./components/Footer/Footer";
 import { CustomCursor } from "./components/CustomCursor/CustomCursor";
@@ -25,9 +25,7 @@ export const App = () => {
       <a href="#main" className="skip-link">
         Pular para o conteúdo
       </a>
-      {!isPreloading && (
-        <div className="scroll-progress" aria-hidden="true" />
-      )}
+      {!isPreloading && <div className="scroll-progress" aria-hidden="true" />}
       <div
         ref={mainRef}
         id="main"
@@ -41,7 +39,7 @@ export const App = () => {
           <Hero />
           <Servicos />
           <Projetos />
-          <Sobre />
+          <About />
           <Contato />
           <Footer />
         </SmoothScroll>
