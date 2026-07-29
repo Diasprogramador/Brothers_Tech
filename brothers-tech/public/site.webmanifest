@@ -1,0 +1,24 @@
+{
+  "name": "Brothers Tech",
+  "short_name": "Brothers Tech",
+  "description": "Estúdio de dois irmãos que constrói sistemas, apps, sites e softwares sob medida.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1A1A",
+  "theme_color": "#1A1A1A",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
