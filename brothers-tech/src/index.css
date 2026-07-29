@@ -370,7 +370,7 @@ section {
   background: #161616 !important;
   color: white !important;
   position: relative;
-  height: 250vh;
+  height: 500vh;
 }
 
 .about-sticky-wrapper {
@@ -423,6 +423,13 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.about-style-img {
+  position: absolute !important;
+  inset: 0;
+  margin: auto;
+  transition: none;
 }
 
 .about-img {
