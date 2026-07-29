@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { HeroTitle } from "../HeroTitle";
 import "./Hero.css";
 
 export const Hero = () => {
@@ -42,27 +43,7 @@ export const Hero = () => {
   return (
     <section className="hero" id="home" ref={heroRef}>
       <div className="wrap">
-        <div className="hero-content">
-          <div className="eyebrow mono">estúdio de desenvolvimento</div>
-          <h1 className="hero-title">
-            BROTHERS
-            <br />
-            <span className="accent">TECH</span>
-          </h1>
-          <p className="hero-sub">
-            Construímos sistemas, apps, sites e softwares sob medida — do
-            primeiro rascunho ao produto no ar.
-          </p>
-          <div className="hero-actions">
-            <a href="#contato" className="btn-primary">
-              Iniciar projeto →
-            </a>
-            <a href="#servicos" className="btn-ghost">
-              Serviços
-            </a>
-          </div>
-        </div>
-
+        <HeroTitle />
         <div className="hero-avatars" aria-hidden="true">
           <div className="avatar-item">
             <img

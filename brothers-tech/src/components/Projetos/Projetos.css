@@ -1,11 +1,19 @@
+/* =====================================================================
+   PROJETOS — Mobile-first
+   Cards com expansão no hover (desktop) e tap (mobile)
+   ===================================================================== */
+
 #projetos {
   padding: clamp(var(--s-10), 12vh, var(--s-12)) 0;
 }
+
 .projects-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--s-4);
 }
+
+/* ---------- Card ---------- */
 .project-card {
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
@@ -13,13 +21,22 @@
   background: var(--surface);
   transition:
     transform var(--dur-normal) var(--ease-out-expo),
-    box-shadow var(--dur-normal) var(--ease-out-expo);
+    box-shadow var(--dur-normal) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-out-expo);
   position: relative;
+  cursor: pointer;
+  /* outline para foco visível (a11y) */
+  outline: none;
 }
-.project-card:hover {
-  transform: translateY(-4px);
+.project-card:focus-visible {
+  border-color: var(--ink);
   box-shadow: var(--shadow-md);
 }
+.project-card:hover {
+  border-color: var(--ink-muted);
+}
+
+/* Thumb com imagem */
 .project-thumb {
   aspect-ratio: 16/10;
   background: var(--bg-soft);
@@ -27,37 +44,144 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
   background-image: radial-gradient(
     circle at 30% 30%,
     rgba(0, 0, 0, 0.04),
     transparent 60%
   );
 }
-.project-thumb span {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--ink-dim);
-  font-weight: 500;
-  border: 1px dashed var(--line);
-  padding: 8px 14px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
+.project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--dur-slow) var(--ease-out-expo);
 }
+.project-card:hover .project-thumb img {
+  transform: scale(1.04);
+}
+
+/* Etiqueta de status (canto do thumb) */
+.project-status {
+  position: absolute;
+  bottom: var(--s-3);
+  left: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: lowercase;
+  color: var(--ink);
+  font-weight: 500;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Body ---------- */
 .project-body {
   padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.project-body__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
 }
 .project-body h4 {
   font-size: 1.0625rem;
   font-weight: 600;
   font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
-.project-body p {
+.project-year {
+  font-size: 0.6875rem;
   color: var(--ink-dim);
-  font-size: 0.8125rem;
-  margin-top: var(--s-1);
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
+.project-tagline {
+  color: var(--ink-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  margin-top: -2px;
+}
+
+/* ---------- Detalhes (expandidos no hover/active) ---------- */
+.project-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--dur-slow) var(--ease-out-expo),
+    opacity var(--dur-normal) var(--ease-out-expo),
+    margin-top var(--dur-slow) var(--ease-out-expo);
+  margin-top: 0;
+}
+.project-details > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.project-description {
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  list-style: none;
+  padding: 0;
+}
+.project-stack__item {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Hover: expande no desktop ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .project-card:hover .project-details {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: var(--s-3);
+  }
+}
+
+/* ---------- Active (mobile / tap) ---------- */
+.project-card.is-active {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.project-card.is-active .project-details {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: var(--s-3);
+}
+.project-card.is-active .project-thumb img {
+  transform: scale(1.04);
+}
+
+/* ---------- Nota ---------- */
 .projects-note {
   margin-top: var(--s-8);
   display: flex;
@@ -83,7 +207,7 @@
 }
 
 /* =====================================================================
-   BREAKPOINTS
+   BREAKPOINTS — Mobile-first
    ===================================================================== */
 @media (min-width: 560px) {
   .projects-grid {
@@ -114,5 +238,16 @@
   .projects-note {
     padding: var(--s-3);
     gap: var(--s-2);
+  }
+}
+
+/* =====================================================================
+   prefers-reduced-motion
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-thumb img,
+  .project-details {
+    transition: none !important;
   }
 }
