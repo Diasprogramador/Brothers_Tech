@@ -5,52 +5,47 @@ import "./AnimatedHeroTitle.css";
 /**
  * AnimatedHeroTitle — wrapper que controla a interação stroke-drawing.
  *
- * - Desktop: hover ativa a animação
- * - Mobile: tap ativa a animação (toggle)
- * - Após 1.5s sem interação, reverte
+ * Estratégia robusta:
+ * 1. Captura o SVG após o mount via callback ref
+ * 2. Calcula stroke-dasharray de cada path (no espaço REAL, considerando scale)
+ * 3. Aplica dasharray/dashoffset INLINE (inline > CSS specificity)
+ * 4. Controla estado is-active via class no wrapper
  *
- * O stroke-dasharray é calculado dinamicamente pelo `getTotalLength()` de cada path.
+ * - Desktop: hover ativa
+ * - Mobile: tap ativa (toggle)
+ * - Auto-reset 1.5s após mouseleave / touchend
  */
 export const AnimatedHeroTitle = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const strokeLayerRef = useRef<SVGGElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
   const [isActive, setIsActive] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
 
-  // Captura referência ao stroke-layer quando o SVG monta
+  // Após o SVG montar, calcular dasharray para cada path
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const layer = container.querySelector<SVGGElement>(
-      ".hero-title__stroke-layer",
-    );
-    strokeLayerRef.current = layer;
-  }, []);
+    const svg = svgRef.current;
+    if (!svg) return;
 
-  // Calcula stroke-dasharray para cada path do stroke-layer
-  useEffect(() => {
-    const layer = strokeLayerRef.current;
-    if (!layer) return;
-
-    const paths = layer.querySelectorAll<SVGPathElement>(
+    const strokePaths = svg.querySelectorAll<SVGPathElement>(
       ".hero-title__stroke-path",
     );
-    paths.forEach((path) => {
+
+    strokePaths.forEach((path) => {
       try {
         const length = path.getTotalLength();
-        path.style.strokeDasharray = `${length}`;
-        path.style.strokeDashoffset = `${length}`;
+        // Aplicar inline com !important via setProperty para garantir prioridade sobre CSS
+        path.style.setProperty("stroke-dasharray", `${length}`, "important");
+        path.style.setProperty("stroke-dashoffset", `${length}`, "important");
       } catch {
-        // fallback silencioso
-        path.style.strokeDasharray = "500";
-        path.style.strokeDashoffset = "500";
+        path.style.setProperty("stroke-dasharray", "800", "important");
+        path.style.setProperty("stroke-dashoffset", "800", "important");
       }
     });
   }, []);
 
-  // Ativação por hover (desktop)
+  // Hover handlers (desktop)
   useEffect(() => {
-    const el = containerRef.current;
+    const el = wrapperRef.current;
     if (!el) return;
 
     const handleEnter = () => {
@@ -83,7 +78,6 @@ export const AnimatedHeroTitle = () => {
     };
   }, []);
 
-  // Touch handlers
   const handleTouchStart = () => {
     if (resetTimerRef.current !== null) {
       window.clearTimeout(resetTimerRef.current);
@@ -104,12 +98,12 @@ export const AnimatedHeroTitle = () => {
 
   return (
     <div
-      ref={containerRef}
+      ref={wrapperRef}
       className={`hero-title-wrapper ${isActive ? "is-active" : ""}`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <HeroTitle />
+      <HeroTitle svgRef={svgRef} />
     </div>
   );
 };

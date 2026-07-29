@@ -1,4 +1,4 @@
-/* AnimatedHeroTitle — wrapper que propaga o estado is-active para o HeroTitle */
+/* AnimatedHeroTitle — wrapper que controla o estado de hover/touch */
 
 .hero-title-wrapper {
   display: flex;
@@ -7,21 +7,20 @@
   width: 100%;
 }
 
-/* O HeroTitle aplica o estado is-active no SVG */
+.hero-title-wrapper:hover {
+  cursor: pointer;
+}
+
+/* Estado ativo: fade-out do preenchido, fade-in + drawing do stroke */
 .hero-title-wrapper.is-active .hero-title__filled-path {
   opacity: 0;
-  transition: opacity 0.18s var(--ease-out-expo);
+  transition: opacity 0.15s ease-out;
 }
 
 .hero-title-wrapper.is-active .hero-title__stroke-path {
   opacity: 1;
   stroke-dashoffset: 0;
   transition:
-    opacity 0.12s var(--ease-out-expo),
-    stroke-dashoffset 0.85s var(--ease-out-expo);
-}
-
-/* Quando o mouse está dentro do wrapper, mostra cursor pointer */
-.hero-title-wrapper:hover {
-  cursor: pointer;
+    opacity 0.1s ease-out,
+    stroke-dashoffset 0.9s ease-out;
 }

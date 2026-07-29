@@ -9,23 +9,30 @@ interface HeroTitleProps {
 // Layout constants — baseados no Preloader para manter proporções
 const GAP_X = 6; // espaço horizontal entre letras (em unidades SVG)
 const GAP_Y = 18; // espaço vertical entre as linhas BROTHERS e TECH
-const STROKE_WIDTH = 1.5; // espessura do stroke no estado hovered
-
-// viewBox com base em unidades (multiplicador) — usado para ter coordenadas absolutas
-const SCALE = 1;
 
 interface LetterPosition {
   d: string;
   color: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
 }
 
-function calculateLayout() {
+interface LayoutResult {
+  totalWidth: number;
+  totalHeight: number;
+  positions: LetterPosition[];
+  brothersLine: { x: number; y: number }[];
+  techLine: { x: number; y: number }[];
+  techScale: number;
+  strokeWidth: number;
+}
+
+function calculateLayout(): LayoutResult {
   const brothers = HERO_LETTERS.slice(0, 8); // B R O T H E R S
   const tech = HERO_LETTERS.slice(8); // T E C H
 
-  // Extrai viewBox dimensions de cada letra para layout preciso
   const getDims = (letter: (typeof HERO_LETTERS)[number]) => {
     const parts = letter.viewBox.split(" ").map(Number);
     return { width: parts[2], height: parts[3] };
@@ -34,68 +41,105 @@ function calculateLayout() {
   const brothersDims = brothers.map(getDims);
   const techDims = tech.map(getDims);
 
+  // Alvo: BROTHERS define a altura base. TECH é escalada para caber na mesma altura.
+  // Usamos a letra "R" do BROTHERS (altura 84) como referência porque é a mais comum.
+  const TARGET_H = 84;
+  const brothersScale = TARGET_H / Math.max(...brothersDims.map((d) => d.height));
+  const techScale = TARGET_H / Math.max(...techDims.map((d) => d.height));
+
+  const brothersScaled = brothersDims.map((d) => ({
+    width: d.width * brothersScale,
+    height: d.height * brothersScale,
+  }));
+  const techScaled = techDims.map((d) => ({
+    width: d.width * techScale,
+    height: d.height * techScale,
+  }));
+
   const brothersWidth =
-    brothersDims.reduce((sum, d) => sum + d.width, 0) +
+    brothersScaled.reduce((sum, d) => sum + d.width, 0) +
     (brothers.length - 1) * GAP_X;
   const techWidth =
-    techDims.reduce((sum, d) => sum + d.width, 0) +
+    techScaled.reduce((sum, d) => sum + d.width, 0) +
     (tech.length - 1) * GAP_X;
 
-  const brothersMaxH = Math.max(...brothersDims.map((d) => d.height));
-  const techMaxH = Math.max(...techDims.map((d) => d.height));
-
   const totalWidth = Math.max(brothersWidth, techWidth);
-  const totalHeight = brothersMaxH + GAP_Y + techMaxH;
+  const totalHeight = TARGET_H + GAP_Y + TARGET_H;
 
-  // Centraliza cada linha horizontalmente
   const brothersOffsetX = (totalWidth - brothersWidth) / 2;
   const techOffsetX = (totalWidth - techWidth) / 2;
-  const techY = brothersMaxH + GAP_Y;
 
   const positions: LetterPosition[] = [];
+
+  // BROTHERS row (y = 0)
   let x = brothersOffsetX;
   for (let i = 0; i < brothers.length; i++) {
     positions.push({
       d: brothers[i].filledPath,
       color: brothers[i].color,
-      x,
+      x: x / brothersScale,
       y: 0,
+      width: brothersDims[i].width,
+      height: brothersDims[i].height,
     });
-    x += brothersDims[i].width + GAP_X;
+    x += brothersScaled[i].width + GAP_X;
   }
+
+  // TECH row (y = TARGET_H + GAP_Y)
+  const techY = TARGET_H + GAP_Y;
   x = techOffsetX;
   for (let i = 0; i < tech.length; i++) {
     positions.push({
       d: tech[i].filledPath,
       color: tech[i].color,
-      x,
-      y: techY,
+      x: x / techScale,
+      y: techY / techScale,
+      width: techDims[i].width,
+      height: techDims[i].height,
     });
-    x += techDims[i].width + GAP_X;
+    x += techScaled[i].width + GAP_X;
   }
 
+  // stroke-width proporcional ao tamanho: TECH usa stroke menor porque é menor
+  const strokeWidth = brothersScale >= techScale ? 1.5 * brothersScale : 1.5 * techScale;
+
   return {
-    totalWidth: totalWidth * SCALE,
-    totalHeight: totalHeight * SCALE,
-    positions: positions.map((p) => ({
-      ...p,
-      x: p.x * SCALE,
-      y: p.y * SCALE,
-    })),
-    strokeWidth: STROKE_WIDTH * SCALE,
+    totalWidth,
+    totalHeight,
+    positions,
+    brothersLine: [],
+    techLine: [],
+    techScale,
+    strokeWidth,
   };
 }
 
 /**
  * HeroTitle — título animado "BROTHERS / TECH" com letras SVG.
- * Estrutura idêntica ao Preloader: SVG único, viewBox calculada,
- * paths posicionados via transform. Garante proporções corretas em qualquer tela.
  *
- * As letras são interativas: ao hover/touch, fazem stroke-drawing animation
- * (fade-out do preenchido + animação de stroke da borda).
+ * Estratégia:
+ * - SVG único com viewBox calculada.
+ * - BROTHERS (8 letras) e TECH (4 letras) em linhas separadas.
+ * - As letras do TECH são ESCALADAS para terem a mesma altura visual das do BROTHERS
+ *   (resolve o problema de letras do TECH serem 25% maiores no Figma).
+ * - Cada letra tem sua própria escala aplicada via transform="translate(...) scale(...)".
+ * - Renderiza dois layers: filled (preenchido) e stroke (borda).
+ *   O stroke é animado via stroke-dashoffset no hover/touch.
  */
 export const HeroTitle = ({ svgRef }: HeroTitleProps = {}) => {
-  const { totalWidth, totalHeight, positions, strokeWidth } = calculateLayout();
+  const { totalWidth, totalHeight, positions, techScale, strokeWidth } =
+    calculateLayout();
+
+  // Separa positions por linha para aplicar transform correto
+  const TARGET_H = 84;
+  const brothersScale =
+    TARGET_H /
+    Math.max(...HERO_LETTERS.slice(0, 8).map((l) => {
+      const p = l.viewBox.split(" ").map(Number);
+      return p[3];
+    }));
+
+  const brothersEnd = HERO_LETTERS.slice(0, 8).length;
 
   return (
     <div className="hero-title" aria-label="Brothers Tech">
@@ -110,15 +154,19 @@ export const HeroTitle = ({ svgRef }: HeroTitleProps = {}) => {
       >
         {/* Filled layer (preenchido) — visível por padrão */}
         <g className="hero-title__filled-layer">
-          {positions.map((p, i) => (
-            <path
-              key={`fill-${i}`}
-              className="hero-title__filled-path"
-              d={p.d}
-              fill={p.color}
-              transform={`translate(${p.x}, ${p.y})`}
-            />
-          ))}
+          {positions.map((p, i) => {
+            const isTech = i >= brothersEnd;
+            const scale = isTech ? techScale : brothersScale;
+            return (
+              <path
+                key={`fill-${i}`}
+                className="hero-title__filled-path"
+                d={p.d}
+                fill={p.color}
+                transform={`translate(${p.x}, ${p.y}) scale(${scale})`}
+              />
+            );
+          })}
         </g>
 
         {/* Stroke layer (borda) — animação stroke-drawing no hover/touch */}
@@ -127,17 +175,21 @@ export const HeroTitle = ({ svgRef }: HeroTitleProps = {}) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          {positions.map((p, i) => (
-            <path
-              key={`stroke-${i}`}
-              className="hero-title__stroke-path"
-              d={p.d}
-              fill="none"
-              stroke={p.color}
-              strokeWidth={strokeWidth}
-              transform={`translate(${p.x}, ${p.y})`}
-            />
-          ))}
+          {positions.map((p, i) => {
+            const isTech = i >= brothersEnd;
+            const scale = isTech ? techScale : brothersScale;
+            return (
+              <path
+                key={`stroke-${i}`}
+                className="hero-title__stroke-path"
+                d={p.d}
+                fill="none"
+                stroke={p.color}
+                strokeWidth={strokeWidth / scale}
+                transform={`translate(${p.x}, ${p.y}) scale(${scale})`}
+              />
+            );
+          })}
         </g>
       </svg>
     </div>

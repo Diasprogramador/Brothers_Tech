@@ -9,8 +9,6 @@
   max-width: 700px; /* igual ao Preloader */
   margin-inline: auto;
   text-align: center;
-  /* leve respiro pra não colar no topo */
-  padding-block: var(--s-2);
 }
 
 .hero-title__svg {
@@ -22,33 +20,15 @@
 
 /* ---------- Filled layer (preenchido) — visível por padrão ---------- */
 .hero-title__filled-path {
-  fill: currentColor;
-  transition:
-    opacity 0.25s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
-    transform 0.25s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
-  transform-origin: center;
-}
-
-.hero-title__filled-layer {
-  color: #2f2f42; /* cor base para o layer filled */
-}
-.hero-title__filled-layer path[fill="#364C84"] {
-  fill: #364c84;
+  transition: opacity 0.2s ease-out;
 }
 
 /* ---------- Stroke layer (borda) — escondido por padrão ---------- */
-.hero-title__stroke-layer {
-  pointer-events: auto;
-}
-
 .hero-title__stroke-path {
   opacity: 0;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
   transition:
-    opacity 0.18s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
-    stroke-dashoffset 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
-  pointer-events: auto;
+    opacity 0.15s ease-out,
+    stroke-dashoffset 0.8s ease-out;
   cursor: pointer;
 }
 
