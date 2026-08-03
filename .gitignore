@@ -1,3 +1,5 @@
 .mimocode
 
 .vscode
+.vercel
+.env*
