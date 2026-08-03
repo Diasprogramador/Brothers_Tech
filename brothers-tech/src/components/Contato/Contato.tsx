@@ -11,11 +11,11 @@ export const Contato = () => {
             — e a gente volta com um plano.
           </p>
           <div className="contact-actions">
-            <a href="mailto:contato@brothertech.dev" className="btn-primary">
+            <a href="mailto:brothers.tech.237@gmail.com" className="btn-primary">
               Enviar e-mail →
             </a>
             <a
-              href="https://wa.me/55SEUNUMERO"
+              href="https://wa.me/5531972037820"
               className="btn-ghost"
               rel="noopener"
             >
@@ -24,21 +24,15 @@ export const Contato = () => {
           </div>
           <ul className="contact-channels" role="list">
             <li>
-              <a href="mailto:contato@brothertech.dev" className="channel">
+              <a href="mailto:brothers.tech.237@gmail.com" className="channel">
                 <span className="dot green" aria-hidden="true"></span>
-                contato@brothertech.dev
+                brothers.tech.237@gmail.com
               </a>
             </li>
             <li>
-              <a href="#" className="channel">
+              <a href="https://www.instagram.com/_brothers.tech" className="channel" target="_blank" rel="noopener noreferrer">
                 <span className="dot orange" aria-hidden="true"></span>
-                @brothers_tech
-              </a>
-            </li>
-            <li>
-              <a href="#" className="channel">
-                <span className="dot blue" aria-hidden="true"></span>
-                github.com/brothers-tech
+                @_brothers.tech
               </a>
             </li>
           </ul>
