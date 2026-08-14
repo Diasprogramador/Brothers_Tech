@@ -77,42 +77,42 @@ export const Hero = () => {
           BROTHERS TECH
         </div>
 
-        <div className="hero-titulo" ref={tituloRef}>
-          <h1>
+        {/* título e dupla dividem a MESMA célula central: o título sai, a
+            dupla entra no mesmo lugar — o miolo nunca fica vazio. */}
+        <div className="hero-centro">
+          <div className="hero-titulo" ref={tituloRef}>
+            <h1>
+              <img
+                src="assets/hero-title.png"
+                alt="Brothers Tech — Sistemas, Apps, Sites e Software sob medida"
+                loading="eager"
+                decoding="async"
+              />
+            </h1>
+          </div>
+
+          <div className="hero-dupla" aria-hidden="true">
             <img
-              src="assets/hero-title.png"
-              alt="Brothers Tech — Sistemas, Apps, Sites e Software sob medida"
+              ref={av1Ref}
+              className="hero-dupla__img hero-dupla__img--1"
+              src="assets/sanderson_hero.avif"
+              alt=""
+              width="237"
+              height="712"
               loading="eager"
               decoding="async"
             />
-          </h1>
-          <div className="hero-dica" ref={dicaRef}>
-            <span>role</span>
-            <span className="hero-dica__linha" />
+            <img
+              ref={av2Ref}
+              className="hero-dupla__img hero-dupla__img--2"
+              src="assets/caio_hero.avif"
+              alt=""
+              width="373"
+              height="676"
+            loading="eager"
+              decoding="async"
+            />
           </div>
-        </div>
-
-        <div className="hero-dupla" aria-hidden="true">
-          <img
-            ref={av1Ref}
-            className="hero-dupla__img hero-dupla__img--1"
-            src="assets/sanderson_hero.avif"
-            alt=""
-            width="237"
-            height="712"
-            loading="eager"
-            decoding="async"
-          />
-          <img
-            ref={av2Ref}
-            className="hero-dupla__img hero-dupla__img--2"
-            src="assets/caio_hero.avif"
-            alt=""
-            width="373"
-            height="676"
-            loading="eager"
-            decoding="async"
-          />
         </div>
 
         <div className="hero-rodape">
@@ -128,6 +128,11 @@ export const Hero = () => {
             <span className="tag"><span className="dot blue" aria-hidden="true" />Sites</span>
             <span className="tag"><span className="dot green" aria-hidden="true" />Softwares</span>
           </div>
+        </div>
+
+        <div className="hero-dica" ref={dicaRef}>
+          <span>role</span>
+          <span className="hero-dica__linha" />
         </div>
 
         <div className="hero-veu" ref={veuRef} aria-hidden="true" />

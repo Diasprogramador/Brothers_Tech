@@ -12,6 +12,9 @@
   top: 0;
   height: 100svh;
   overflow: hidden;
+  /* habilita cqh/cqw e as container queries de cada seção: as medidas passam
+     a ser relativas à TELA DO APARELHO, não a um tamanho fixo. */
+  container-type: size;
 }
 
 /* comprimento de cada cena (quanto de rolagem a animação consome) */

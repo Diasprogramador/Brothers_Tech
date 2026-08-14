@@ -153,20 +153,22 @@ export const AboutContent = () => {
               ))}
             </div>
 
-            <div className="fundador-cena__chips" aria-hidden="true">
-              {ESTILOS.map((estilo) => (
-                <span key={estilo} data-chip className="mono">
-                  {estilo}
-                </span>
-              ))}
-            </div>
+            <div className="fundador-cena__lado">
+              <div className="fundador-cena__chips" aria-hidden="true">
+                {ESTILOS.map((estilo) => (
+                  <span key={estilo} data-chip className="mono">
+                    {estilo}
+                  </span>
+                ))}
+              </div>
 
-            <div className="fundador-cena__info">
-              <span className="founder-eyebrow" style={{ color: f.cor }}>
-                {f.papel}
-              </span>
-              <h3>{f.nome}</h3>
-              <p>{f.desc}</p>
+              <div className="fundador-cena__info">
+                <span className="founder-eyebrow" style={{ color: f.cor }}>
+                  {f.papel}
+                </span>
+                <h3>{f.nome}</h3>
+                <p>{f.desc}</p>
+              </div>
             </div>
           </div>
         ))}
