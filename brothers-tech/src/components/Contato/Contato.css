@@ -11,7 +11,7 @@
   top: -30%;
   left: 50%;
   width: 150%;
-  aspect-ratio: 1;
+  height: 150vw;
   transform: translateX(-50%);
   background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 58%);
   pointer-events: none;
@@ -90,8 +90,9 @@
   top: -40%;
   right: -30%;
   width: 90%;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, color-mix(in oklab, var(--acento) 35%, transparent) 0%, transparent 62%);
+  height: 0;
+  padding-bottom: 90%;
+  background: radial-gradient(circle, var(--acento-brilho, rgba(255, 255, 255, 0.14)) 0%, transparent 62%);
   pointer-events: none;
   transition: background var(--dur-slow) var(--ease-out-expo);
 }
@@ -148,7 +149,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 .contato-chip[aria-pressed="true"] .ponto {
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--cor) 22%, transparent);
+  box-shadow: 0 0 0 4px var(--cor-halo, rgba(255, 255, 255, 0.22));
 }
 
 .contato-seg {

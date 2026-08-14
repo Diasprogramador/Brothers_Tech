@@ -4,11 +4,13 @@ import "./Contato.css";
 const WHATSAPP = "5531972037820";
 const EMAIL = "brothers.tech.237@gmail.com";
 
+/* cor sólida + as versões translúcidas prontas: nada de color-mix(), que
+   Android/WebView mais antigo não entende (a regra inteira seria descartada). */
 const TIPOS = [
-  { nome: "Sistema", cor: "#4f8a66" },
-  { nome: "App", cor: "#c4723f" },
-  { nome: "Site", cor: "#4068a1" },
-  { nome: "Software", cor: "#6a8cc0" },
+  { nome: "Sistema", cor: "#4f8a66", halo: "rgba(79, 138, 102, 0.22)", brilho: "rgba(79, 138, 102, 0.35)" },
+  { nome: "App", cor: "#c4723f", halo: "rgba(196, 114, 63, 0.22)", brilho: "rgba(196, 114, 63, 0.35)" },
+  { nome: "Site", cor: "#4068a1", halo: "rgba(64, 104, 161, 0.22)", brilho: "rgba(64, 104, 161, 0.35)" },
+  { nome: "Software", cor: "#6a8cc0", halo: "rgba(106, 140, 192, 0.22)", brilho: "rgba(106, 140, 192, 0.35)" },
 ] as const;
 
 const PRAZOS = [
@@ -29,8 +31,11 @@ export const Contato = () => {
   const [copiado, setCopiado] = useState(false);
 
   const acento = useMemo(() => {
-    if (!tipos.length) return "#ffffff";
-    return TIPOS.find((t) => t.nome === tipos[0])?.cor ?? "#ffffff";
+    const alvo = tipos.length ? TIPOS.find((t) => t.nome === tipos[0]) : undefined;
+    return {
+      cor: alvo?.cor ?? "#ffffff",
+      brilho: alvo?.brilho ?? "rgba(255, 255, 255, 0.14)",
+    };
   }, [tipos]);
 
   const mensagem = useMemo(() => {
@@ -78,7 +83,15 @@ export const Contato = () => {
             </div>
           </div>
 
-          <div className="contato-card" style={{ "--acento": acento } as React.CSSProperties}>
+          <div
+            className="contato-card"
+            style={
+              {
+                "--acento": acento.cor,
+                "--acento-brilho": acento.brilho,
+              } as React.CSSProperties
+            }
+          >
             <div className="contato-card__brilho" aria-hidden="true" />
 
             <fieldset className="contato-campo">
@@ -99,7 +112,7 @@ export const Contato = () => {
                     type="button"
                     className="contato-chip"
                     aria-pressed={tipos.includes(t.nome)}
-                    style={{ "--cor": t.cor } as React.CSSProperties}
+                    style={{ "--cor": t.cor, "--cor-halo": t.halo } as React.CSSProperties}
                     onClick={() => alternar(t.nome)}
                   >
                     <i className="ponto" />

@@ -1,7 +1,8 @@
 /* =====================================================================
    CENAS FIXADAS (scroll-telling) — base compartilhada
-   Mobile-first: a mesma cena vale para celular e desktop, porque a altura
-   é medida em múltiplos de 100svh (a tela do aparelho), não em pixels.
+   Mobile-first e à prova de navegador antigo: a BASE de tudo usa svh/vh/vw,
+   que todo Android/Chrome/Safari em uso entende. Unidades de container
+   (cqh/cqw) e @container aparecem apenas dentro de @supports, como melhoria.
    ===================================================================== */
 
 .cena {
@@ -12,9 +13,6 @@
   top: 0;
   height: 100svh;
   overflow: hidden;
-  /* habilita cqh/cqw e as container queries de cada seção: as medidas passam
-     a ser relativas à TELA DO APARELHO, não a um tamanho fixo. */
-  container-type: size;
 }
 
 /* comprimento de cada cena (quanto de rolagem a animação consome) */
@@ -23,13 +21,19 @@
 .cena--projetos { height: 300svh; }
 .cena--sobre { height: 350svh; }
 
-/* Sem suporte a svh (navegadores antigos): cai para vh. */
+/* Sem svh (navegadores mais antigos): cai para vh. */
 @supports not (height: 100svh) {
   .cena__palco { height: 100vh; }
   .cena--hero { height: 250vh; }
   .cena--servicos { height: 350vh; }
   .cena--projetos { height: 300vh; }
   .cena--sobre { height: 350vh; }
+}
+
+/* Melhoria: onde houver suporte, o palco vira container e as seções passam a
+   se medir por ele (idêntico na prática, mas robusto a barra de navegador). */
+@supports (container-type: size) {
+  .cena__palco { container-type: size; }
 }
 
 /* Movimento reduzido: nada de pinar — cada palco vira bloco normal. */

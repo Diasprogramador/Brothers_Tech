@@ -1,12 +1,7 @@
-/* HERO fixado — mobile-first.
-   O título fica no CENTRO ÓTICO do palco em qualquer aparelho: a pilha
-   central usa padding simétrico e o rodapé/dica são absolutos, então nada
-   empurra a composição para cima (era o vazio que aparecia nos Motorola). */
+/* HERO fixado — mobile-first, sem depender de unidades de container.
+   O título fica no centro ótico do palco em qualquer proporção de tela. */
 
-.hero-palco {
-  background: var(--bg);
-  container-type: size; /* habilita cqh/cqw e as container queries abaixo */
-}
+.hero-palco { background: var(--bg); }
 
 .hero-grade {
   position: absolute;
@@ -14,7 +9,7 @@
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
-  background-size: max(44px, 12cqw) max(44px, 12cqw);
+  background-size: max(44px, 12vw) max(44px, 12vw);
   mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
   pointer-events: none;
@@ -23,8 +18,8 @@
   position: absolute;
   top: -14%;
   left: 50%;
-  width: min(340px, 82cqw);
-  aspect-ratio: 1;
+  width: min(340px, 82vw);
+  height: min(340px, 82vw);
   transform: translateX(-50%);
   background: radial-gradient(circle, rgba(79, 138, 102, 0.16) 0%, transparent 65%);
   pointer-events: none;
@@ -42,7 +37,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-display);
-  font-size: 27cqw;
+  font-size: 27vw;
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 0.9;
@@ -52,17 +47,20 @@
   z-index: 0;
 }
 
+/* título e dupla dividem a MESMA célula: o título sai, a dupla entra no
+   mesmo lugar — o miolo nunca fica vazio. */
 .hero-centro {
   position: absolute;
   inset: 0;
   z-index: 2;
   display: grid;
   place-items: center;
-  padding: clamp(58px, 10cqh, 118px) var(--gutter);
+  padding: clamp(58px, 10svh, 118px) var(--gutter);
 }
 .hero-centro > * {
   grid-area: 1 / 1;
   width: 100%;
+  min-width: 0;
 }
 
 .hero-titulo {
@@ -80,9 +78,10 @@
 }
 
 .hero-dupla {
-  height: clamp(150px, 34cqh, 440px);
+  height: clamp(150px, 34svh, 440px);
+  max-height: 100%;
   display: flex;
-  gap: 2.5cqw;
+  gap: 2.5vw;
   align-items: flex-end;
   justify-content: center;
 }
@@ -100,7 +99,7 @@
 
 .hero-rodape {
   position: absolute;
-  bottom: clamp(44px, 8cqh, 92px);
+  bottom: clamp(44px, 8svh, 92px);
   left: 0;
   width: 100%;
   z-index: 3;
@@ -121,7 +120,7 @@
 .hero-assinatura__nome {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(0.9375rem, 4.4cqw, 1.1875rem);
+  font-size: clamp(0.9375rem, 4.4vw, 1.1875rem);
   letter-spacing: 0.02em;
 }
 .hero-assinatura__papel { font-size: var(--text-eyebrow); color: var(--ink-dim); }
@@ -135,7 +134,7 @@
 
 .hero-dica {
   position: absolute;
-  bottom: clamp(14px, 2.6cqh, 26px);
+  bottom: clamp(14px, 2.6svh, 26px);
   left: 0;
   width: 100%;
   z-index: 3;
@@ -151,7 +150,7 @@
 }
 .hero-dica__linha {
   width: 1px;
-  height: clamp(16px, 3cqh, 30px);
+  height: clamp(16px, 3svh, 30px);
   background: linear-gradient(var(--ink-dim), transparent);
 }
 
@@ -165,19 +164,19 @@
 }
 
 /* tela curta (aparelho pequeno / paisagem): a dica sai */
-@container (max-height: 660px) {
+@media (max-height: 660px) {
   .hero-dica { display: none; }
 }
 
 /* desktop */
-@container (min-width: 760px) {
-  .hero-palavra { font-size: 15cqw; }
+@media (min-width: 760px) {
+  .hero-palavra { font-size: 15vw; }
   .hero-titulo { max-width: 820px; }
-  .hero-dupla { height: clamp(300px, 52cqh, 620px); }
+  .hero-dupla { height: clamp(300px, 52svh, 620px); }
   .hero-rodape { flex-direction: row; align-items: center; justify-content: center; gap: 30px; }
   .hero-assinatura { align-items: flex-start; text-align: left; }
 }
-@container (min-width: 1100px) {
+@media (min-width: 1100px) {
   .hero-titulo { max-width: 960px; }
 }
 
