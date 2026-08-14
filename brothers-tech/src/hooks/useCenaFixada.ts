@@ -3,13 +3,17 @@ import { useEffect, useRef } from "react";
 /**
  * useCenaFixada — progresso de rolagem de uma seção "pinada".
  *
- * A seção tem altura de N x 100svh e um palco `position: sticky; height: 100svh`
- * dentro (ver os .css das seções). Este hook devolve, a cada quadro, o
- * progresso 0..1 da rolagem dentro dessa seção e chama `aplicar(p)`.
+ * A seção tem altura de N x 100vh e um palco `position: sticky` dentro (ver
+ * cenas.css). Este hook devolve, a cada quadro, o progresso 0..1 da rolagem
+ * dentro dessa seção e chama `aplicar(p)`.
+ *
+ * Ele também adiciona a classe `cena--pronta` na seção. Enquanto ela não
+ * existe, o CSS mostra o conteúdo em fluxo normal — então uma falha de script
+ * ou um navegador sem suporte nunca deixa a tela preta.
  *
  * Regras de performance:
- * - um único requestAnimationFrame por seção, e só enquanto a seção está na tela
- *   (IntersectionObserver liga/desliga o loop);
+ * - um único requestAnimationFrame por seção, e só enquanto a seção está na
+ *   tela (IntersectionObserver liga/desliga o loop);
  * - `aplicar` só escreve transform/opacity/clip-path — nada que gere layout;
  * - `prefers-reduced-motion` desliga o loop e aplica o estado final uma vez.
  */
@@ -32,13 +36,19 @@ export function useCenaFixada(
       return;
     }
 
+    // só pina depois que sabemos que o script está rodando
+    el.classList.add("cena--pronta");
+
     let raf = 0;
     let rodando = false;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
       const vao = el.offsetHeight - window.innerHeight;
-      if (vao <= 0) return;
+      if (vao <= 0) {
+        aplicarRef.current(0);
+        return;
+      }
       const p = Math.min(1, Math.max(0, -el.getBoundingClientRect().top / vao));
       aplicarRef.current(p);
     };
@@ -57,9 +67,13 @@ export function useCenaFixada(
     );
     io.observe(el);
 
+    // primeiro quadro imediato: o palco já entra no estado certo
+    aplicarRef.current(0);
+
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      el.classList.remove("cena--pronta");
     };
   }, [ref]);
 }

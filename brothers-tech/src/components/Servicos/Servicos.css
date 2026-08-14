@@ -1,8 +1,6 @@
-/* SERVIÇOS fixado — baralho de cards, mobile-first */
+/* SERVIÇOS fixado — baralho de cards. Base em px/%/vw/vh. */
 
-.servicos-palco {
-  background: #1f1f1f;
-}
+.servicos-palco { background: #1f1f1f; }
 .servicos-grade {
   position: absolute;
   inset: 0;
@@ -15,22 +13,24 @@
 
 .servicos-cabeca {
   position: absolute;
-  top: 9%;
+  top: 88px;
   left: 0;
   width: 100%;
   padding-inline: var(--gutter);
+  box-sizing: border-box;
+  z-index: 3;
 }
 .servicos-cabeca .section-eyebrow { color: var(--on-dark-dim); }
 .servicos-cabeca .section-eyebrow .n { color: var(--on-dark); }
 .servicos-cabeca h2 {
   font-size: clamp(1.5rem, 7.7vw, 2.125rem);
   color: var(--on-dark);
-  max-width: 80%;
+  max-width: 20ch;
 }
 
 .servicos-contador {
   position: absolute;
-  top: 27%;
+  top: 26%;
   right: var(--gutter);
   font-family: var(--font-display);
   font-size: clamp(4.375rem, 25vw, 6.75rem);
@@ -39,32 +39,32 @@
   color: var(--on-dark);
   opacity: 0.07;
   font-variant-numeric: tabular-nums;
+  z-index: 2;
 }
 
 .servicos-baralho {
   position: absolute;
-  top: 35%;
+  top: 36%;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: 15%;
+  bottom: 96px;
+  z-index: 4;
 }
 .servico-card {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   background: #262626;
   border: 1px solid #333333;
   border-radius: var(--r-lg);
   padding: clamp(22px, 7vw, 34px) clamp(18px, 6vw, 26px);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--s-3);
   will-change: transform, opacity;
 }
-.servico-card .num {
-  font-size: 0.8125rem;
-  color: var(--on-dark);
-  font-weight: 600;
-}
+.servico-card .num { font-size: 0.8125rem; color: var(--on-dark); font-weight: 600; }
 .servico-card h3 {
   font-size: clamp(1.3125rem, 6.7vw, 1.75rem);
   color: var(--on-dark);
@@ -84,11 +84,12 @@
 
 .servicos-tracos {
   position: absolute;
-  bottom: 7%;
+  bottom: 48px;
   left: var(--gutter);
   right: var(--gutter);
   display: flex;
   gap: 6px;
+  z-index: 5;
 }
 .servicos-tracos span {
   flex: 1;
@@ -98,10 +99,15 @@
   transform-origin: left center;
 }
 
+@media (max-height: 660px) {
+  .servicos-cabeca { top: 72px; }
+  .servicos-baralho { top: 40%; bottom: 66px; }
+  .servicos-tracos { bottom: 30px; }
+}
 @media (min-width: 760px) {
   .servicos-baralho {
     top: 30%;
-    bottom: 17%;
+    bottom: 120px;
     left: max(4vw, calc(50% - 360px));
     right: max(4vw, calc(50% - 360px));
   }
@@ -114,15 +120,30 @@
   .servicos-baralho { left: calc(50% - 420px); right: calc(50% - 420px); }
 }
 
+/* sem JS: os quatro cards em lista, nada invisível */
+.cena:not(.cena--pronta) .servicos-cabeca,
+.cena:not(.cena--pronta) .servicos-baralho,
+.cena:not(.cena--pronta) .servicos-tracos {
+  position: static;
+}
+.cena:not(.cena--pronta) .servicos-baralho {
+  display: grid;
+  gap: var(--s-4);
+  margin-top: var(--s-8);
+}
+.cena:not(.cena--pronta) .servico-card {
+  position: static;
+  inset: auto;
+  opacity: 1;
+  transform: none;
+  min-height: 200px;
+}
+.cena:not(.cena--pronta) .servicos-contador,
+.cena:not(.cena--pronta) .servicos-tracos { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .servicos-cabeca,
-  .servicos-baralho,
-  .servicos-tracos { position: static; }
-  .servicos-baralho {
-    display: grid;
-    gap: 1px;
-    margin-top: var(--s-8);
-  }
-  .servico-card { position: static; opacity: 1; }
-  .servicos-contador { display: none; }
+  .servicos-cabeca, .servicos-baralho, .servicos-tracos { position: static; }
+  .servicos-baralho { display: grid; gap: var(--s-4); margin-top: var(--s-8); }
+  .servico-card { position: static; inset: auto; opacity: 1; transform: none; }
+  .servicos-contador, .servicos-tracos { display: none; }
 }

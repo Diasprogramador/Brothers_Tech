@@ -1,6 +1,6 @@
 /* SOBRE fixado — lego → normal → pixel com a tela travada.
-   Mobile-first e SEM unidades de container na base: era isso que estourava o
-   avatar por cima do texto em Android que não suporta cqh/cqw.
+   Base em px/%/vw/vh: era o clamp() com unidade moderna que fazia o avatar
+   perder a altura e passar por cima do texto.
    Substitui o bloco ".about ..." que hoje vive em src/index.css. */
 
 .about-palco {
@@ -25,7 +25,7 @@
 
 .about-cabeca {
   position: absolute;
-  top: 8.5%;
+  top: 84px;
   left: var(--gutter);
   right: var(--gutter);
   z-index: 4;
@@ -36,11 +36,11 @@
   font-size: clamp(1.375rem, 6.7vw, 1.875rem);
   color: var(--on-dark);
   margin-top: var(--s-2);
-  max-width: 82%;
+  max-width: 22ch;
 }
 
-/* pilha centralizada: o avatar tem altura própria e NUNCA invade o texto,
-   porque os dois são itens de um flex column com gap. */
+/* pilha centralizada: avatar e texto são itens de um flex com gap, então o
+   avatar NUNCA invade o texto, seja qual for a altura da tela. */
 .fundador-cena {
   position: absolute;
   inset: 0;
@@ -49,8 +49,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(14px, 3svh, 30px);
-  padding: clamp(88px, 15svh, 190px) var(--gutter) clamp(40px, 7svh, 90px);
+  gap: 18px;
+  padding: 150px var(--gutter) 56px;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -58,9 +59,9 @@
   position: relative;
   flex: 0 1 auto;
   min-height: 0;
-  height: clamp(160px, 34svh, 420px);
-  width: min(78vw, 336px);
-  max-width: 78vw;
+  height: 34vh;
+  max-height: 340px;
+  width: min(72vw, 300px);
   cursor: pointer;
 }
 .fundador-cena__brilho {
@@ -88,7 +89,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 2svh, 18px);
+  gap: 14px;
   width: 100%;
   min-height: 0;
 }
@@ -134,7 +135,7 @@
 
 .about-barra {
   position: absolute;
-  bottom: 3.2%;
+  bottom: 24px;
   left: var(--gutter);
   right: var(--gutter);
   z-index: 4;
@@ -163,13 +164,20 @@
   transform: scaleX(0);
 }
 
-/* tela curta: os chips saem e o avatar encolhe — nada encosta no texto */
-@media (max-height: 700px) {
-  .fundador-cena { padding-block: clamp(76px, 13svh, 190px) clamp(30px, 5svh, 90px); }
-  .fundador-cena__chips { display: none; }
-  .fundador-cena__visual { height: clamp(140px, 30svh, 300px); }
+/* telas altas: avatar maior */
+@media (min-height: 800px) {
+  .fundador-cena { padding-top: 170px; gap: 24px; }
+  .fundador-cena__visual { height: 38vh; max-height: 420px; width: min(76vw, 336px); }
 }
-@media (max-height: 620px) {
+/* telas curtas: chips saem, avatar encolhe, texto continua legível */
+@media (max-height: 700px) {
+  .fundador-cena { padding: 120px var(--gutter) 44px; gap: 14px; }
+  .fundador-cena__visual { height: 28vh; max-height: 240px; }
+  .fundador-cena__chips { display: none; }
+}
+@media (max-height: 600px) {
+  .fundador-cena { padding: 100px var(--gutter) 36px; }
+  .fundador-cena__visual { height: 24vh; }
   .about-barra { display: none; }
 }
 
@@ -180,23 +188,38 @@
     justify-content: center;
     align-items: center;
     gap: 6vw;
-    padding-inline: 7vw;
+    padding: 120px 7vw;
   }
-  .fundador-cena__visual { height: clamp(280px, 52svh, 560px); width: min(34vw, 460px); max-width: 34vw; }
+  .fundador-cena__visual { height: 52vh; max-height: 560px; width: min(34vw, 460px); }
   .fundador-cena__lado { align-items: flex-start; max-width: 480px; width: auto; }
-  .fundador-cena__chips { justify-content: flex-start; }
+  .fundador-cena__chips { justify-content: flex-start; display: flex; }
   .fundador-cena__info { text-align: left; }
   .fundador-cena__info p { margin-inline: 0; }
 }
+
+/* sem JS: os dois fundadores em fluxo, avatar "normal" visível */
+.cena:not(.cena--pronta) .about-cabeca,
+.cena:not(.cena--pronta) .fundador-cena { position: static; }
+.cena:not(.cena--pronta) .fundador-cena {
+  opacity: 1;
+  transform: none;
+  padding: 0;
+  margin-top: var(--s-10);
+}
+.cena:not(.cena--pronta) .fundador-cena__visual { height: 320px; }
+.cena:not(.cena--pronta) .fundador-cena__visual img { opacity: 0; }
+.cena:not(.cena--pronta) .fundador-cena__visual img[data-estilo="normal"] { opacity: 1; }
+.cena:not(.cena--pronta) .about-barra { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .about-cabeca, .fundador-cena { position: static; }
   .fundador-cena {
     opacity: 1 !important;
     transform: none !important;
-    margin-top: var(--s-10);
     padding: 0;
+    margin-top: var(--s-10);
   }
+  .fundador-cena__visual { height: 320px; }
   .fundador-cena__visual img { opacity: 0; }
   .fundador-cena__visual img[data-estilo="normal"] { opacity: 1; }
   .about-barra { display: none; }

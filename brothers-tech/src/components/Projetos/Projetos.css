@@ -1,12 +1,10 @@
-/* PROJETOS fixado — cases em tela cheia, mobile-first */
+/* PROJETOS fixado — cases em tela cheia. Base em px/%/vw/vh. */
 
-.projetos-palco {
-  background: var(--bg-soft);
-}
+.projetos-palco { background: var(--bg-soft); }
 
 .projetos-cabeca {
   position: absolute;
-  top: 9%;
+  top: 88px;
   left: var(--gutter);
   right: var(--gutter);
   z-index: 5;
@@ -14,15 +12,16 @@
 .projetos-cabeca h2 {
   font-size: clamp(1.5rem, 7.7vw, 2.125rem);
   margin-top: var(--s-2);
+  max-width: 20ch;
 }
 
 .projeto-cena {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  clip-path: inset(100% 0 0 0);
   will-change: clip-path;
 }
+.cena--pronta .projeto-cena { clip-path: inset(100% 0 0 0); }
 .projeto-cena__img {
   position: absolute;
   inset: 0;
@@ -43,7 +42,7 @@
 }
 .projeto-cena__meta {
   position: absolute;
-  bottom: 9%;
+  bottom: 76px;
   left: var(--gutter);
   right: var(--gutter);
   color: var(--on-dark);
@@ -83,7 +82,7 @@
 
 .projetos-contador {
   position: absolute;
-  bottom: 3.4%;
+  bottom: 28px;
   left: var(--gutter);
   z-index: 6;
   font-size: 0.75rem;
@@ -92,21 +91,39 @@
   mix-blend-mode: difference;
 }
 
+@media (max-height: 660px) {
+  .projetos-cabeca { top: 72px; }
+  .projeto-cena__meta { bottom: 52px; }
+  .projeto-cena__stack { display: none; }
+}
+@media (min-width: 760px) {
+  .projeto-cena__meta { max-width: 660px; }
+  .projetos-cabeca h2 { max-width: 16ch; }
+}
+
+/* sem JS: cases em cartões empilhados, visíveis */
+.cena:not(.cena--pronta) .projetos-cabeca { position: static; }
+.cena:not(.cena--pronta) .projeto-cena {
+  position: relative;
+  inset: auto;
+  clip-path: none;
+  height: 70vh;
+  margin-top: var(--s-5);
+  border-radius: var(--r-lg);
+}
+.cena:not(.cena--pronta) .projeto-cena__meta { opacity: 1; transform: none; }
+.cena:not(.cena--pronta) .projetos-contador { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .projetos-cabeca { position: static; padding-block: var(--s-8) 0; }
   .projeto-cena {
     position: relative;
     inset: auto;
-    clip-path: none;
-    height: 70svh;
+    clip-path: none !important;
+    height: 70vh;
     margin-top: var(--s-5);
     border-radius: var(--r-lg);
   }
   .projeto-cena__meta { opacity: 1 !important; transform: none !important; }
   .projetos-contador { display: none; }
-}
-
-@media (min-width: 760px) {
-  .projeto-cena__meta { max-width: 660px; }
-  .projetos-cabeca h2 { max-width: 16ch; }
 }

@@ -1,5 +1,6 @@
-/* HERO fixado — mobile-first, sem depender de unidades de container.
-   O título fica no centro ótico do palco em qualquer proporção de tela. */
+/* HERO fixado — base em px/%/vw/vh (sem svh, sem unidades de container).
+   O título fica no centro ótico do palco em qualquer proporção de tela e os
+   avatares nunca são cortados: a dupla é limitada pela altura disponível. */
 
 .hero-palco { background: var(--bg); }
 
@@ -55,12 +56,14 @@
   z-index: 2;
   display: grid;
   place-items: center;
-  padding: clamp(58px, 10svh, 118px) var(--gutter);
+  padding: 84px var(--gutter) 148px;
+  box-sizing: border-box;
 }
 .hero-centro > * {
   grid-area: 1 / 1;
   width: 100%;
   min-width: 0;
+  max-height: 100%;
 }
 
 .hero-titulo {
@@ -78,8 +81,8 @@
 }
 
 .hero-dupla {
-  height: clamp(150px, 34svh, 440px);
-  max-height: 100%;
+  height: 100%;
+  max-height: 440px;
   display: flex;
   gap: 2.5vw;
   align-items: flex-end;
@@ -87,6 +90,8 @@
 }
 .hero-dupla__img {
   width: auto;
+  max-width: 46%;
+  max-height: 100%;
   display: block;
   object-fit: contain;
   object-position: center bottom;
@@ -94,16 +99,17 @@
   opacity: 0;
   will-change: transform, opacity;
 }
-.hero-dupla__img--1 { height: 92%; max-width: 46%; margin-bottom: 4%; }
+.hero-dupla__img--1 { height: 92%; margin-bottom: 4%; }
 .hero-dupla__img--2 { height: 100%; max-width: 52%; }
 
 .hero-rodape {
   position: absolute;
-  bottom: clamp(44px, 8svh, 92px);
+  bottom: 68px;
   left: 0;
   width: 100%;
   z-index: 3;
   padding-inline: var(--gutter);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -134,7 +140,7 @@
 
 .hero-dica {
   position: absolute;
-  bottom: clamp(14px, 2.6svh, 26px);
+  bottom: 20px;
   left: 0;
   width: 100%;
   z-index: 3;
@@ -150,7 +156,7 @@
 }
 .hero-dica__linha {
   width: 1px;
-  height: clamp(16px, 3svh, 30px);
+  height: 24px;
   background: linear-gradient(var(--ink-dim), transparent);
 }
 
@@ -163,8 +169,16 @@
   z-index: 4;
 }
 
+/* telas mais altas: mais respiro, avatares maiores */
+@media (min-height: 760px) {
+  .hero-centro { padding: 104px var(--gutter) 168px; }
+  .hero-dupla { max-height: 520px; }
+  .hero-rodape { bottom: 84px; }
+}
 /* tela curta (aparelho pequeno / paisagem): a dica sai */
 @media (max-height: 660px) {
+  .hero-centro { padding: 72px var(--gutter) 116px; }
+  .hero-rodape { bottom: 44px; }
   .hero-dica { display: none; }
 }
 
@@ -172,7 +186,7 @@
 @media (min-width: 760px) {
   .hero-palavra { font-size: 15vw; }
   .hero-titulo { max-width: 820px; }
-  .hero-dupla { height: clamp(300px, 52svh, 620px); }
+  .hero-dupla { max-height: 620px; }
   .hero-rodape { flex-direction: row; align-items: center; justify-content: center; gap: 30px; }
   .hero-assinatura { align-items: flex-start; text-align: left; }
 }
@@ -180,13 +194,30 @@
   .hero-titulo { max-width: 960px; }
 }
 
+/* sem JS: composição em fluxo, tudo visível */
+.cena:not(.cena--pronta) .hero-centro,
+.cena:not(.cena--pronta) .hero-rodape {
+  position: static;
+  display: block;
+  padding: 0;
+}
+.cena:not(.cena--pronta) .hero-centro > * { max-height: none; }
+.cena:not(.cena--pronta) .hero-dupla {
+  height: auto;
+  max-height: none;
+  margin-top: var(--s-8);
+}
+.cena:not(.cena--pronta) .hero-dupla__img { height: 240px; opacity: 1; }
+.cena:not(.cena--pronta) .hero-rodape { margin-top: var(--s-8); }
+.cena:not(.cena--pronta) .hero-assinatura,
+.cena:not(.cena--pronta) .hero-tags { clip-path: none; }
+.cena:not(.cena--pronta) .hero-dica,
+.cena:not(.cena--pronta) .hero-veu { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-palco { padding-block: var(--s-12) var(--s-10); }
-  .hero-centro { position: static; display: block; }
-  .hero-centro > * { width: auto; }
-  .hero-dupla { height: auto; margin-top: var(--s-8); }
-  .hero-dupla__img { height: clamp(180px, 32svh, 320px); opacity: 1; }
-  .hero-rodape { position: static; margin-top: var(--s-8); }
+  .hero-centro, .hero-rodape { position: static; display: block; padding: 0; }
+  .hero-dupla { height: auto; max-height: none; margin-top: var(--s-8); }
+  .hero-dupla__img { height: 240px; opacity: 1; }
   .hero-assinatura, .hero-tags { clip-path: none; }
   .hero-dica, .hero-veu { display: none; }
 }
