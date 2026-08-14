@@ -1,0 +1,165 @@
+/* SOBRE fixado — lego → normal → pixel com a tela travada, mobile-first.
+   Substitui o bloco ".about ... " que hoje vive em src/index.css. */
+
+.about-palco {
+  background: #161616;
+  color: var(--on-dark);
+}
+
+.about-palavra {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 32vw;
+  font-weight: 900;
+  color: var(--on-dark);
+  opacity: 0.03;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.about-cabeca {
+  position: absolute;
+  top: 8.5%;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 3;
+}
+.about-cabeca .section-eyebrow { color: var(--on-dark-dim); }
+.about-cabeca .section-eyebrow .n { color: var(--on-dark); }
+.about-cabeca h2 {
+  font-size: clamp(1.375rem, 6.7vw, 1.875rem);
+  color: var(--on-dark);
+  margin-top: var(--s-2);
+  max-width: 82%;
+}
+
+.fundador-cena {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.fundador-cena__visual {
+  position: absolute;
+  top: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(280px, 68vw);
+  aspect-ratio: 4 / 5;
+  cursor: pointer;
+}
+.fundador-cena__brilho {
+  position: absolute;
+  inset: -18%;
+  background: radial-gradient(circle, var(--founder-color, transparent) 0%, transparent 70%);
+  opacity: 0.18;
+  filter: blur(26px);
+  pointer-events: none;
+}
+.fundador-cena__visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+  opacity: 0;
+}
+.fundador-cena__visual img[data-estilo="lego"] { opacity: 1; }
+
+.fundador-cena__chips {
+  position: absolute;
+  top: 61%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.fundador-cena__chips span {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--on-dark-dim);
+  padding: 5px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid #2e2e2e;
+  transition:
+    color var(--dur-normal) var(--ease-out-expo),
+    border-color var(--dur-normal) var(--ease-out-expo),
+    background var(--dur-normal) var(--ease-out-expo);
+}
+.fundador-cena__chips span[data-ativo="true"] {
+  color: var(--on-dark);
+  border-color: #5a5a5a;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.fundador-cena__info {
+  position: absolute;
+  top: 66%;
+  left: var(--gutter);
+  right: var(--gutter);
+  text-align: center;
+}
+.fundador-cena__info h3 {
+  font-size: clamp(1.875rem, 10vw, 2.75rem);
+  color: var(--on-dark);
+  margin: 0 0 var(--s-3);
+}
+.fundador-cena__info p {
+  color: var(--on-dark-muted);
+  line-height: 1.6;
+  max-width: 40ch;
+  margin-inline: auto;
+}
+
+.about-barra {
+  position: absolute;
+  bottom: 3.2%;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.about-barra > .mono {
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+.about-barra__trilho {
+  flex: 1;
+  height: 1px;
+  background: #2e2e2e;
+  position: relative;
+}
+.about-barra__preenche {
+  position: absolute;
+  inset: 0;
+  background: var(--on-dark);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+@media (min-width: 860px) {
+  .fundador-cena__visual { top: 16%; width: min(340px, 34vw); }
+  .fundador-cena__info { top: 62%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-cabeca,
+  .fundador-cena { position: static; }
+  .fundador-cena { opacity: 1 !important; transform: none !important; margin-top: var(--s-10); }
+  .fundador-cena__visual,
+  .fundador-cena__chips,
+  .fundador-cena__info { position: static; transform: none; margin-inline: auto; }
+  .fundador-cena__visual img { opacity: 0; }
+  .fundador-cena__visual img[data-estilo="normal"] { opacity: 1; }
+  .about-barra { display: none; }
+}

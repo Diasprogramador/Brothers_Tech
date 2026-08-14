@@ -1,264 +1,107 @@
-/* =====================================================================
-   PROJETOS — Mobile-first
-   Cards com expansão no hover (desktop) e tap (mobile)
-   ===================================================================== */
+/* PROJETOS fixado — cases em tela cheia, mobile-first */
 
-#projetos {
-  padding: clamp(var(--s-10), 12vh, var(--s-12)) 0;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-4);
-  align-items: stretch;
-}
-
-/* garante que todos os cards tenham mesma altura (grid stretch) */
-.project-card {
-  display: flex;
-  flex-direction: column;
-}
-
-/* ---------- Card ---------- */
-.project-card {
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  background: var(--surface);
-  transition:
-    transform var(--dur-normal) var(--ease-out-expo),
-    box-shadow var(--dur-normal) var(--ease-out-expo),
-    border-color var(--dur-fast) var(--ease-out-expo);
-  position: relative;
-  cursor: pointer;
-  /* outline para foco visível (a11y) */
-  outline: none;
-}
-.project-card:focus-visible {
-  border-color: var(--ink);
-  box-shadow: var(--shadow-md);
-}
-.project-card:hover {
-  border-color: var(--ink-muted);
-}
-
-/* Thumb com imagem */
-.project-thumb {
-  /* altura maior — preenche melhor o card e dá presença ao projeto */
-  height: clamp(240px, 32vw, 340px);
+.projetos-palco {
   background: var(--bg-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background-image: radial-gradient(
-    circle at 30% 30%,
-    rgba(0, 0, 0, 0.04),
-    transparent 60%
-  );
 }
-.project-thumb img {
+
+.projetos-cabeca {
+  position: absolute;
+  top: 9%;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 5;
+}
+.projetos-cabeca h2 {
+  font-size: clamp(1.5rem, 7.7vw, 2.125rem);
+  margin-top: var(--s-2);
+}
+
+.projeto-cena {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+.projeto-cena__img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  /* cover preenche todo o thumb cortando o whitespace lateral;
-     object-position centraliza o produto na imagem */
   object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform var(--dur-slow) var(--ease-out-expo);
+  will-change: transform;
 }
-.project-card:hover .project-thumb img {
-  transform: scale(1.04);
-}
-
-/* Etiqueta de status (canto do thumb) */
-.project-status {
+.projeto-cena__veu {
   position: absolute;
-  bottom: var(--s-3);
-  left: var(--s-3);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  text-transform: lowercase;
-  color: var(--ink);
-  font-weight: 500;
-  border: 1px solid var(--line);
-  padding: 4px 10px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  letter-spacing: 0.02em;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.86) 0%,
+    rgba(10, 10, 10, 0.32) 44%,
+    rgba(10, 10, 10, 0.05) 70%
+  );
 }
-
-/* ---------- Body ---------- */
-.project-body {
-  padding: var(--s-4) var(--s-5) var(--s-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
+.projeto-cena__meta {
+  position: absolute;
+  bottom: 9%;
+  left: var(--gutter);
+  right: var(--gutter);
+  color: var(--on-dark);
+  max-width: 620px;
 }
-.project-body__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s-3);
+.projeto-cena__ano {
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-dark-muted);
 }
-.project-body h4 {
-  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
-  font-weight: 600;
+.projeto-cena__meta h3 {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  font-size: clamp(1.6875rem, 8.7vw, 2.375rem);
+  color: var(--on-dark);
+  margin: var(--s-2) 0 var(--s-3);
 }
-.project-year {
-  font-size: 0.6875rem;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-}
-.project-tagline {
-  color: var(--ink-dim);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  margin-top: -2px;
-}
-
-/* ---------- Detalhes (expandidos no hover/active) ---------- */
-.project-details {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transition:
-    grid-template-rows var(--dur-slow) var(--ease-out-expo),
-    opacity var(--dur-normal) var(--ease-out-expo),
-    margin-top var(--dur-slow) var(--ease-out-expo);
-  margin-top: 0;
-}
-.project-details > * {
-  overflow: hidden;
-  min-height: 0;
-}
-
-.project-description {
+.projeto-cena__meta p {
   font-size: var(--text-body);
   line-height: 1.6;
-  color: var(--ink-muted);
-  text-wrap: pretty;
+  color: #dcdcdc;
+  max-width: 34ch;
 }
-
-.project-stack {
+.projeto-cena__stack {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2);
-  margin-top: var(--s-4);
-  list-style: none;
-  padding: 0;
+  gap: 6px;
+  margin-top: var(--s-5);
 }
-.project-stack__item {
-  font-family: var(--font-mono);
+.projeto-cena__stack li {
   font-size: 0.6875rem;
-  color: var(--ink);
-  border: 1px solid var(--line);
-  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  padding: 5px 10px;
   border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.02em;
+  color: var(--on-dark);
 }
 
-/* ---------- Hover: expande no desktop ---------- */
-@media (hover: hover) and (pointer: fine) {
-  .project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-  .project-card:hover .project-details {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    margin-top: var(--s-3);
-  }
+.projetos-contador {
+  position: absolute;
+  bottom: 3.4%;
+  left: var(--gutter);
+  z-index: 6;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: var(--on-dark);
+  mix-blend-mode: difference;
 }
 
-/* ---------- Active (mobile / tap) ---------- */
-.project-card.is-active {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-.project-card.is-active .project-details {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  margin-top: var(--s-3);
-}
-.project-card.is-active .project-thumb img {
-  transform: scale(1.04);
-}
-
-/* ---------- Nota ---------- */
-.projects-note {
-  margin-top: var(--s-8);
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  color: var(--ink-muted);
-  font-size: 0.875rem;
-  padding: var(--s-3) var(--s-4);
-  border: 1px dashed var(--line);
-  border-radius: var(--r-md);
-  background: rgba(255, 255, 255, 0.4);
-}
-.projects-note .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--orange);
-  flex: none;
-  box-shadow: 0 0 0 4px rgba(196, 114, 74, 0.15);
-}
-.projects-note .mono {
-  font-size: 0.8125rem !important;
-}
-
-/* =====================================================================
-   BREAKPOINTS — Mobile-first
-   ===================================================================== */
-@media (min-width: 560px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .projects-note {
-    padding: var(--s-4) var(--s-5);
-  }
-}
-
-/* Telas muito pequenas (≤ 380px) */
-@media (max-width: 380px) {
-  #projetos {
-    padding: clamp(var(--s-8), 10vh, var(--s-10)) 0;
-  }
-  .project-body {
-    padding: var(--s-4);
-  }
-  .project-body h4 {
-    font-size: 1rem;
-  }
-  .projects-note {
-    padding: var(--s-3);
-    gap: var(--s-2);
-  }
-}
-
-/* =====================================================================
-   prefers-reduced-motion
-   ===================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .project-card,
-  .project-thumb img,
-  .project-details {
-    transition: none !important;
+  .projetos-cabeca { position: static; padding-block: var(--s-8) 0; }
+  .projeto-cena {
+    position: relative;
+    inset: auto;
+    clip-path: none;
+    height: 70svh;
+    margin-top: var(--s-5);
+    border-radius: var(--r-lg);
   }
+  .projeto-cena__meta { opacity: 1 !important; transform: none !important; }
+  .projetos-contador { display: none; }
 }

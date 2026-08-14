@@ -1,0 +1,40 @@
+/* =====================================================================
+   CENAS FIXADAS (scroll-telling) — base compartilhada
+   Mobile-first: a mesma cena vale para celular e desktop, porque a altura
+   é medida em múltiplos de 100svh (a tela do aparelho), não em pixels.
+   ===================================================================== */
+
+.cena {
+  position: relative;
+}
+.cena__palco {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* comprimento de cada cena (quanto de rolagem a animação consome) */
+.cena--hero { height: 250svh; }
+.cena--servicos { height: 350svh; }
+.cena--projetos { height: 300svh; }
+.cena--sobre { height: 350svh; }
+
+/* Sem suporte a svh (navegadores antigos): cai para vh. */
+@supports not (height: 100svh) {
+  .cena__palco { height: 100vh; }
+  .cena--hero { height: 250vh; }
+  .cena--servicos { height: 350vh; }
+  .cena--projetos { height: 300vh; }
+  .cena--sobre { height: 350vh; }
+}
+
+/* Movimento reduzido: nada de pinar — cada palco vira bloco normal. */
+@media (prefers-reduced-motion: reduce) {
+  .cena { height: auto !important; }
+  .cena__palco {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+  }
+}

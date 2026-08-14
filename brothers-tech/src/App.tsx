@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { MotionConfig } from "framer-motion";
 import { usePreloader } from "./hooks/usePreloader";
 import { useReveal } from "./hooks/useReveal";
 
@@ -20,7 +21,11 @@ export const App = () => {
   useReveal(mainRef);
 
   return (
-    <>
+    // As animações do About rodam via useScroll/useTransform (JS), fora do
+    // alcance do bloco global @media (prefers-reduced-motion: reduce) em
+    // index.css, que só zera animation/transition de CSS. reducedMotion="user"
+    // faz o Framer Motion respeitar a preferência do sistema nessas também.
+    <MotionConfig reducedMotion="user">
       {isPreloading && <Preloader onComplete={onComplete} />}
       <a href="#main" className="skip-link">
         Pular para o conteúdo
@@ -45,6 +50,6 @@ export const App = () => {
         </SmoothScroll>
       </div>
       <CustomCursor />
-    </>
+    </MotionConfig>
   );
 };

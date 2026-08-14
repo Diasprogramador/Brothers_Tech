@@ -1,119 +1,119 @@
-#servicos {
+/* SERVIÇOS fixado — baralho de cards, mobile-first */
+
+.servicos-palco {
   background: #1f1f1f;
-  padding: clamp(var(--s-10), 12vh, var(--s-12)) 0;
-  position: relative;
 }
-#servicos::before {
-  content: "";
+.servicos-grade {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
 }
-#servicos .section-head h2 {
-  color: var(--on-dark);
-}
-#servicos .section-head p {
-  color: var(--on-dark-muted);
-}
-#servicos .section-eyebrow {
-  color: var(--on-dark-dim);
-}
-#servicos .section-eyebrow .n {
-  color: var(--on-dark);
-}
-.services-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  background: #2e2e2e;
-  border: 1px solid #2e2e2e;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-}
-.service-card {
-  background: #1f1f1f;
-  padding: var(--s-6) var(--s-5);
-  position: relative;
-  transition: background var(--dur-normal) var(--ease-out-expo);
-  overflow: hidden;
-}
-.service-card::after {
-  content: "";
+
+.servicos-cabeca {
   position: absolute;
-  top: 0;
+  top: 9%;
   left: 0;
-  height: 2px;
-  width: 0;
-  background: var(--green);
-  transition: width var(--dur-slow) var(--ease-out-expo);
-}
-.service-card:hover {
-  background: #262626;
-}
-.service-card:hover::after {
   width: 100%;
+  padding-inline: var(--gutter);
 }
-.service-card .num {
-  font-family: var(--font-mono);
+.servicos-cabeca .section-eyebrow { color: var(--on-dark-dim); }
+.servicos-cabeca .section-eyebrow .n { color: var(--on-dark); }
+.servicos-cabeca h2 {
+  font-size: clamp(1.5rem, 7.7vw, 2.125rem);
+  color: var(--on-dark);
+  max-width: 80%;
+}
+
+.servicos-contador {
+  position: absolute;
+  top: 27%;
+  right: var(--gutter);
+  font-family: var(--font-display);
+  font-size: clamp(4.375rem, 25vw, 6.75rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--on-dark);
+  opacity: 0.07;
+  font-variant-numeric: tabular-nums;
+}
+
+.servicos-baralho {
+  position: absolute;
+  top: 35%;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 15%;
+}
+.servico-card {
+  position: absolute;
+  inset: 0;
+  background: #262626;
+  border: 1px solid #333333;
+  border-radius: var(--r-lg);
+  padding: clamp(22px, 7vw, 34px) clamp(18px, 6vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  will-change: transform, opacity;
+}
+.servico-card .num {
   font-size: 0.8125rem;
   color: var(--on-dark);
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
-.service-card h3 {
-  font-size: var(--text-h3);
-  margin: var(--s-3) 0 var(--s-3);
+.servico-card h3 {
+  font-size: clamp(1.3125rem, 6.7vw, 1.75rem);
   color: var(--on-dark);
+  margin: 0;
 }
-.service-card p {
+.servico-card p {
   color: var(--on-dark-muted);
   font-size: var(--text-body);
-  line-height: 1.65;
+  line-height: 1.6;
+  margin: 0;
 }
-.service-card .for {
-  margin-top: var(--s-5);
-  font-family: var(--font-mono);
+.servico-card .for {
+  margin-top: auto;
   font-size: 0.75rem;
   color: var(--on-dark-dim);
 }
 
-/* =====================================================================
-   BREAKPOINTS — Mobile-first (subir pra tablet/desktop)
-   ===================================================================== */
-@media (min-width: 560px) {
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
+.servicos-tracos {
+  position: absolute;
+  bottom: 7%;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  gap: 6px;
+}
+.servicos-tracos span {
+  flex: 1;
+  height: 2px;
+  background: var(--on-dark);
+  opacity: 0.16;
+  transform-origin: left center;
+}
+
+@media (min-width: 860px) {
+  .servicos-baralho {
+    left: max(var(--gutter), calc(50% - 320px));
+    right: max(var(--gutter), calc(50% - 320px));
   }
 }
 
-@media (min-width: 768px) {
-  .service-card {
-    padding: var(--s-8) var(--s-6);
+@media (prefers-reduced-motion: reduce) {
+  .servicos-cabeca,
+  .servicos-baralho,
+  .servicos-tracos { position: static; }
+  .servicos-baralho {
+    display: grid;
+    gap: 1px;
+    margin-top: var(--s-8);
   }
-}
-
-@media (min-width: 1100px) {
-  .service-card h3 {
-    transition: transform var(--dur-normal) var(--ease-out-expo);
-  }
-  .service-card:hover h3 {
-    transform: translateX(4px);
-  }
-}
-
-/* Telas muito pequenas (≤ 380px) */
-@media (max-width: 380px) {
-  #servicos {
-    padding: clamp(var(--s-8), 10vh, var(--s-10)) 0;
-  }
-  .service-card {
-    padding: var(--s-5) var(--s-4);
-  }
-  .service-card h3 {
-    font-size: clamp(1.125rem, 2vw, 1.375rem);
-  }
+  .servico-card { position: static; opacity: 1; }
+  .servicos-contador { display: none; }
 }

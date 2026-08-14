@@ -176,6 +176,38 @@ section {
   position: relative;
 }
 
+/* =====================================================================
+   SECTION HEAD — cabeçalho padrão (número + título + lead), reusado por
+   Serviços, Projetos e Sobre. Cada seção só sobrescreve a cor do texto
+   para combinar com o fundo (claro ou escuro).
+   ===================================================================== */
+.section-head {
+  max-width: 640px;
+  margin-bottom: var(--s-8);
+}
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: var(--s-3);
+}
+.section-eyebrow .n {
+  font-weight: 700;
+}
+.section-head h2 {
+  font-size: var(--text-h2);
+  margin-bottom: var(--s-3);
+}
+.section-head p {
+  font-size: var(--text-body);
+  line-height: 1.65;
+  max-width: 48ch;
+}
+
 /* Skip link — escondido por padrão, aparece só no :focus */
 .skip-link {
   position: absolute;
@@ -363,185 +395,3 @@ section {
   transform: translate(0, 0) scale(1);
 }
 
-/* =====================================================================
-   ABOUT SECTION PREMIUM (Awwwards-style, isolado)
-   ===================================================================== */
-.about-premium {
-  background: #161616 !important;
-  color: white !important;
-  position: relative;
-  height: 500vh;
-}
-
-.about-sticky-wrapper {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.about-bg-text {
-  position: absolute;
-  font-size: 25vw;
-  font-weight: 900;
-  color: white;
-  opacity: 0.03;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.about-wrap {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  align-items: center;
-  gap: var(--s-12);
-}
-
-.about-visuals {
-  position: relative;
-  height: 70vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.about-avatar-box {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.about-style-img {
-  position: absolute !important;
-  inset: 0;
-  margin: auto;
-  transition: none;
-}
-
-.about-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.6));
-}
-
-.about-infos {
-  position: relative;
-  height: 400px;
-  display: flex;
-  align-items: center;
-}
-
-.about-text-card {
-  position: absolute;
-  width: 100%;
-}
-
-.about-eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--text-eyebrow);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  display: block;
-  margin-bottom: var(--s-2);
-}
-
-.about-title {
-  font-size: clamp(3rem, 7vw, 5rem);
-  font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 0.9;
-  margin-bottom: var(--s-4);
-}
-
-.about-paragraph {
-  font-size: var(--text-body);
-  color: var(--on-dark-muted);
-  max-width: 400px;
-  line-height: 1.6;
-}
-
-.about-progress {
-  position: absolute;
-  right: var(--gutter);
-  height: 200px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.about-progress-fill {
-  width: 100%;
-  background: var(--green);
-  height: 100%;
-}
-
-@media (max-width: 900px) {
-  .about-premium {
-    height: auto !important;
-  }
-  .about-sticky-wrapper {
-    position: relative;
-    height: auto;
-    padding-block: var(--s-12);
-    display: block;
-    overflow: visible;
-  }
-  .about-bg-text {
-    font-size: 40vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) !important;
-    opacity: 0.02;
-  }
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: var(--s-12);
-    text-align: center;
-  }
-  .about-visuals {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-12);
-  }
-  .about-avatar-box {
-    position: relative;
-    opacity: 1 !important;
-    scale: 1 !important;
-    filter: none !important;
-    height: 40vh;
-    margin-bottom: var(--s-4);
-  }
-  .about-infos {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-12);
-  }
-  .about-text-card {
-    position: relative;
-    opacity: 1 !important;
-    transform: none !important;
-    margin-bottom: var(--s-12);
-  }
-  .about-paragraph {
-    margin-inline: auto;
-  }
-  .about-progress {
-    display: none;
-  }
-}
