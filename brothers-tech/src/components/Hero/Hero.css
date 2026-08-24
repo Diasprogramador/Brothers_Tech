@@ -88,9 +88,25 @@
   align-items: flex-end;
   justify-content: center;
 }
+/* A dupla divide a largura da linha por flex-grow, não por "height: X%" +
+   max-width fixo por avatar. Com height:X%/max-width:% (versão antiga), em
+   telas estreitas o max-width vencia pro Caio (foto mais larga, segurando o
+   notebook) mas não pro Sanderson (foto mais estreita) — o mesmo par que
+   parecia parelho no desktop ficava com o Caio ~26% menor no celular, porque
+   cada avatar batia num limite diferente dependendo do espaço disponível.
+   Com width:0 + flex-grow (base 0), os dois SEMPRE dividem a largura da
+   `.hero-dupla` na mesma proporção fixa, em qualquer largura de tela — a
+   altura vem de `height: auto`, calculada pelo navegador a partir da
+   proporção intrínseca de cada imagem, então a escala relativa entre os
+   dois nunca inverte ao redimensionar. `max-height: 100%` é a rede de
+   segurança pra telas muito altas e estreitas. Os pesos abaixo (100/172)
+   foram calibrados medindo o recorte real de cada .avif (proporção
+   largura/altura só do personagem, sem a margem transparente do canvas) pra
+   que as duas figuras saiam com a mesma altura aparente. */
 .hero-dupla__img {
-  width: auto;
-  max-width: 46%;
+  width: 0;
+  flex: 1 1 0;
+  height: auto;
   max-height: 100%;
   display: block;
   object-fit: contain;
@@ -99,8 +115,8 @@
   opacity: 0;
   will-change: transform, opacity;
 }
-.hero-dupla__img--1 { height: 92%; margin-bottom: 4%; }
-.hero-dupla__img--2 { height: 100%; max-width: 52%; }
+.hero-dupla__img--1 { flex-grow: 100; }
+.hero-dupla__img--2 { flex-grow: 172; }
 
 .hero-rodape {
   position: absolute;

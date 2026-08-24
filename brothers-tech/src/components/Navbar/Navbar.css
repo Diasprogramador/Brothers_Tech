@@ -1,6 +1,7 @@
 /* =====================================================================
    NAVBAR — Mobile-first
-   Ordem de breakpoints: base (mobile) → tablet (560px) → desktop (860px)
+   Ordem de breakpoints: base (mobile) → tablet (560px) → desktop (760px) —
+   mesmo breakpoint que o resto das seções usa pra virar layout desktop.
    ===================================================================== */
 
 /* ---------- Base: mobile-first (até 559px) ---------- */
@@ -262,8 +263,13 @@ nav a:focus-visible::after {
   }
 }
 
-/* ≥ 860px — desktop: mostra nav inline, esconde burger */
-@media (min-width: 860px) {
+/* ≥ 760px — desktop: mostra nav inline, esconde burger.
+   Mesmo breakpoint que Hero/Servicos/Projetos/About usam pra virar layout
+   desktop (ver "@media (min-width: 760px)" nesses arquivos): estava em
+   860px aqui, então tablets de ~768–834px (iPad, iPad Air etc.) mostravam o
+   conteúdo já em layout desktop mas a navbar ainda em modo mobile
+   (hambúrguer) — os dois precisam trocar juntos. */
+@media (min-width: 760px) {
   nav[aria-label="Navegação principal"] {
     display: block;
   }

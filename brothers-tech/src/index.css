@@ -110,6 +110,9 @@ body {
   line-height: 1.65;
   letter-spacing: -0.005em;
   overflow-x: hidden;
+  min-height: 100vh; /* fallback: se o navegador não entender 100svh a
+    seguir, essa declaração continua valendo — svh sozinho, sem essa linha
+    antes, some inteiro em navegador antigo e o body fica sem min-height */
   min-height: 100svh;
   margin: 0;
   /* previne rubber-band scroll em Safari iOS */
@@ -283,8 +286,8 @@ section {
   }
 }
 
-/* ≥ 860px — desktop */
-@media (min-width: 860px) {
+/* ≥ 760px — desktop (mesmo breakpoint do Navbar.css) */
+@media (min-width: 760px) {
   html {
     scroll-padding-top: 64px; /* navbar altura em desktop */
   }

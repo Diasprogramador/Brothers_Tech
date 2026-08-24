@@ -107,9 +107,10 @@ export const Navbar = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [menuOpen, closeMenu]);
 
-  // Fecha ao redimensionar para desktop
+  // Fecha ao redimensionar para desktop (mesmo breakpoint do CSS que troca
+  // pro nav inline, em Navbar.css)
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 860px)");
+    const mql = window.matchMedia("(min-width: 760px)");
     const handleChange = (e: MediaQueryListEvent) => {
       if (e.matches && menuOpen) closeMenu();
     };
