@@ -4,14 +4,7 @@ import "./Contato.css";
 const WHATSAPP = "5531972037820";
 const EMAIL = "brothers.tech.237@gmail.com";
 
-/* cor sólida + as versões translúcidas prontas: nada de color-mix(), que
-   Android/WebView mais antigo não entende (a regra inteira seria descartada). */
-const TIPOS = [
-  { nome: "Sistema", cor: "#4f8a66", halo: "rgba(79, 138, 102, 0.22)", brilho: "rgba(79, 138, 102, 0.35)" },
-  { nome: "App", cor: "#c4723f", halo: "rgba(196, 114, 63, 0.22)", brilho: "rgba(196, 114, 63, 0.35)" },
-  { nome: "Site", cor: "#4068a1", halo: "rgba(64, 104, 161, 0.22)", brilho: "rgba(64, 104, 161, 0.35)" },
-  { nome: "Software", cor: "#6a8cc0", halo: "rgba(106, 140, 192, 0.22)", brilho: "rgba(106, 140, 192, 0.35)" },
-] as const;
+const TIPOS = ["Sistema", "App", "Site", "Software"] as const;
 
 const PRAZOS = [
   { rotulo: "sem pressa", frase: "sem pressa" },
@@ -22,21 +15,15 @@ const PRAZOS = [
 /**
  * CONTATO — montador de recado.
  * O visitante escolhe o que precisa e o prazo; a mensagem se escreve sozinha e
- * os links de WhatsApp/e-mail já saem preenchidos. O acento do card assume a
- * cor do primeiro serviço escolhido.
+ * os links de WhatsApp/e-mail já saem preenchidos. Acento único (verde, o
+ * principal da marca) em vez de uma cor por tipo de serviço — com os quatro
+ * chips escolhidos ao mesmo tempo, cada um puxando o brilho do card, o
+ * contador e o botão pra uma cor diferente, o card virava um mosaico.
  */
 export const Contato = () => {
   const [tipos, setTipos] = useState<string[]>([]);
   const [prazo, setPrazo] = useState(1);
   const [copiado, setCopiado] = useState(false);
-
-  const acento = useMemo(() => {
-    const alvo = tipos.length ? TIPOS.find((t) => t.nome === tipos[0]) : undefined;
-    return {
-      cor: alvo?.cor ?? "#ffffff",
-      brilho: alvo?.brilho ?? "rgba(255, 255, 255, 0.14)",
-    };
-  }, [tipos]);
 
   const mensagem = useMemo(() => {
     const n = tipos.length;
@@ -83,15 +70,7 @@ export const Contato = () => {
             </div>
           </div>
 
-          <div
-            className="contato-card"
-            style={
-              {
-                "--acento": acento.cor,
-                "--acento-brilho": acento.brilho,
-              } as React.CSSProperties
-            }
-          >
+          <div className="contato-card">
             <div className="contato-card__brilho" aria-hidden="true" />
 
             <fieldset className="contato-campo">
@@ -108,15 +87,13 @@ export const Contato = () => {
               <div className="contato-chips">
                 {TIPOS.map((t) => (
                   <button
-                    key={t.nome}
+                    key={t}
                     type="button"
                     className="contato-chip"
-                    aria-pressed={tipos.includes(t.nome)}
-                    style={{ "--cor": t.cor, "--cor-halo": t.halo } as React.CSSProperties}
-                    onClick={() => alternar(t.nome)}
+                    aria-pressed={tipos.includes(t)}
+                    onClick={() => alternar(t)}
                   >
-                    <i className="ponto" />
-                    {t.nome}
+                    {t}
                   </button>
                 ))}
               </div>
@@ -171,7 +148,6 @@ export const Contato = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <i className="ponto" style={{ background: "#c4723f" }} />
                 @_brothers.tech
               </a>
             </div>

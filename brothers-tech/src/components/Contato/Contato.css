@@ -66,7 +66,9 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--cor, #4f8a66);
+  background: var(--blue-soft); /* --green real hoje é um azul-marinho quase
+    preto (ver index.css) — some contra o fundo escuro do card num ponto de
+    7px. --blue-soft mantém o mesmo acento frio da marca com contraste real. */
   flex: none;
 }
 .contato-selos .ponto { animation: contato-pulso 2.4s ease-in-out infinite; }
@@ -92,9 +94,8 @@
   width: 90%;
   height: 0;
   padding-bottom: 90%;
-  background: radial-gradient(circle, var(--acento-brilho, rgba(255, 255, 255, 0.14)) 0%, transparent 62%);
+  background: radial-gradient(circle, rgba(79, 138, 102, 0.16) 0%, transparent 62%);
   pointer-events: none;
-  transition: background var(--dur-slow) var(--ease-out-expo);
 }
 
 .contato-campo {
@@ -119,7 +120,7 @@
   color: var(--on-dark-dim);
   padding: 0;
 }
-.contato-campo__conta { color: var(--acento); transition: color var(--dur-normal) ease; }
+.contato-campo__conta { color: var(--green-soft); }
 
 .contato-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
 .contato-chip {
@@ -144,12 +145,9 @@
 }
 .contato-chip:active { transform: scale(0.96); }
 .contato-chip[aria-pressed="true"] {
-  color: var(--on-dark);
-  border-color: var(--cor);
-  background: rgba(255, 255, 255, 0.1);
-}
-.contato-chip[aria-pressed="true"] .ponto {
-  box-shadow: 0 0 0 4px var(--cor-halo, rgba(255, 255, 255, 0.22));
+  color: #1f1f1f;
+  border-color: var(--on-dark);
+  background: var(--on-dark);
 }
 
 .contato-seg {
@@ -186,7 +184,7 @@
   left: 4px;
   width: calc((100% - 8px - 8px) / 3);
   border-radius: var(--r-pill);
-  background: var(--acento);
+  background: var(--on-dark);
   transition:
     transform var(--dur-slow) var(--ease-out-expo),
     background var(--dur-normal) ease;
@@ -234,8 +232,8 @@
 .contato-acoes a:active { transform: scale(0.97); }
 .contato-acoes__wa {
   font-weight: 600;
-  background: var(--acento);
-  color: #2a2a2a;
+  background: var(--green);
+  color: var(--on-dark);
 }
 .contato-acoes__mail {
   font-weight: 500;
